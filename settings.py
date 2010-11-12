@@ -88,9 +88,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    'apps.grappelli',
+    'ncfmusic.apps.grappelli',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    'ncfmusic.apps.heroshots',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
