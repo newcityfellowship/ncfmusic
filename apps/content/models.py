@@ -1,19 +1,19 @@
 from django.db import models
 
-def Listen(models.Model):
+class Listen(models.Model):
     title = models.CharField(max_length=256)
     slug = models.SlugField(max_length=255)
     mp3 = models.FileField(upload_to='/ext/listen')
-    songwriter = models.ForeignKey('Contributor')
+    songwriter = models.ForeignKey('Contributor', related_name='listen_songwriter')
     producer = models.CharField(max_length=128, null=True, blank=True)
-    vocals = models.ManyToManyField('Contributor', null=True)
-    instruments = models.ForeignKey('Contributor', null=True)
+    vocals = models.ManyToManyField('Contributor', null=True, related_name='listen_vocals')
+    instruments = models.ForeignKey('Contributor', null=True, related_name='listen_instruments')
     release_date = models.DateField(null=True, blank=True)
     album_title = models.CharField(max_length=256, null=True)
     church = models.ForeignKey('Church')
     insert_date = models.DateField(auto_now_add=True)
     
-def Watch(models.Model):
+class Watch(models.Model):
     title = models.CharField(max_length=256)
     slug = models.SlugField(max_length=255)
     description = models.TextField(null=True, blank=True)
@@ -23,7 +23,7 @@ def Watch(models.Model):
     duration = models.CharField(max_length=16)
     insert_date = models.DateField(auto_now_add=True)
     
-def Tutorial(models.Model):
+class Tutorial(models.Model):
     title = models.CharField(max_length=256)
     slug = models.SlugField(max_length=255)
     date = models.DateField()
@@ -34,17 +34,17 @@ def Tutorial(models.Model):
     vimeo_embed_code = models.CharField(max_length=512)
     insert_date = models.DateField(auto_now_add=True)
     
-def Talk(models.Model):
+class Talk(models.Model):
     title = models.CharField(max_length=256)
     slug = models.SlugField(max_length=255)
     teaser = models.TextField()
     date = models.DateField()
-    author = models.ForeignKey('Contributor')
-    church = models.ForeignKey('Contributor')
+    author = models.ForeignKey('Contributor', related_name='talk_author')
+    church = models.ForeignKey('Contributor', related_name='talk_church')
     duration = models.CharField(max_length=16)
     mp3 = models.FileField(upload_to='/ext/talks')
     
-def Article(models.Model):
+class Article(models.Model):
     title = models.CharField(max_length=256)
     slug = models.SlugField(max_length=255)
     teaser = models.TextField()
@@ -53,7 +53,7 @@ def Article(models.Model):
     church = models.ForeignKey('Church')
     article_body = models.TextField()
     
-def Song(models.Model):
+class Song(models.Model):
     title = models.CharField(max_length=256)
     slug = models.SlugField(max_length=255)
     songwriter = models.ForeignKey('Contributor')
@@ -62,12 +62,12 @@ def Song(models.Model):
     slides = models.FileField(upload_to='/ext/slides', null=True, blank=True)
     lyrics = models.FileField(upload_to='/ext/lyrics', null=True, blank=True)
     producer = models.CharField(max_length=256, null=True, blank=True)
-    vocals = models.ManyToManyField('Musician', null=True)
-    instruments = models.ManyToManyField('Musician', null=True)
+    vocals = models.ManyToManyField('Contributor', null=True, related_name='song_vocals')
+    instruments = models.ManyToManyField('Contributor', null=True, related_name='sont_instruments')
     release_date = models.DateField()
     album_title = models.CharField(max_length=256, null=True, blank=True)
     
-def Event(models.Model):
+class Event(models.Model):
     title = models.CharField(max_length=256)
     slug = models.SlugField(max_length=255)
     start_date = models.DateField()
@@ -79,7 +79,7 @@ def Event(models.Model):
     artile_body = models.TextField()
     photo = models.FileField(upload_to='/ext/events', null=True, blank=True)
     
-def Church(models.Model):
+class Church(models.Model):
     name = models.CharField(max_length=256)
     slug = models.SlugField(max_length=255)
     address = models.CharField(max_length=256)
@@ -88,7 +88,7 @@ def Church(models.Model):
     postal_code = models.IntegerField(null=True, blank=True)
     coords = models.CharField(max_length=128)
     
-def Contributor(models.Model):
+class Contributor(models.Model):
     name = models.CharField(max_length=128)
     slug = models.SlugField(max_length=255)
     title = models.CharField(max_length=128)
@@ -99,14 +99,14 @@ def Contributor(models.Model):
     website = models.URLField(null=True, blank=True)
     buy_music_url = models.URLField(null=True, blank=True)
     
-def Contact(models.Model):
+class Contact(models.Model):
     first_name = models.CharField(max_length=256)
     last_name = models.CharField(max_length=256)
     email_address = models.EmailField()
     insert_date = models.DateField(auto_now_add=True)
     
-def Page(models.Model):
-    from ncfmusic.apps.heroshots import Image
+class Page(models.Model):
+    from ncfmusic.apps.heroshots.models import Image
     
     slug = models.SlugField(max_length=255)
     content = models.TextField(blank=True, null=True)

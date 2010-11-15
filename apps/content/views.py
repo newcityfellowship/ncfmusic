@@ -186,7 +186,7 @@ def article(request, slug):
 def songs(request, start_letter=None):
     page = get_object_or_404(Page, slug__exact='songs')
     
-    song_list = Songs.objects.order_by('title')
+    song_list = Song.objects.order_by('title')
     
     #   I'm sure there's a better way to do this, but it's late and my brain's tired, so this will work
     sections = {}
@@ -212,7 +212,65 @@ def songs(request, start_letter=None):
         'page': page,
         'songs': songs,
         'sections': sections,
+        'start_letter': start_letter
     })
     
     return render_to_response('songs.html', context)
+    
+def events(request, month=None, year=None):
+    import datetime
+    
+    page = get_object_or_404(Page, slug__exact='events')
+    
+    events_list = Event.objects.order_by('start_date')
+    
+    #   I'm sure there's a better way to do this, but it's late and my brain's tired, so this will work
+    months = {}
+    first = events_list.order_by('start_date')[0]
+    last = events_list.order_by('-start_date')[0]
+    
+    thisdate = datetime.date(first.year, first.month, 1)
+    while thisdate <= last:
+        months[thisdate] = events_list.filter(start_date__month=thisdate.month, start_date__year=thisdate.year)
+        if thisdate.month == 12:
+            thisdate = datetime.date(thisdate.year+1, 1, 1)
+        else:
+            thisdate = datetime.date(thisdate.year, thisdate.month+1, 1)
+    
+    if month and year:
+        events_list = months[datetime.date(year,month,1)]
+        
+    paginator = Paginator(events_list, 4)
+    
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+        
+    try:
+        events = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        events = paginator.page(paginator.num_pages)
+
+    context = RequestContext(request, {
+        'page': page,
+        'events': events,
+        'months': months,
+        'month': month,
+        'year': year,
+    })
+    
+    return render_to_response('events.html', context)
+    
+def event(request, slug):
+    page = get_object_or_404(Page, slug__exact='events')
+    event = get_object_or_404(Event, slug__exact=slug)
+    
+    context = RequestContext(request, {
+        'page': page,
+        'event': event,
+    })
+    
+    return render_to_response('event.html', context)
+    
     
