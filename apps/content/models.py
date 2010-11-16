@@ -11,7 +11,10 @@ class Listen(models.Model):
     release_date = models.DateField(null=True, blank=True)
     album_title = models.CharField(max_length=256, null=True)
     church = models.ForeignKey('Church')
-    insert_date = models.DateField(auto_now_add=True)
+    insert_date = models.DateField(auto_now_add=True, editable=False)
+    
+    def __unicode__(self):
+        return self.title
     
 class Watch(models.Model):
     title = models.CharField(max_length=256)
@@ -21,7 +24,10 @@ class Watch(models.Model):
     date = models.DateField(null=True, blank=True)
     vimeo_embed_code = models.CharField(max_length=512)
     duration = models.CharField(max_length=16)
-    insert_date = models.DateField(auto_now_add=True)
+    insert_date = models.DateField(auto_now_add=True, editable=False)
+    
+    def __unicode__(self):
+        return self.title
     
 class Tutorial(models.Model):
     title = models.CharField(max_length=256)
@@ -32,7 +38,10 @@ class Tutorial(models.Model):
     church = models.ForeignKey('Church')
     teaser = models.TextField()
     vimeo_embed_code = models.CharField(max_length=512)
-    insert_date = models.DateField(auto_now_add=True)
+    insert_date = models.DateField(auto_now_add=True, editable=False)
+    
+    def __unicode__(self):
+        return self.title
     
 class Talk(models.Model):
     title = models.CharField(max_length=256)
@@ -44,6 +53,9 @@ class Talk(models.Model):
     duration = models.CharField(max_length=16)
     mp3 = models.FileField(upload_to='/ext/talks')
     
+    def __unicode__(self):
+        return self.title
+    
 class Article(models.Model):
     title = models.CharField(max_length=256)
     slug = models.SlugField(max_length=255)
@@ -52,6 +64,9 @@ class Article(models.Model):
     author = models.ForeignKey('Contributor')
     church = models.ForeignKey('Church')
     article_body = models.TextField()
+    
+    def __unicode__(self):
+        return self.title
     
 class Song(models.Model):
     title = models.CharField(max_length=256)
@@ -67,6 +82,9 @@ class Song(models.Model):
     release_date = models.DateField()
     album_title = models.CharField(max_length=256, null=True, blank=True)
     
+    def __unicode__(self):
+        return self.title
+    
 class Event(models.Model):
     title = models.CharField(max_length=256)
     slug = models.SlugField(max_length=255)
@@ -76,8 +94,12 @@ class Event(models.Model):
     church = models.ForeignKey('Church')
     city = models.CharField(max_length=256)
     teaser = models.TextField()
-    artile_body = models.TextField()
+    article_body = models.TextField()
     photo = models.FileField(upload_to='/ext/events', null=True, blank=True)
+
+    def __unicode__(self):
+        return self.title
+
     
 class Church(models.Model):
     name = models.CharField(max_length=256)
@@ -87,6 +109,9 @@ class Church(models.Model):
     state = models.CharField(max_length=128, null=True, blank=True)
     postal_code = models.IntegerField(null=True, blank=True)
     coords = models.CharField(max_length=128)
+    
+    def __unicode__(self):
+        return self.name
     
 class Contributor(models.Model):
     name = models.CharField(max_length=128)
@@ -99,11 +124,14 @@ class Contributor(models.Model):
     website = models.URLField(null=True, blank=True)
     buy_music_url = models.URLField(null=True, blank=True)
     
+    def __unicode__(self):
+        return self.name
+    
 class Contact(models.Model):
     first_name = models.CharField(max_length=256)
     last_name = models.CharField(max_length=256)
     email_address = models.EmailField()
-    insert_date = models.DateField(auto_now_add=True)
+    insert_date = models.DateField(auto_now_add=True, editable=False)
     
 class Page(models.Model):
     from ncfmusic.apps.heroshots.models import Image
@@ -111,6 +139,9 @@ class Page(models.Model):
     slug = models.SlugField(max_length=255)
     content = models.TextField(blank=True, null=True)
     heroshot = models.ForeignKey(Image)
+    
+    def __unicode__(self):
+        return self.slug
     
     
     
