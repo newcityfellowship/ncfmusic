@@ -273,4 +273,28 @@ def event(request, slug):
     
     return render_to_response('event.html', context)
     
+def churches(request):
+    page = get_object_or_404(Page, slug__exact='contributors')
+    
+    church_list = Church.objects.order_by('name')
+    
+    context = RequestContext(request, {
+        'page': page,
+        'church_list': church_list,
+    })
+    
+    return render_to_response('churches.html', context)
+    
+def musicians(request):
+    page = get_object_or_404(Page, slug__exact='contributors')
+    
+    musician_list = Contributors.objects.order_by('name')
+    
+    context = RequestContext(request, {
+        'page': page,
+        'musician_list': musician_list,
+    })
+    
+    return render_to_response('musicians.html', context)
+    
     

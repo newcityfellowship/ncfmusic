@@ -30,6 +30,8 @@ urlpatterns += patterns('ncfmusic.apps.content.views',
     (r'^events/$',                                  'events'),
     (r'^events/(?P<month>\d{2})/(?P<year>\d{4})/$', 'events'),
     (r'^events/(?P<slug>[\w-]+)/$',                 'event'),
+    (r'^churches/$',                                'churches'),
+    (r'^musicians/$',                               'musicians'),
     (r'^$',                                         'home'),
 )
 
