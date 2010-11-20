@@ -28,6 +28,9 @@ class Watch(models.Model):
     
     def __unicode__(self):
         return self.title
+        
+    class Meta:
+        verbose_name_plural = 'Watches'
     
 class Tutorial(models.Model):
     title = models.CharField(max_length=256)
@@ -112,6 +115,9 @@ class Church(models.Model):
     
     def __unicode__(self):
         return self.name
+        
+    class Meta:
+        verbose_name_plural = 'Churches'
     
 class Contributor(models.Model):
     name = models.CharField(max_length=128)
