@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from django.http import HttpResponseRedirect
 
 from .models import *
 from .forms import *
@@ -297,4 +298,54 @@ def musicians(request):
     
     return render_to_response('musicians.html', context)
     
+def search(request):
+    page = get_object_or_404(Page, slug__exact='search')
+    
+    if ('q' in request.GET) and request.GET['q'].strip():
+        query_string = request.GET['q']
+        
+        listen_query = get_query(query_string, ['title', 'album_title',])
+        listen = Listen.objects.filter(listen_query).order_by('-release_date')
+
+        watch_query = get_query(query_string, ['title', 'description', 'church',])
+        watch = Watch.objects.filter(watch_query).order_by('-date')
+        
+        tutorial_query = get_query(query_string, ['title', 'teaser',])
+        tutorial = Tutorial.objects.filter(tutorial_query).order_by('-insert_date')
+        
+        talk_query = get_query(query_string, ['title', 'teaser',])
+        talk = Talk.objects.filter(talk_query).order_by('-date')
+        
+        article_query = get_query(query_string, ['title', 'teaser', 'article_body',])
+        article = Article.objects.filter(article_query).order_by('-date')
+        
+        song_query = get_query(query_string, ['title',])
+        song = Song.objects.filter(song_query).order_by('-release_date')
+        
+        church_query = get_query(query_string, ['name', 'address', 'city', 'state', 'postal_code',])
+        church = Church.objects.filter(church_query).order_by('name')
+        
+        contributor_query = get_query(query_string, ['name', 'title',])
+        contributor = Contributor.objects.filter(contributor_query).order_by('name')
+        
+        event_query = get_query(query_string, ['title', 'teaser', 'article_body',])
+        event = Event.objects.filter(event_query).order_by('title')
+        
+        context = RequestContext(request, {
+            'page': page,
+            'listen': listen,
+            'watch': watch,
+            'tutorial': tutorial,
+            'talk': talk,
+            'article': article,
+            'song': song,
+            'church': church,
+            'contributor': contributor,
+            'event': event,
+        })
+
+        return render_to_response('search.html', context)
+    else:
+        #   No query params, head back to the home page
+        return HttpResponseRedirect('/')
     

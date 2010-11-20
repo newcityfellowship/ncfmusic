@@ -23,7 +23,7 @@ class Watch(models.Model):
     church = models.ForeignKey('Church', null=True)
     date = models.DateField(null=True, blank=True)
     vimeo_embed_code = models.CharField(max_length=512)
-    duration = models.CharField(max_length=16)
+    duration = models.CharField(max_length=16, null=True, blank=True)
     insert_date = models.DateField(auto_now_add=True, editable=False)
     
     def __unicode__(self):
