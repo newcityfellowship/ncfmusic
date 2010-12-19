@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+      <div class='interior listen' id='content'>
+        <h2 class='pagename'>
+          Listen
+        </h2>
+        <div class='intro'>
+          <a href='#'>
+            <img alt='Subscribe to the NCF Music Podcast' src='{{ MEDIA_URL }}/images/subscribe-podcast.png' />
+          </a>
+          <p>
+            {{ page.content }}
+          </p>
+          <div class='break'></div>
+        </div>
+        <ul class='aggregation'>
+  {% for listen in listens.object_list %}          
+          <li>
+            <button class='audioplay paused'></button>
+            <h3 class='floater'>{{ listen.title }}</h3>
+            <div class='audioplayer'>
+              <div class='time'></div>
+              <div class='outerprogressbar'>
+                <div class='innerprogressbar'></div>
+              </div>
+            </div>
+            <div class='details floater'>
+              <span>{{ listen.release_date|date:"F j, Y"}}</span>
+              <span> |</span>
+              <span>
+                <a href='{{ listen.songwriter.get_absolute_url }}'>{{ listen.songwriter }}</a>
+              </span>
+              <span> |</span>
+              <span>
+                <a href='{{ listen.church.get_absolute_url }}'>{{ listen.church }}</a>
+              </span>
+              <span> |</span>
+              <span class='expander'>View Song Info &#x2B07;  &#x2B06;</span>
+            </div>
+            <div class='extendeddetails'></div>
+            <div class='break'></div>
+          </li>
+  {% endfor %}          
+          <li class='last'>
+            <div id='pagination'>
+  {% ifnotequal listens.number 1 %}     
+              <div class='first'>
+                <a href="?page=1">first</a>
+              </div>
+  {% else %}
+              <div class='first inactive'>first</div>
+  {% endifnotequal %}
+  {% if listens.has_previous %}
+              <div class='previous'>
+                <a href="?page={{ listens.previous_page_number }}">&lt; previous</a>
+              </div>
+  {% else %}          
+              <div class='previous inactive'>&lt; previous</div>
+  {% endif %}
+              <div class='pages'>
+                <span>page</span>
+                <span class='number'>{{ listens.number }}</span>
+                <span> of</span>
+                <span class='number'>{{ listens.num_pages }}</span>
+              </div>
+  {% if listens.has_next %}
+              <div class='next'>
+                <a href='?page={{ listens.next_page_number }}'>next &gt;</a>
+              </div>
+  {% else %}
+              <div class='next inactive'>next &gt;</div>
+  {% endif %}
+  {% ifnotequal listens.number listens.num_pages %}
+              <div class='last'>
+                <a href='?page={{ listens.num_pages }}'>last</a>
+              </div>
+  {% else %}
+              <div class='last inactive'>last</div>
+  {% endifnotequal %}
+              <div class='break'></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+{% endblock content %}

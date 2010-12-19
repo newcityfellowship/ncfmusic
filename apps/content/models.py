@@ -1,13 +1,15 @@
+from __future__ import absolute_import
 from django.db import models
+from .utils import *
 
 class Listen(models.Model):
     title = models.CharField(max_length=256)
     slug = models.SlugField(max_length=255)
-    mp3 = models.FileField(upload_to='/ext/listen')
+    mp3 = models.FileField(upload_to='ext/listen')
     songwriter = models.ForeignKey('Contributor', related_name='listen_songwriter')
     producer = models.CharField(max_length=128, null=True, blank=True)
-    vocals = models.ManyToManyField('Contributor', null=True, related_name='listen_vocals')
-    instruments = models.ForeignKey('Contributor', null=True, related_name='listen_instruments')
+    vocals = models.ManyToManyField('Contributor', null=True, blank=True, related_name='listen_vocals')
+    instruments = models.ForeignKey('Contributor', null=True, blank=True, related_name='listen_instruments')
     release_date = models.DateField(null=True, blank=True)
     album_title = models.CharField(max_length=256, null=True)
     church = models.ForeignKey('Church')
@@ -22,8 +24,10 @@ class Watch(models.Model):
     description = models.TextField(null=True, blank=True)
     church = models.ForeignKey('Church', null=True)
     date = models.DateField(null=True, blank=True)
-    vimeo_embed_code = models.CharField(max_length=512)
-    duration = models.CharField(max_length=16, null=True, blank=True)
+    vimeo_url = models.CharField(max_length=256)
+    vimeo_embed_code = models.CharField(max_length=1024, null=True, blank=True, help_text="If left blank we'll try to figure it out from the vimeo url")
+    vimeo_thumb = models.CharField(max_length=256, null=True, blank=True, help_text="If left blank we'll try to figure it out from the vimeo url")
+    duration = models.CharField(max_length=16, null=True, blank=True, help_text="If left blank we'll try to figure it out from the vimeo url")
     insert_date = models.DateField(auto_now_add=True, editable=False)
     
     def __unicode__(self):
@@ -31,6 +35,75 @@ class Watch(models.Model):
         
     class Meta:
         verbose_name_plural = 'Watches'
+        
+    def save(self, *args, **kwargs):
+        self.vimeo_embed_code = self._get_embed_code()
+        self.vimeo_thumb = self._get_vimeo_thumb()
+        self.duration = self._get_vimeo_duration()
+        super(Watch, self).save(*args, **kwargs) # Call the "real" save() method.
+        
+    def _get_vimeo_json(self):
+        import re
+
+        m = re.search('/(\d+)$', self.vimeo_url)
+        if m:
+            vimeo_id = m.group(1)
+            
+            api_url = "http://vimeo.com/api/v2/video/%s.json" % vimeo_id
+            return self._get_vimeo_json_with_api_url(api_url)
+            
+        
+        return '' 
+    
+    @memoize    
+    def _get_vimeo_json_with_api_url(self, api_url):
+        import urllib2
+        conn = urllib2.Request(url=api_url, headers={'User-Agent' : 'New City Music'})
+        
+        try:
+            f = urllib2.urlopen(conn)
+            results = f.read()
+        except urllib2.URLError, ue:
+            return ''
+        
+        return results
+
+    def _get_embed_code(self):
+        """
+        Figure out the embed code
+        """
+        
+        import simplejson
+
+        objarr = simplejson.loads(self._get_vimeo_json())
+        if len(objarr):
+            obj = simplejson.loads(self._get_vimeo_json())[0]
+ 
+            #return '<object width="640" height="360"><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=%s&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=0&amp;show_portrait=0&amp;color=ffffff&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id=%s&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=0&amp;show_portrait=0&amp;color=ffffff&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="640" height="360"></embed></object>' % (obj.get('id'), obj.get('id'))
+        
+            return '<iframe src="http://player.vimeo.com/video/%s" width="640" height="360" frameborder="0"></iframe>' % obj.get('id')
+        else:
+            return ''
+
+    def _get_vimeo_thumb(self):
+        import simplejson
+        objarr = simplejson.loads(self._get_vimeo_json())
+        if len(objarr):
+            obj = objarr[0]
+            return obj.get('thumbnail_medium')
+        else:
+            return ''
+            
+    def _get_vimeo_duration(self):
+        import simplejson
+        objarr = simplejson.loads(self._get_vimeo_json())
+        if len(objarr):
+            obj = objarr[0]
+            duration = int(obj.get('duration'))
+            return "%d:%d" % (int(duration/60), (duration%60))
+            return obj.get('duration')
+        else:
+            return ''
     
 class Tutorial(models.Model):
     title = models.CharField(max_length=256)
@@ -45,6 +118,9 @@ class Tutorial(models.Model):
     
     def __unicode__(self):
         return self.title
+        
+    def get_absolute_url(self):
+        return '/tutorials/%s' % self.slug
     
 class Talk(models.Model):
     title = models.CharField(max_length=256)
@@ -70,6 +146,9 @@ class Article(models.Model):
     
     def __unicode__(self):
         return self.title
+        
+    def get_absolute_url(self):
+        return '/articles/%s' % self.slug
     
 class Song(models.Model):
     title = models.CharField(max_length=256)
@@ -118,6 +197,9 @@ class Church(models.Model):
         
     class Meta:
         verbose_name_plural = 'Churches'
+        
+    def get_absolute_url(self):
+        return '/churches/%s' % self.slug
     
 class Contributor(models.Model):
     name = models.CharField(max_length=128)
@@ -132,6 +214,9 @@ class Contributor(models.Model):
     
     def __unicode__(self):
         return self.name
+        
+    def get_absolute_url(self):
+        return '/musicians/%s' % self.slug
     
 class Contact(models.Model):
     first_name = models.CharField(max_length=256)
@@ -144,7 +229,7 @@ class Page(models.Model):
     
     slug = models.SlugField(max_length=255)
     content = models.TextField(blank=True, null=True)
-    heroshot = models.ForeignKey(Image)
+    heroshot = models.ForeignKey(Image, null=True, blank=True)
     
     def __unicode__(self):
         return self.slug

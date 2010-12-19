@@ -1,9 +1,84 @@
 {% extends "base.html" %}
 
-{% block content %}
-{{ listen }}
-{{ watch }}
-{{ learn }}
-{{ form.as_l }}
-{{ fomr.heroshots }}
+{% block headercallout %}        
+        <div class='headercallout listen'>
+          <div class='title'>
+            <span>Listen</span>
+            <a class='viewall' href='#'>
+              <img src='{{ MEDIA_URL }}/images/title-all-songs.png' />
+            </a>
+          </div>
+          <ul class='contents'>
+  {% for song in songs %}
+            <li>
+              <button class='audioplay paused' id='playsong{{ song.id }}' rel='song{{ song.id }}'></button>
+              <h3>{{ song.title }}</h3>
+              <a href='{{ song.church.get_absolute_url }}'>{{ song.church }}</a>
+              <div class='audioplayer nocontrols'>
+                <div class='mp3holder' id='song{{ song.id }}' rel='{{ song.mp3.url }}'></div>
+              </div>
+            </li>
+  {% endfor %}            
+          </ul>
+        </div>
+{% endblock headercallout %}
+
+{% block content %}      
+      <div class='home' id='content'>
+        <div id='leftcallout'>
+          <div class='title'>
+            <span>Watch</span>
+            <a class='viewall' href='#'>
+              <img src='{{ MEDIA_URL }}/images/title-all-videos.png' />
+            </a>
+          </div>
+          {{ watch.vimeo_embed_code }}
+          <h3>
+            <a href='#'>{{ watch.title }}</a>
+          </h3>
+          <p>{{ watch.description }}</p>
+        </div>
+        <div id='rightcol'>
+          <div id='ad'>
+            <a href='#'>
+              <img src='{{ MEDIA_URL }}/images/music-conference.png' />
+            </a>
+          </div>
+          <div id='learn'>
+            <div class='title'>
+              <span>Learn</span>
+              <a class='viewall' href='#'>
+                <img src='{{ MEDIA_URL }}/images/title-all-articles.png' />
+              </a>
+            </div>
+            <ul>
+  {% for article in learn %}              
+              <li>
+                <h3>
+                  <a href='{{ article.get_absolute_url }}'></a>
+                </h3>
+                <p>{{ article.teaser }}</p>
+              </li>
+  {% endfor %}              
+            </ul>
+          </div>
+          <div id='findasong'>
+            <form action='/songs/' method='get'>
+              <div class='typechooser'>
+                <input name='type' type='radio' value='sheet_music' />
+                <span>Sheet Music</span>
+                <input name='type' type='radio' value='lyrics' />
+                <span>Lyrics</span>
+                <input name='type' type='radio' value='slides' />
+                <span>Overhead Slides</span>
+              </div>
+              <h2>Find A Song</h2>
+              <div class='searchwrap'>
+                <input class='searchtext' name='q' type='text' value='Album, Artist, or Song Name' />
+                <input class='searchbutton' name='submit' src='{{ MEDIA_URL }}/images/search-icon2.png' type='image' />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
 {% endblock content %}

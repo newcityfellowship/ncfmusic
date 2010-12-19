@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+      <div class='interior watch' id='content'>
+        <div id='mainvideo'>
+          {{ watch.vimeo_embed_code|safe }}
+        </div>
+        <h2 class='pagename'>
+          Watch
+        </h2>
+        <div class='intro'>
+          <p>
+            {{ watch.description|safe }}
+          </p>
+        </div>
+        <div id='nowplaying'>
+          <span class='label'>&#x2794 Now Playing</span>
+          <h2>{{ watch.title }}</h2>
+          <div class='details'>
+            <span>{{ watch.duration }}</span>
+            <span> |</span>
+            <span>{{ watch.date|date:"F j, Y" }}</span>
+            <span> |</span>
+            <span>
+              <a href='{{ watch.church.get_absolute_url }}'>{{ watch.church }}</a>
+            </span>
+          </div>
+        </div>
+        <div class='break'></div>
+        <div class='relatedvideos'>
+          <ul>
+  {% for video in watches.object_list %}
+            <li>
+              <a href='{{ video.get_absolute_url }}'>
+                <img src='{{ video.vimeo_thumb}}' />
+              </a>
+              <h2>
+                <a href='#'>{{ video.title }}</a>
+              </h2>
+              <div class='details'>
+                <span>{{ video.title }}</span>
+                <span> |</span>
+                <span>{{ video.date|date:"F j, Y" }}</span>
+                <span> |</span>
+                <span>
+                  <a href='{{ video.church.get_absolute_url }}'>{{ video.church }}</a>
+                </span>
+              </div>
+            </li>
+  {% endfor %}
+          </ul>
+          <div class='break'></div>
+        </div>
+        <div id='pagination'>
+  {% ifnotequal watches.number 1 %}     
+          <div class='first'>
+            <a href="?page=1">first</a>
+          </div>
+  {% else %}
+          <div class='first inactive'>first</div>
+  {% endifnotequal %}
+  {% if watches.has_previous %}
+          <div class='previous'>
+            <a href="?page={{ watches.previous_page_number }}">&lt; previous</a>
+          </div>
+  {% else %}          
+          <div class='previous inactive'>&lt; previous</div>
+  {% endif %}
+          <div class='pages'>
+            <span>page</span>
+            <span class='number'>{{ watches.number }}</span>
+            <span> of</span>
+            <span class='number'>{{ watches.num_pages }}</span>
+          </div>
+  {% if watches.has_next %}
+          <div class='next'>
+            <a href='?page={{ watches.next_page_number }}'>next &gt;</a>
+          </div>
+  {% else %}
+          <div class='next inactive'>next &gt;</div>
+  {% endif %}
+  {% ifnotequal watches.number watches.num_pages %}
+          <div class='last'>
+            <a href='?page={{ watches.num_pages }}'>last</a>
+          </div>
+  {% else %}
+          <div class='last inactive'>last</div>
+  {% endifnotequal %}          
+        <div class='break'></div>
+      </div>
+{% endblock content %}      

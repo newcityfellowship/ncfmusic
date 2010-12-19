@@ -48,3 +48,14 @@ def normalize_query(query_string,
     
     '''
     return [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)] 
+
+def memoize(function):
+    cache = {}
+    def decorated_function(*args):
+        if args in cache:
+            return cache[args]
+        else:
+            val = function(*args)
+            cache[args] = val
+            return val
+    return decorated_function

@@ -102,4 +102,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.auth",
     "django.core.context_processors.request",
     "grappelli.context_processors.admin_template_path",
+    'django.core.context_processors.media',
 )

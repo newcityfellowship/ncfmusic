@@ -100,6 +100,7 @@ class ChurchAdmin(admin.ModelAdmin):
     list_display = ('name', 'city', 'state', )
     list_filter = ('state', )
     search_fields = ('name', 'city', 'state', )
+    prepopulated_fields = {'slug': ('name',)}
 
 admin.site.register(Church, ChurchAdmin)
 

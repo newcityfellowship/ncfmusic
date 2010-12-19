@@ -65,11 +65,16 @@ def listen(request):
         'listens': listens
     })
     
-    return render_to_response('about.html', context)
+    return render_to_response('listen.html', context)
     
-def watch(request):
+def watch(request, slug=None):
     page = get_object_or_404(Page, slug__exact='watch')
     watch_list = Watch.objects.order_by('-insert_date')
+    
+    if slug:
+        watch = get_object_or_404(Watch, slug__exect=slug)
+    else:
+        watch = watch_list[0];
     
     paginator = Paginator(watch_list, 5)
     
@@ -79,19 +84,20 @@ def watch(request):
         page = 1
         
     try:
-        watchs = paginator.page(page)
+        watches = paginator.page(page)
     except (EmptyPage, InvalidPage):
-        watchs = paginator.page(paginator.num_pages)
+        watches = paginator.page(paginator.num_pages)
         
     context = RequestContext(request, {
         'page': page,
-        'watchs': watchs
+        'watches': watches,
+        'watch': watch
     })
     
     return render_to_response('watch.html', context)
     
-def tutorials(requset):
-    page = get_object_or_404(Page, slug__exact='tutorials')
+def tutorials(request):
+    page = get_object_or_404(Page, slug__exact='learn')
     tutorial_list = Tutorial.objects.order_by('-insert_date')
     
     paginator = Paginator(tutorial_list, 3)
@@ -115,7 +121,7 @@ def tutorials(requset):
     return render_to_response('tutorials.html', context)
     
 def tutorial(request, slug):
-    page = get_object_or_404(Page, slug__exact='tutorials')
+    page = get_object_or_404(Page, slug__exact='learn')
     tutorial = get_object_or_404(Tutorial, slug__exact=slug)
     
     context = RequestContext(request, {
@@ -189,6 +195,15 @@ def songs(request, start_letter=None):
     
     song_list = Song.objects.order_by('title')
     
+    if ('q' in request.GET) and request.GET['q'].strip():
+        if ('type' in request.GET) and request.GET['type'].strip():
+            song_list = {
+                'sheet_music': song_list.filter(sheet_music__isnull=False),
+                'lyrics': song_list.filter(lyrics__isnull=False),
+                'slides': song_list.filter(slides__isnull=False),
+            }[request.GET['type']]
+
+    
     #   I'm sure there's a better way to do this, but it's late and my brain's tired, so this will work
     sections = {}
     for letter in map(chr, range(65, 91)):
@@ -196,6 +211,9 @@ def songs(request, start_letter=None):
     
     if start_letter:
         song_list = sections[start_letter]
+        
+    
+        
         
     paginator = Paginator(song_list, 4)
     
@@ -286,10 +304,27 @@ def churches(request):
     
     return render_to_response('churches.html', context)
     
-def musicians(request):
+    
+def church(request, slug):
+    page = get_object_or_404(Page, slug__exact='contributors')
+    church = get_object_or_404(Church, slug__exact=slug)
+    
+    context = RequestContext(request, {
+        'page': page,
+        'church': church,
+    })
+    
+    return render_to_response('church.html', context)    
+    
+def musicians(request, slug=None):
     page = get_object_or_404(Page, slug__exact='contributors')
     
-    musician_list = Contributors.objects.order_by('name')
+    #   If we have musician slug we'll put them at the top of the list
+    if slug:
+        musician_list = get_object_or_404(Contributor, slug__exact=slug)
+        musician_list = musician_list | Contributors.objects.exclude(slug__exact=slug).order_by('name')
+    else:
+        musician_list = Contributors.objects.order_by('name')
     
     context = RequestContext(request, {
         'page': page,
