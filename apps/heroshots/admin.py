@@ -1,7 +1,5 @@
-from __future__ import absolute_import
-
 from django.contrib import admin
-from .models import Image, Category
+from ncfmusic.apps.heroshots.models import Image, Category
 
 class ImageInline(admin.TabularInline):
 	model = Image

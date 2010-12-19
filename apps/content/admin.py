@@ -1,8 +1,6 @@
-from __future__ import absolute_import
-
 from django.contrib import admin
 
-from .models import *
+from ncfmusic.apps.content.models import *
 
 class ListenAdmin(admin.ModelAdmin):
     list_display = ('title', 'album_title', 'songwriter', 'church', 'release_date', )

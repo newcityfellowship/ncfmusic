@@ -1,6 +1,5 @@
-from __future__ import absolute_import
 from django.db import models
-from .utils import *
+from ncfmusic.apps.content.utils import *
 
 class Listen(models.Model):
     title = models.CharField(max_length=256)
