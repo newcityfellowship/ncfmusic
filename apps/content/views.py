@@ -9,8 +9,8 @@ from ncfmusic.apps.content.utils import *
 from ncfmusic.apps.heroshots.models import *
 
 def home(request):
-    listen = Listen.objects.order_by('-insert_date')[:3]
-    watch = Watch.objects.order_by('-insert_date')[:1]
+    songs = Listen.objects.order_by('-insert_date')[:3]
+    watch = Watch.objects.order_by('-insert_date')[0]
     learn = Tutorial.objects.order_by('-insert_date')[:2]
     
     heroshots = Category.objects.filter(slug='homepage')
@@ -23,7 +23,7 @@ def home(request):
         form = ContactForm()
     
     context = RequestContext(request, {
-        'listen': listen,
+        'songs': songs,
         'watch': watch,
         'learn': learn,
         'form': form,

@@ -24,6 +24,7 @@ class Watch(models.Model):
     church = models.ForeignKey('Church', null=True)
     date = models.DateField(null=True, blank=True)
     vimeo_url = models.CharField(max_length=256)
+    vimeo_id = models.CharField(max_length=16, null=True, blank=True, help_text="If left blank we'll try to figure it out from the vimeo url.")
     vimeo_embed_code = models.CharField(max_length=1024, null=True, blank=True, help_text="If left blank we'll try to figure it out from the vimeo url")
     vimeo_thumb = models.CharField(max_length=256, null=True, blank=True, help_text="If left blank we'll try to figure it out from the vimeo url")
     duration = models.CharField(max_length=16, null=True, blank=True, help_text="If left blank we'll try to figure it out from the vimeo url")
@@ -36,6 +37,8 @@ class Watch(models.Model):
         verbose_name_plural = 'Watches'
         
     def save(self, *args, **kwargs):
+        if not self.vimeo_id:
+            self.vimeo_id = self._get_vimeo_id()
         if not self.vimeo_embed_code:
             self.vimeo_embed_code = self._get_embed_code()
         if not self.vimeo_thumb:
@@ -103,7 +106,15 @@ class Watch(models.Model):
             obj = objarr[0]
             duration = int(obj.get('duration'))
             return "%d:%d" % (int(duration/60), (duration%60))
-            return obj.get('duration')
+        else:
+            return ''
+            
+    def _get_vimeo_id(self):
+        import simplejson
+        objarr = simplejson.loads(self._get_vimeo_json())
+        if len(objarr):
+            obj = objarr[0]
+            return obj.get('id')
         else:
             return ''
     

@@ -32,11 +32,11 @@
               <img src='{{ MEDIA_URL }}/images/title-all-videos.png' />
             </a>
           </div>
-          {{ watch.vimeo_embed_code }}
+          <iframe src="http://player.vimeo.com/video/{{ watch.vimeo_id }}" width="367" height="208" frameborder="0"></iframe>
           <h3>
             <a href='#'>{{ watch.title }}</a>
           </h3>
-          <p>{{ watch.description }}</p>
+          <p>{{ watch.description|safe }}</p>
         </div>
         <div id='rightcol'>
           <div id='ad'>
@@ -57,7 +57,7 @@
                 <h3>
                   <a href='{{ article.get_absolute_url }}'></a>
                 </h3>
-                <p>{{ article.teaser }}</p>
+                <p>{{ article.teaser|safe }}</p>
               </li>
   {% endfor %}              
             </ul>
