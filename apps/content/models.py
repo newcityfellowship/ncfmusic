@@ -36,9 +36,12 @@ class Watch(models.Model):
         verbose_name_plural = 'Watches'
         
     def save(self, *args, **kwargs):
-        self.vimeo_embed_code = self._get_embed_code()
-        self.vimeo_thumb = self._get_vimeo_thumb()
-        self.duration = self._get_vimeo_duration()
+        if not self.vimeo_embed_code:
+            self.vimeo_embed_code = self._get_embed_code()
+        if not self.vimeo_thumb:
+            self.vimeo_thumb = self._get_vimeo_thumb()
+        if not self.duration:
+            self.duration = self._get_vimeo_duration()
         super(Watch, self).save(*args, **kwargs) # Call the "real" save() method.
         
     def _get_vimeo_json(self):
