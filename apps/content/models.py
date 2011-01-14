@@ -226,11 +226,11 @@ class Church(models.Model):
 class Contributor(models.Model):
     name = models.CharField(max_length=128)
     slug = models.SlugField(max_length=255)
-    title = models.CharField(max_length=128)
-    church = models.ForeignKey('Church')
-    city = models.CharField(max_length=256)
+    title = models.CharField(max_length=128, null=True, blank=True)
+    church = models.ForeignKey('Church', null=True, blank=True)
+    city = models.CharField(max_length=256, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
-    phone = models.CharField(max_length=32)
+    phone = models.CharField(max_length=32, null=True, blank=True)
     website = models.URLField(null=True, blank=True)
     buy_music_url = models.URLField(null=True, blank=True)
     
