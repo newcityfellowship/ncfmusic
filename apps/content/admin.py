@@ -106,7 +106,7 @@ class ContributorAdmin(admin.ModelAdmin):
     list_display = ('name', 'title', 'church', )
     list_filter = ('church', )
     search_fields = ('name', 'title', )
-    prepopulated_fields = {'slug': ('title',)}
+    prepopulated_fields = {'slug': ('name',)}
     
     class Media:
         js = [
