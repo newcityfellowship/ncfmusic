@@ -9,10 +9,11 @@ class Listen(models.Model):
     producer = models.CharField(max_length=128, null=True, blank=True)
     vocals = models.ManyToManyField('Contributor', null=True, blank=True, related_name='listen_vocals')
     instruments = models.ForeignKey('Contributor', null=True, blank=True, related_name='listen_instruments')
-    release_date = models.DateField(null=True, blank=True)
+    record_date = models.DateField(null=True, blank=True)
     album_title = models.CharField(max_length=256, null=True)
     church = models.ForeignKey('Church')
     insert_date = models.DateField(auto_now_add=True, editable=False)
+    source = models.CharField(max_length=1024)
     
     def __unicode__(self):
         return self.title
