@@ -1,0 +1,21 @@
+<li>
+  <h3><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h3>
+  <div class='break'></div>
+  <div class='details'>
+    <span>{{ article.date|date:"F j, Y" }}</span>
+    <span> |</span>
+    <span>
+      <a href='{{ article.author.get_absolute_url }}'>{{ article.author }}</a>
+    </span>
+    <span> |</span>
+    <span>
+      <a href='{{ article.church.get_absolute_url }}'>{{ article.church }}</a>
+    </span>
+  </div>
+  <div class='break'></div>
+  <div class='teaser'>
+    <p>
+      {{ article.teaser|safe }}
+    </p>
+  </div>
+</li>

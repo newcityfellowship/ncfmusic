@@ -32,7 +32,7 @@
         <ul class='subnavlist'>
   {% for tutorial in tutorial_list %}
           <li>
-            <a href='{{ tutorial.get_absolute_url }}'>{{ tutorial.title }}</a>
+            <a href='{{ tutorial.get_abslute_url }}'>{{ tutorial.title }}</a>
           </li>
   {% endfor %}
         </ul>
@@ -47,7 +47,7 @@
         <ul class='subnavlist'>
   {% for talk in talk_list %}
           <li>
-            <a href='{{ talk.get_absolute_url }}'>{{ talk.title }}</a>
+            <a href='{{ talk.get_abslute_url }}'>{{ talk.title }}</a>
           </li>
   {% endfor %}
         </ul>
@@ -62,7 +62,7 @@
         <ul class='subnavlist'>
   {% for article in article_list %}
           <li>
-            <a href='{{ article.get_absolute_url }}'>{{ article.title }}</a>
+            <a href='{{ article.get_abslute_url }}'>{{ article.title }}</a>
           </li>
   {% endfor %}
         </ul>
@@ -74,65 +74,64 @@
       Learn
     </h2>
     <ul class='aggregation'>
-  {% for tutorial in tutorials.object_list %}    
+  {% for talk in talks.object_list %}
       <li>
-        <a href='#'>
-          <img class='thumb' src='{{ tutorial.vimeo_thumb }}' />
-        </a>
-        <h3 class='nofloat'>{{ tutorial.title }}</h3>
+        <h3>{{ talk.title }}</h3>
+        <div class='break'></div>
         <div class='details'>
-          <span>{{ tutorial.date|date:"F j, Y" }}</span>
+          <span>{{ talk.date|date:"F j, Y" }}</span>
           <span> |</span>
           <span>
-            <a href='{{ tutorial.author.get_absolute_url }}'>{{ tutorial.author }}</a>
+            <a href='{{ talk.author.get_absolute_url }}'>{{ talk.author }}</a>
           </span>
           <span> |</span>
           <span>
-            <a href='{{ tutorial.church.get_absolute_url }}'>{{ tutorial.church }}</a>
+            <a href='{{ talk.church.get_absolute_url }}'>{{ talk.church }}</a>
           </span>
           <span> |</span>
-          <span>Duration {{ tutorial.duration }}</span>
+          <span>Duration {{ talk.duration }}</span>
         </div>
+        <div class='break'></div>
         <div class='teaser'>
           <p>
-            {{ tutorial.teaser|safe }}
+            {{ talk.teaser|safe }}
           </p>
         </div>
-      </li>
+      </li>      
   {% endfor %}      
     </ul>
     <div class='break'></div>
     <div id='pagination'>
-{% ifnotequal tutorials.number 1 %}     
+{% ifnotequal talks.number 1 %}     
       <div class='first'>
         <a href="?page=1">first</a>
       </div>
 {% else %}
       <div class='first inactive'>first</div>
 {% endifnotequal %}
-{% if tutorials.has_previous %}
+{% if talks.has_previous %}
       <div class='previous'>
-        <a href="?page={{ tutorials.previous_page_number }}">&lt; previous</a>
+        <a href="?page={{ talks.previous_page_number }}">&lt; previous</a>
       </div>
 {% else %}          
       <div class='previous inactive'>&lt; previous</div>
 {% endif %}
       <div class='pages'>
         <span>page</span>
-        <span class='number'>{{ tutorials.number }}</span>
+        <span class='number'>{{ talks.number }}</span>
         <span> of</span>
-        <span class='number'>{{ tutorials.num_pages }}</span>
+        <span class='number'>{{ talks.num_pages }}</span>
       </div>
-{% if tutorials.has_next %}
+{% if talks.has_next %}
       <div class='next'>
-        <a href='?page={{ tutorials.next_page_number }}'>next &gt;</a>
+        <a href='?page={{ talks.next_page_number }}'>next &gt;</a>
       </div>
 {% else %}
       <div class='next inactive'>next &gt;</div>
 {% endif %}
-{% ifnotequal tutorials.number tutorials.num_pages %}
+{% ifnotequal talks.number talks.num_pages %}
       <div class='last'>
-        <a href='?page={{ tutorials.num_pages }}'>last</a>
+        <a href='?page={{ talks.num_pages }}'>last</a>
       </div>
 {% else %}
       <div class='last inactive'>last</div>

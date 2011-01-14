@@ -17,9 +17,10 @@
         <ul class='aggregation'>
   {% for listen in listens.object_list %}          
           <li>
-            <button class='audioplay paused'></button>
+            <button class='audioplay paused' id='playsong{{ listen.id }}' rel='song{{ listen.id }}'></button>
             <h3 class='floater'>{{ listen.title }}</h3>
             <div class='audioplayer'>
+              <div class='mp3holder' id='song{{ listen.id }}' rel='{{ listen.mp3.url }}'></div>
               <div class='time'></div>
               <div class='outerprogressbar'>
                 <div class='innerprogressbar'></div>
@@ -36,9 +37,35 @@
                 <a href='{{ listen.church.get_absolute_url }}'>{{ listen.church }}</a>
               </span>
               <span> |</span>
-              <span class='expander'>View Song Info &#x2B07;  &#x2B06;</span>
+              <span class='expander' rel='song{{ listen.id }}-detail'>View Song Info &#x2B07;</span>
             </div>
-            <div class='extendeddetails'></div>
+            <div class='extendeddetails' id='song{{ listen.id }}-detail'>
+              <table>
+                <tr>
+                  <td class='category'>Songwriter:</td>
+                  <td class='listing'>
+                    <a href='{{ listen.songwriter.get_absolute_url }}'>{{ listen.songwriter }}</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td class='category'>Producer:</td>
+                  <td class='listing'>
+                    <a href='{{ listen.producer.get_absolute_url }}'>{{ listen.producer }}</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td class='category'>Vocals:</td>
+                  <td class='listing'>
+                    {% for contributor in listen.vocals.all %}
+                    <a href="{{ contribuer.get_absolute_url }}">{{ contribuer }}</a>
+                      {% if not forloop.last %}
+                      <span>,</span>
+                      {% endif %}
+                    {% endfor %}
+                  </td>
+                </tr>
+              </table>
+            </div>
             <div class='break'></div>
           </li>
   {% endfor %}          

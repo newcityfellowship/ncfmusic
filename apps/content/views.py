@@ -95,9 +95,54 @@ def watch(request, slug=None):
     
     return render_to_response('watch.html', context)
     
-def tutorials(request):
+def learn_sidebar():
+    source_list = Church.objects.order_by('name')
+    tutorial_list = Tutorial.objects.order_by('-date')[:5]
+    talk_list = Talk.objects.order_by('-date')[:5]
+    article_list = Article.objects.order_by('-date')[:5]
+    
+    return source_list, tutorial_list, talk_list, article_list
+        
+def sources(request, slug=None):
     page = get_object_or_404(Page, slug__exact='learn')
-    tutorial_list = Tutorial.objects.order_by('-insert_date')
+    
+    learn_list = Learn.objects.order_by('-date')
+    
+    if (slug):
+        learn_list = learn_list.filter(church__slug__exact=slug)
+
+    paginator = Paginator(learn_list, 3)
+    
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+        
+    try:
+        learns = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        learns = paginator.page(paginator.num_pages)
+
+    source_list, tutorial_list, talk_list, article_list = learn_sidebar()
+
+    context = RequestContext(request, {
+        'page': page,
+        'learns': learns,
+        'source_list': source_list, #   For the sidebar
+        'tutorial_list': tutorial_list, 
+        'talk_list': talk_list,
+        'article_list': article_list,
+    })
+    
+    return render_to_response('learns.html', context)
+    
+def tutorials(request, slug=None):
+    page = get_object_or_404(Page, slug__exact='learn')
+    
+    if slug:
+        tutorial_list = Tutorial.objects.filter(church__slug=slug).order_by('-date')
+    else:
+        tutorial_list = Tutorial.objects.order_by('-date')
     
     paginator = Paginator(tutorial_list, 3)
     
@@ -111,10 +156,15 @@ def tutorials(request):
     except (EmptyPage, InvalidPage):
         tutorials = paginator.page(paginator.num_pages)
         
+    source_list, tutorial_list, talk_list, article_list = learn_sidebar()
+        
     context = RequestContext(request, {
         'page': page,
         'tutorials': tutorials,
-        'tutorial_list': tutorial_list[:5], #   For the sidebar
+        'source_list': source_list, #   For the sidebar
+        'tutorial_list': tutorial_list, 
+        'talk_list': talk_list,
+        'article_list': article_list,
     })
     
     return render_to_response('tutorials.html', context)
@@ -146,10 +196,15 @@ def talks(request):
     except (EmptyPage, InvalidPage):
         talks = paginator.page(paginator.num_pages)
         
+    source_list, tutorial_list, talk_list, article_list = learn_sidebar()
+        
     context = RequestContext(request, {
         'page': page,
         'talks': talks,
-        'talk_list': talk_list[:5], #   For the sidebar
+        'source_list': source_list, #   For the sidebar
+        'tutorial_list': tutorial_list, 
+        'talk_list': talk_list,
+        'article_list': article_list,
     })
     
     return render_to_response('talks.html', context)

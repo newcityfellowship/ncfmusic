@@ -1,0 +1,28 @@
+<li>
+  <button class='audioplay paused' id='playsong{{ talk.id }}' rel='song{{ talk.id }}'></button>
+  <h3 class='floater'>{{ talk.title }}</h3>
+  <div class='audioplayer'>
+    <div class='mp3holder' id='song{{ talk.id }}' rel='{{ talk.mp3.url }}'></div>
+    <div class='time'></div>
+    <div class='outerprogressbar'>
+      <div class='innerprogressbar'></div>
+    </div>
+  </div>
+  <div class='details floater'>
+    <span>{{ talk.date|date:"F j, Y" }}</span>
+    <span> |</span>
+    <span>
+      <a href='{{ talk.author.get_absolute_url }}'>{{ talk.author }}</a>
+    </span>
+    <span> |</span>
+    <span>
+      <a href='{{ talk.church.get_absolute_url }}'>{{ talk.church }}</a>
+    </span>
+  </div>
+  <div class='break'></div>
+  <div class='teaser indented'>
+    <p>
+      {{ talk.teaser|safe }}
+    </p>
+  </div>
+</li>

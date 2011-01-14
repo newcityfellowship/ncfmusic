@@ -1,0 +1,24 @@
+<li>
+  <a href='{{ tutorial.get_absolute_url }}'>
+    <img class='thumb' src='{{ tutorial.vimeo_thumb }}' />
+  </a>
+  <h3 class='nofloat'><a href='{{ tutorial.get_absolute_url }}'>{{ tutorial.title }}</a></h3>
+  <div class='details'>
+    <span>{{ tutorial.date|date:"F j, Y" }}</span>
+    <span> |</span>
+    <span>
+      <a href='{{ tutorial.author.get_absolute_url }}'>{{ tutorial.author }}</a>
+    </span>
+    <span> |</span>
+    <span>
+      <a href='{{ tutorial.church.get_absolute_url }}'>{{ tutorial.church }}</a>
+    </span>
+    <span> |</span>
+    <span>Duration {{ tutorial.duration }}</span>
+  </div>
+  <div class='teaser'>
+    <p>
+      {{ tutorial.teaser|safe }}
+    </p>
+  </div>
+</li>

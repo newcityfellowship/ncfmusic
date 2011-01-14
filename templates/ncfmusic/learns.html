@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class='interior learn' id='content'>
+  {% include "learn/sidebar.html" %}
+  <div id='maincontent'>
+    <h2 class='pagename'>
+      Learn
+    </h2>
+    <ul class='aggregation'>
+  {% for learn in learns.object_list %}   
+    {% if learn.tutorial %}
+      {% with learn.tutorial as tutorial %}
+        {% include "learn/tutorial_item.html" %}
+      {% endwith %}
+    {% endif %}
+    
+    {% if learn.talk %}
+      {% with learn.talk as talk %}
+        {% include "learn/talk_item.html" %}
+      {% endwith %}
+    {% endif %}
+    
+    {% if learn.article %}
+      {% with learn.article as article %}
+        {% include "learn/article_item.html" %}
+      {% endwith %}
+    {% endif %}
+  {% endfor %}      
+    </ul>
+    <div class='break'></div>
+    <div id='pagination'>
+{% ifnotequal tutorials.number 1 %}     
+      <div class='first'>
+        <a href="?page=1">first</a>
+      </div>
+{% else %}
+      <div class='first inactive'>first</div>
+{% endifnotequal %}
+{% if tutorials.has_previous %}
+      <div class='previous'>
+        <a href="?page={{ tutorials.previous_page_number }}">&lt; previous</a>
+      </div>
+{% else %}          
+      <div class='previous inactive'>&lt; previous</div>
+{% endif %}
+      <div class='pages'>
+        <span>page</span>
+        <span class='number'>{{ tutorials.number }}</span>
+        <span> of</span>
+        <span class='number'>{{ tutorials.num_pages }}</span>
+      </div>
+{% if tutorials.has_next %}
+      <div class='next'>
+        <a href='?page={{ tutorials.next_page_number }}'>next &gt;</a>
+      </div>
+{% else %}
+      <div class='next inactive'>next &gt;</div>
+{% endif %}
+{% ifnotequal tutorials.number tutorials.num_pages %}
+      <div class='last'>
+        <a href='?page={{ tutorials.num_pages }}'>last</a>
+      </div>
+{% else %}
+      <div class='last inactive'>last</div>
+{% endifnotequal %}   
+    </div>
+    <div class='break'></div>
+  </div>
+  <div class='break'></div>
+</div>
+{% endblock content %}
