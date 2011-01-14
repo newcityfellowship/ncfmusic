@@ -4,7 +4,7 @@ from ncfmusic.apps.content.models import *
 
 class ListenAdmin(admin.ModelAdmin):
     list_display = ('title', 'album_title', 'songwriter', 'church', 'record_date', )
-    list_filter = ('church', 'release_date' )
+    list_filter = ('church', 'record_date' )
     search_fields = ('title', 'album_title', )
     prepopulated_fields = {'slug': ('title',)}
 
