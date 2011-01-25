@@ -34,14 +34,16 @@ def home(request):
     
 def about(request):
     page = get_object_or_404(Page, slug__exact='about')
-    church = get_object_or_404(Church, name='New City Fellowship Glenwood')
-    #   Maybe it would be easier to hard code this into the template?
-    contact = get_object_or_404(Contact, church=church, first_name='James', last_name='Ward')
+    #church = get_object_or_404(Church, name='New City Fellowship Glenwood')
+    #   Maybe it would be easier to hard code this into the template? 
+    # I agree. Pulled it out.
+    #contact = get_object_or_404(Contact, church=church, first_name='James', last_name='Ward')
     
     context = RequestContext(request, {
-        'page': page,
-        'contact': contact
+        'page': page
     })
+    
+    return render_to_response('about.html', context);
     
 def listen(request):
     page = get_object_or_404(Page, slug__exact='listen')
