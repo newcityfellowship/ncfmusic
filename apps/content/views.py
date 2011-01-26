@@ -46,7 +46,7 @@ def about(request):
     return render_to_response('about.html', context);
     
 def listen(request):
-    page = get_object_or_404(Page, slug__exact='listen')
+    contentpage = get_object_or_404(Page, slug__exact='listen')
     listen_list = Listen.objects.order_by('-insert_date')
     
     paginator = Paginator(listen_list, 5)
@@ -62,6 +62,7 @@ def listen(request):
         listens = paginator.page(paginator.num_pages)
         
     context = RequestContext(request, {
+        'contentpage': contentpage,
         'page': page,
         'listens': listens
     })
