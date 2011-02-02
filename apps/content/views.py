@@ -219,12 +219,15 @@ def articles(request):
         articles = paginator.page(page)
     except (EmptyPage, InvalidPage):
         articles = paginator.page(paginator.num_pages)
-    
+        
+    source_list, tutorial_list, talk_list = learn_sidebar()
     context = RequestContext(request, {
         'page': page,
         'learns': articles,
         'expanded': 'articles',
         'article_list': article_list[:5], #   For the sidebar
+        'tutorial_list': tutorial_list, 
+        'talk_list': talk_list
     })
     return render_to_response('learns.html', context)
     
