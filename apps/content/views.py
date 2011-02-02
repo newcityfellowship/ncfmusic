@@ -162,7 +162,7 @@ def tutorials(request, slug=None):
         
     context = RequestContext(request, {
         'page': page,
-        'tutorials': tutorials,
+        'learns': tutorials,
         'tutorial_list': tutorial_list, 
         'talk_list': talk_list,
         'expanded': 'tutorials',
@@ -215,7 +215,7 @@ def talks(request):
         
     context = RequestContext(request, {
         'page': page,
-        'talks': talks,
+        'learns': talks,
         'expanded': 'talks',
         'tutorial_list': tutorial_list, 
         'talk_list': talk_list,
