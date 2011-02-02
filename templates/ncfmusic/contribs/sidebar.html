@@ -1,0 +1,37 @@
+<div id='left-nav'>
+  <div class='title'>
+    <span>Contributors</span>
+  </div>
+  <ul class='topnavlist'>
+		<li class='navsection {% ifnotequal expanded 'churches' %}collapsed{% endifnotequal %}'>
+      <div class='topcat'>
+        <div class='navexpander'>+</div>
+        <div class='catname'>
+          <a href='/churches/'>Churches</a>
+        </div>
+      </div>
+      <ul class='subnavlist'>
+{% for church in churches %}
+        <li>
+          <a href='{{ church.get_absolute_url }}'>{{ church.name }}</a>
+        </li>
+{% endfor %}
+      </ul>
+    </li>
+    <li class='navsection {% ifnotequal expanded 'musicians' %}collapsed{% endifnotequal %}'>
+      <div class='topcat'>
+        <div class='navexpander'>+</div>
+        <div class='catname'>
+          <a href='/musicians/'>Musicians</a>
+        </div>
+      </div>
+      <ul class='subnavlist'>
+{% for contrib in contribs %}
+        <li>
+          <a href='{{ contrib.get_absolute_url }}'>{{ contrib.name }}</a>
+        </li>
+{% endfor %}
+      </ul>
+    </li>
+  </ul>
+</div>

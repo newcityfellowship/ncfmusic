@@ -74,7 +74,10 @@ p, h3, h3 a {
   background-image: url(/media/images/listen-hero.jpg); }
   
 #header.learn {
-  background-image: url(/media/images/learn-hero.jpg); }  
+  background-image: url(/media/images/learn-hero.jpg); }
+
+#header.contrib {
+  background-image: url(/media/images/contrib-hero.jpg); }  
 
 #header.watch {
   background-image: url(/media/images/watch-hero.jpg); }
