@@ -195,7 +195,7 @@ def talk(request, slug):
         'expanded': 'tutorials',
         'article_list': article_list
     })
-    return render_to_response('tutorial.html', context)
+    return render_to_response('talk.html', context)
     
 def talks(request):
     talk_list = Talk.objects.order_by('-insert_date')
