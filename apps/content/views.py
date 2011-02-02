@@ -131,7 +131,6 @@ def sources(request, slug=None):
     context = RequestContext(request, {
         'page': page,
         'learns': learns,
-        'source_list': source_list, #   For the sidebar
         'tutorial_list': tutorial_list, 
         'talk_list': talk_list,
         'article_list': article_list,
@@ -164,31 +163,25 @@ def tutorials(request, slug=None):
     context = RequestContext(request, {
         'page': page,
         'tutorials': tutorials,
-        'source_list': source_list, #   For the sidebar
         'tutorial_list': tutorial_list, 
         'talk_list': talk_list,
+        'expanded': 'tutorials',
         'article_list': article_list,
     })
     
     return render_to_response('tutorials.html', context)
     
 def tutorial(request, slug):
-    page = get_object_or_404(Page, slug__exact='learn')
     tutorial = get_object_or_404(Tutorial, slug__exact=slug)
-    
     context = RequestContext(request, {
-        'page': page,
         'tutorial': tutorial,
     })
-    
     return render_to_response('tutorial.html', context)
     
 def talks(request):
-    page = get_object_or_404(Page, slug__exact='talks')
     talk_list = Talk.objects.order_by('-insert_date')
-    
     paginator = Paginator(talk_list, 4)
-    
+
     try:
         page = int(request.GET.get('page', '1'))
     except ValueError:
@@ -204,7 +197,7 @@ def talks(request):
     context = RequestContext(request, {
         'page': page,
         'talks': talks,
-        'source_list': source_list, #   For the sidebar
+        'expanded': 'talks',
         'tutorial_list': tutorial_list, 
         'talk_list': talk_list,
         'article_list': article_list,
@@ -213,7 +206,6 @@ def talks(request):
     return render_to_response('talks.html', context)
     
 def articles(request):
-    page = get_object_or_404(Page, slug__exact='articles')
     article_list = Article.objects.order_by('-insert_date')
     
     paginator = Paginator(article_list, 4)
@@ -227,24 +219,23 @@ def articles(request):
         articles = paginator.page(page)
     except (EmptyPage, InvalidPage):
         articles = paginator.page(paginator.num_pages)
-        
+    
     context = RequestContext(request, {
         'page': page,
-        'articles': articles,
+        'learns': articles,
+        'expanded': 'articles',
         'article_list': article_list[:5], #   For the sidebar
     })
-    
-    return render_to_response('articles.html', context)
+    return render_to_response('learns.html', context)
     
 def article(request, slug):
-    page = get_object_or_404(Page, slug__exact='articles')
     article = get_object_or_404(Article, slug__exact=slug)
-    
+    article_list = Article.objects.order_by('-insert_date')
     context = RequestContext(request, {
-        'page': page,
         'article': article,
+        'expanded': 'articles',
+        'article_list': article_list[:5], #   For the sidebar
     })
-    
     return render_to_response('article.html', context)
     
 def songs(request, start_letter=None):

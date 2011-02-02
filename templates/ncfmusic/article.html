@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block headerclasses %} class="interior learn" {% endblock headerclasses %}
+
+{% block content %}
+<div class='interior learn' id='content'>
+  {% include "learn/sidebar.html" %}
+  <div id='maincontent'>
+    <h2 class='pagename'>
+      Learn
+    </h2>
+    <ul class='aggregation'>
+
+			<li>
+			  <h3><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h3>
+			  <div class='break'></div>
+			  <div class='details'>
+			    <span>{{ article.date|date:"F j, Y" }}</span>
+			    <span> |</span>
+			    <span>
+			      <a href='{{ article.author.get_absolute_url }}'>{{ article.author }}</a>
+			    </span>
+			    <span> |</span>
+			    <span>
+			      <a href='{{ article.church.get_absolute_url }}'>{{ article.church }}</a>
+			    </span>
+			  </div>
+			  <div class='break'></div>
+			  <div class='teaser'>
+			      {{ article.article_body|safe }}
+			  </div>
+			</li> 
+
+
+
+    </ul>
+    <div class='break'></div>
+  </div>
+  <div class='break'></div>
+</div>
+{% endblock content %}

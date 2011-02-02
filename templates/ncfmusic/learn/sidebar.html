@@ -3,22 +3,22 @@
     <span>Learn</span>
   </div>
   <ul class='topnavlist'>
-    <li class='navsection'>
+		<li class='navsection {% ifnotequal expanded 'articles' %}collapsed{% endifnotequal %}'>
       <div class='topcat'>
-        <div class='navexpander'>-</div>
-        <div class='catname selected'>
-          <a href='#'>Sources</a>
+        <div class='navexpander'>+</div>
+        <div class='catname'>
+          <a href='#'>Articles</a>
         </div>
       </div>
       <ul class='subnavlist'>
-{% for source in source_list %}
+{% for article in article_list %}
         <li>
-          <a href='/learn/sources/{{ source.slug }}/'>{{ source.name }}</a>
+          <a href='{{ article.get_absolute_url }}'>{{ article.title }}</a>
         </li>
 {% endfor %}
       </ul>
     </li>
-    <li class='navsection collapsed'>
+    <li class='navsection {% ifnotequal expanded 'tutorials' %}collapsed{% endifnotequal %}'>
       <div class='topcat'>
         <div class='navexpander'>+</div>
         <div class='catname'>
@@ -33,7 +33,7 @@
 {% endfor %}
       </ul>
     </li>
-    <li class='navsection collapsed'>
+    <li class='navsection {% ifnotequal expanded 'talks' %}collapsed{% endifnotequal %}'>
       <div class='topcat'>
         <div class='navexpander'>+</div>
         <div class='catname'>
@@ -44,21 +44,6 @@
 {% for talk in talk_list %}
         <li>
           <a href='{{ talk.get_absolute_url }}'>{{ talk.title }}</a>
-        </li>
-{% endfor %}
-      </ul>
-    </li>
-    <li class='navsection collapsed'>
-      <div class='topcat'>
-        <div class='navexpander'>+</div>
-        <div class='catname'>
-          <a href='#'>Articles</a>
-        </div>
-      </div>
-      <ul class='subnavlist'>
-{% for article in article_list %}
-        <li>
-          <a href='{{ article.get_absolute_url }}'>{{ article.title }}</a>
         </li>
 {% endfor %}
       </ul>
