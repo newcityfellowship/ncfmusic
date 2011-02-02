@@ -192,7 +192,7 @@ def talk(request, slug):
         'talk': talk,
         'tutorial_list': tutorial_list, 
         'talk_list': talk_list,
-        'expanded': 'tutorials',
+        'expanded': 'talks',
         'article_list': article_list
     })
     return render_to_response('talk.html', context)
