@@ -4,73 +4,7 @@
 
 {% block content %}
 <div class='interior learn' id='content'>
-  <div id='left-nav'>
-    <div class='title'>
-      <span>Learn</span>
-    </div>
-    <ul class='topnavlist'>
-      <li class='navsection'>
-        <div class='topcat'>
-          <div class='navexpander'>-</div>
-          <div class='catname selected'>
-            <a href='#'>Sources</a>
-          </div>
-        </div>
-        <ul class='subnavlist'>
-  {% for source in source_list %}
-          <li>
-            <a href='{{ source.get_absolute_url }}'>{{ source.name }}</a>
-          </li>
-  {% endfor %}
-        </ul>
-      </li>
-      <li class='navsection collapsed'>
-        <div class='topcat'>
-          <div class='navexpander'>+</div>
-          <div class='catname'>
-            <a href='#'>Tutorials</a>
-          </div>
-        </div>
-        <ul class='subnavlist'>
-  {% for tutorial in tutorial_list %}
-          <li>
-            <a href='{{ tutorial.get_abslute_url }}'>{{ tutorial.title }}</a>
-          </li>
-  {% endfor %}
-        </ul>
-      </li>
-      <li class='navsection collapsed'>
-        <div class='topcat'>
-          <div class='navexpander'>+</div>
-          <div class='catname'>
-            <a href='#'>Talks</a>
-          </div>
-        </div>
-        <ul class='subnavlist'>
-  {% for talk in talk_list %}
-          <li>
-            <a href='{{ talk.get_abslute_url }}'>{{ talk.title }}</a>
-          </li>
-  {% endfor %}
-        </ul>
-      </li>
-      <li class='navsection collapsed'>
-        <div class='topcat'>
-          <div class='navexpander'>+</div>
-          <div class='catname'>
-            <a href='#'>Articles</a>
-          </div>
-        </div>
-        <ul class='subnavlist'>
-  {% for article in article_list %}
-          <li>
-            <a href='{{ article.get_abslute_url }}'>{{ article.title }}</a>
-          </li>
-  {% endfor %}
-        </ul>
-      </li>
-    </ul>
-  </div>
+  {% include "learn/sidebar.html" %}
   <div id='maincontent'>
     <h2 class='pagename'>
       Learn

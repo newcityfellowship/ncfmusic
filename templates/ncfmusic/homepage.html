@@ -20,7 +20,12 @@
                 <div class='mp3holder' id='song{{ song.id }}' rel='{{ song.mp3.url }}'></div>
               </div>
             </li>
-  {% endfor %}            
+  {% endfor %}
+            <li class='last'> 
+						   <a href='#'> 
+						   		<img src='media/images/subscribe-podcast-small-callout.png' /> 
+						   </a> 
+						</li>
           </ul>
         </div>
 {% endblock headercallout %}
@@ -57,7 +62,7 @@
   {% for article in learn %}              
               <li>
                 <h3>
-                  <a href='{{ article.get_absolute_url }}'></a>
+                  <a href='/articles/{{ article.slug }}'>{{ article.title }}</a>
                 </h3>
                 <p>{{ article.teaser|safe }}</p>
               </li>

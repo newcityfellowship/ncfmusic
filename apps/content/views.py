@@ -173,8 +173,27 @@ def tutorials(request, slug=None):
     
 def tutorial(request, slug):
     tutorial = get_object_or_404(Tutorial, slug__exact=slug)
+    source_list, tutorial_list, talk_list, article_list = learn_sidebar()
+    
     context = RequestContext(request, {
         'tutorial': tutorial,
+        'tutorial_list': tutorial_list, 
+        'talk_list': talk_list,
+        'expanded': 'tutorials',
+        'article_list': article_list
+    })
+    return render_to_response('tutorial.html', context)
+
+def talk(request, slug):
+    talk = get_object_or_404(Talk, slug__exact=slug)
+    source_list, tutorial_list, talk_list, article_list = learn_sidebar()
+
+    context = RequestContext(request, {
+        'talk': talk,
+        'tutorial_list': tutorial_list, 
+        'talk_list': talk_list,
+        'expanded': 'tutorials',
+        'article_list': article_list
     })
     return render_to_response('tutorial.html', context)
     

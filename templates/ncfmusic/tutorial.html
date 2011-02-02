@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block headerclasses %} class="interior learn" {% endblock headerclasses %}
+
+{% block content %}
+<div class='interior learn' id='content'>
+  {% include "learn/sidebar.html" %}
+  <div id='maincontent'>
+    <h2 class='pagename'>
+      Learn
+    </h2>
+    <ul class='aggregation'>
+
+			<li>
+			  {{ watch.vimeo_embed_code|safe }}
+			
+			  <h3 class='nofloat'><a href='{{ tutorial.get_absolute_url }}'>{{ tutorial.title }}</a></h3>
+			  <div class='details'>
+			    <span>{{ tutorial.date|date:"F j, Y" }}</span>
+			    <span> |</span>
+			    <span>
+			      <a href='{{ tutorial.author.get_absolute_url }}'>{{ tutorial.author }}</a>
+			    </span>
+			    <span> |</span>
+			    <span>
+			      <a href='{{ tutorial.church.get_absolute_url }}'>{{ tutorial.church }}</a>
+			    </span>
+			    <span> |</span>
+			    <span>Duration {{ tutorial.duration }}</span>
+			  </div>
+			  <div class='teaser'>
+			    <p>
+			      {{ tutorial.teaser|safe }}
+			    </p>
+			  </div>
+			</li>
+
+
+
+    </ul>
+    <div class='break'></div>
+  </div>
+  <div class='break'></div>
+</div>
+{% endblock content %}
