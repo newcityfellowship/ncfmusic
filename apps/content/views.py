@@ -169,7 +169,7 @@ def tutorials(request, slug=None):
         'article_list': article_list,
     })
     
-    return render_to_response('tutorials.html', context)
+    return render_to_response('learns.html', context)
     
 def tutorial(request, slug):
     tutorial = get_object_or_404(Tutorial, slug__exact=slug)
@@ -222,7 +222,7 @@ def talks(request):
         'article_list': article_list,
     })
     
-    return render_to_response('talks.html', context)
+    return render_to_response('learns.html', context)
     
 def articles(request):
     article_list = Article.objects.order_by('-insert_date')
