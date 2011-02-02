@@ -11,7 +11,7 @@ from ncfmusic.apps.heroshots.models import *
 def home(request):
     songs = Listen.objects.order_by('-insert_date')[:3]
     watch = Watch.objects.order_by('-insert_date')[0]
-    learn = Learn.objects.order_by('-insert_date')[:2]
+    learn = Article.objects.order_by('-insert_date')[:2]
     
     heroshots = Category.objects.filter(slug='homepage')
     
