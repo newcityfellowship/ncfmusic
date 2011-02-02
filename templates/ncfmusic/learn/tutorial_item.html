@@ -1,8 +1,8 @@
 <li>
-  <a href='{{ tutorial.get_absolute_url }}'>
+  <a href='/tutorials/{{ tutorial.slug }}'>
     <img class='thumb' src='{{ tutorial.vimeo_thumb }}' />
   </a>
-  <h3 class='nofloat'><a href='{{ tutorial.get_absolute_url }}'>{{ tutorial.title }}</a></h3>
+  <h3 class='nofloat'><a href='/tutorials/{{ tutorial.slug }}'>{{ tutorial.title }}</a></h3>
   <div class='details'>
     <span>{{ tutorial.date|date:"F j, Y" }}</span>
     <span> |</span>
@@ -21,4 +21,5 @@
       {{ tutorial.teaser|safe }}
     </p>
   </div>
+	<div class='break'></div>
 </li>
