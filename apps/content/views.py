@@ -261,7 +261,6 @@ def article(request, slug):
     return render_to_response('article.html', context)
     
 def songs(request, start_letter=None):
-    page = get_object_or_404(Page, slug__exact='songs')
     
     song_list = Song.objects.order_by('title')
     
@@ -281,10 +280,7 @@ def songs(request, start_letter=None):
     
     if start_letter:
         song_list = sections[start_letter]
-        
-    
-        
-        
+            
     paginator = Paginator(song_list, 4)
     
     try:

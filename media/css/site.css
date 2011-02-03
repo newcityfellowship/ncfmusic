@@ -81,6 +81,9 @@ p, h3, h3 a {
 
 #header.watch {
   background-image: url(/media/images/watch-hero.jpg); }
+  
+#header.songs {
+  background-image: url(/media/images/song-hero.jpg);}
 
 #nav {
   background-image: url(/media/images/nav-bg.png);
@@ -665,3 +668,13 @@ h2.pagename {
 .nocontrols {
   width: 1px;
   height: 1px; }
+  
+.letternav {
+  padding: 17px;
+}
+
+#left-nav .letternav a{
+  font-weight: bold;
+  padding: 3px;
+  text-decoration: underline;
+}

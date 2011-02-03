@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block headerclasses %} class="interior songs" {% endblock headerclasses %}
+
+{% block content %}
+<div class='interior songs' id='content'>
+  {% include "songs/sidebar.html" %}
+  <div id='maincontent'>
+    <h2 class='pagename'>
+      Songs
+    </h2>
+    <ul class='aggregation'>
+  {% for song in songs.object_list %}   
+    {% include "songs/song_item.html" %}
+  {% endfor %}      
+    </ul>
+    <div class='break'></div>
+</div>
+<div class='break'></div>
+{% endblock content %}

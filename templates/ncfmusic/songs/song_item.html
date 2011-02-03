@@ -1,0 +1,47 @@
+<li>
+  <h3><a href="{{ article.get_absolute_url }}">{{ song.title }}</a></h3>
+  <div class='break'></div>
+  <div class='details'>
+    <span>something here</span>
+    <span> |</span>
+    <span>
+      <a href='{{ article.author.get_absolute_url }}'>{{ song.author }}</a>
+    </span>
+    <span> |</span>
+    <span>
+      <a href='{{ article.church.get_absolute_url }}'>{{ song.church }}</a>
+    </span>
+		<span> |</span>
+    <span class='expander' rel='song{{ listen.id }}-detail'>View Song Info &#x2B07;</span>
+  </div>
+  <div class='break'></div>
+	<div class='extendeddetails' id='song{{ listen.id }}-detail'>
+    <table>
+      <tr>
+        <td class='category'>Songwriter:</td>
+        <td class='listing'>
+          <a href='{{ song.songwriter.get_absolute_url }}'>{{ song.songwriter }}</a>
+        </td>
+      </tr>
+      <tr>
+        <td class='category'>Producer:</td>
+        <td class='listing'>
+          <a href='{{ song.producer.get_absolute_url }}'>{{ song.producer }}</a>
+        </td>
+      </tr>
+      <tr>
+        <td class='category'>Vocals:</td>
+        <td class='listing'>
+          {% for contributor in song.vocals.all %}
+          <a href="{{ contribuer.get_absolute_url }}">{{ contribuer }}</a>
+            {% if not forloop.last %}
+            <span>,</span>
+            {% endif %}
+          {% endfor %}
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class='break'></div>
+  
+</li>
