@@ -191,6 +191,13 @@ h2.pagename {
   font-size: 20px;
   margin-bottom: 17px; }
 
+h2.sectionname {
+  text-transform: uppercase;
+  color: #2E8D7E;
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 17px; }
+
 .textlogo {
   color: #333333; }
 
@@ -405,8 +412,8 @@ h2.pagename {
 
 .aggregation li {
   margin-top: 10px;
-  margin-bottom: 15px;
-  padding-bottom: 15px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
   border-bottom: 1px solid #DDDDDD;
   clear: left; }
 
@@ -677,4 +684,36 @@ h2.pagename {
   font-weight: bold;
   padding: 3px;
   text-decoration: underline;
+}
+
+.actionmenu{
+  background-color: #F1F1F1;
+  padding: 3px;
+  padding-right: 7px;
+  padding-left: 7px;
+  float: right;
+  font-family: 'PT Sans Narrow';
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+  float: right;
+  margin-top: -2px;
+}
+
+.actionmenu span{
+  margin-right: 3px;
+  margin-left: 3px;
+}
+
+.actionmenu .label{
+  color: #414141;
+}
+
+.actionmenu a{
+  color: #797979;
+  text-decoration: none;
+}
+
+.actionmenu a:hover{
+  color: #2E8D7E;
 }

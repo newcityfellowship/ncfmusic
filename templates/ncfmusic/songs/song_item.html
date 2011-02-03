@@ -1,21 +1,27 @@
 <li>
-  <h3><a href="{{ article.get_absolute_url }}">{{ song.title }}</a></h3>
+  <div class='actionmenu'>
+		<span class='label'>Download:</span>
+		<a href='{{ song.sheet_music.url }}'>Sheet Music</a>
+		<span> |</span>
+		<a href='{{ song.slides.url }}'>Slides</a>
+		<span> |</span>
+		<a href='{{ song.lyrics.url }}'>Lyrics</a>
+	</div>
+	<h3><a href="{{ article.get_absolute_url }}">{{ song.title }}</a></h3>
   <div class='break'></div>
   <div class='details'>
-    <span>something here</span>
-    <span> |</span>
     <span>
-      <a href='{{ article.author.get_absolute_url }}'>{{ song.author }}</a>
+      <a href='{{ song.songwriter.get_absolute_url }}'>{{ song.songwriter }}</a>
     </span>
     <span> |</span>
     <span>
-      <a href='{{ article.church.get_absolute_url }}'>{{ song.church }}</a>
+      <a href='{{ song.church.get_absolute_url }}'>{{ song.church }}</a>
     </span>
 		<span> |</span>
-    <span class='expander' rel='song{{ listen.id }}-detail'>View Song Info &#x2B07;</span>
+    <span class='expander' rel='song{{ song.id }}-detail'>View Song Info &#x2B07;</span>
   </div>
   <div class='break'></div>
-	<div class='extendeddetails' id='song{{ listen.id }}-detail'>
+	<div class='extendeddetails' id='song{{ song.id }}-detail'>
     <table>
       <tr>
         <td class='category'>Songwriter:</td>
@@ -26,7 +32,7 @@
       <tr>
         <td class='category'>Producer:</td>
         <td class='listing'>
-          <a href='{{ song.producer.get_absolute_url }}'>{{ song.producer }}</a>
+          {{ song.producer }}
         </td>
       </tr>
       <tr>
@@ -38,6 +44,18 @@
             <span>,</span>
             {% endif %}
           {% endfor %}
+        </td>
+      </tr>
+			<tr>
+        <td class='category'>Release Date:</td>
+        <td class='listing'>
+          {{ song.release_date|date:"F j, Y"}}
+        </td>
+      </tr>
+			<tr>
+        <td class='category'>Album Title:</td>
+        <td class='listing'>
+          {{ song.album_title}}
         </td>
       </tr>
     </table>

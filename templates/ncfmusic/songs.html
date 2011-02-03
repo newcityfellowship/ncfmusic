@@ -6,15 +6,20 @@
 <div class='interior songs' id='content'>
   {% include "songs/sidebar.html" %}
   <div id='maincontent'>
-    <h2 class='pagename'>
-      Songs
-    </h2>
+ 	<h2 class='pagename'>Songs</h2>
+  {% for letter,songs in sections.iteritems %} 
+		<h2 class='sectionname'>{{letter}}</h2><a name='{{letter}}'></a>
     <ul class='aggregation'>
-  {% for song in songs.object_list %}   
-    {% include "songs/song_item.html" %}
-  {% endfor %}      
+  		{% for song in songs %}   
+    		{% include "songs/song_item.html" %}
+  		{% endfor %}      
     </ul>
     <div class='break'></div>
+	{% endfor %}
+		
+	
+
+
 </div>
 <div class='break'></div>
 {% endblock content %}
