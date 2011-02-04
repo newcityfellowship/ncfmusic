@@ -185,6 +185,7 @@ class Song(models.Model):
     instruments = models.ManyToManyField('Contributor', null=True, related_name='sont_instruments')
     release_date = models.DateField()
     album_title = models.CharField(max_length=256, null=True, blank=True)
+    mp3 = models.FileField(upload_to='ext/songs', null=True, blank=True)
     
     def __unicode__(self):
         return self.title
@@ -233,6 +234,7 @@ class Contributor(models.Model):
     phone = models.CharField(max_length=32, null=True, blank=True)
     website = models.URLField(null=True, blank=True)
     buy_music_url = models.URLField(null=True, blank=True)
+    listed_contributor = models.BooleanField(default=True)
     
     def __unicode__(self):
         return self.name
