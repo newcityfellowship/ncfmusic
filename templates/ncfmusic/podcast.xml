@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
+        <channel>
+            <title>New City Music</title>
+            <link>http://ncfmusic.com/</link>
+            <language>en-us</language>
+            <copyright>&#x2117; &amp; &#xA9; 2011 New City Fellowship</copyright>
+            <itunes:subtitle>New City Music</itunes:subtitle>
+            <itunes:author>Various</itunes:author>
+            <itunes:summary>Music of New City Churches</itunes:summary>
+            <description>Music of New City Churches</description>
+            <itunes:owner>
+                <itunes:name>New City Fellowship</itunes:name>
+                <itunes:email>music@newcityfellowship.com</itunes:email>
+            </itunes:owner>
+            <itunes:image href="http://ncfmusic.com/media/images/favicon.gif" />
+            <itunes:category text="Music">
+                <itunes:category text="Gospel"/>
+            </itunes:category>
+{% for listen in listens %}            
+            <item>
+                <title>{{ listen.title }}</title>
+                <itunes:author>{{ listen.songwriter }}</itunes:author>
+                <itunes:subtitle></itunes:subtitle>
+                <itunes:summary></itunes:summary>
+                <itunes:image href="" />
+                <enclosure url="http://ncfmusic.com{{ listen.mp3.url }}" length="{{ listen.mp3.size }}" type="audio/mpeg" />
+                <guid>{{ listen.mp3.url }}</guid>
+                <pubDate>{{ listen.insert_date|date:"D, j M H:i:s EST"}}
+                <itunes:duration></itunes:duration>
+                <itunes:keywords></itunes:keywords>
+            </item>
+{% endfor %}
+        </channel>
+    </rss>

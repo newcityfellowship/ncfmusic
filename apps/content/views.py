@@ -69,6 +69,15 @@ def listen(request):
     
     return render_to_response('listen.html', context)
     
+def podcast(request):
+    listens = Listen.objects.order_by('-insert_date')
+    
+    context = RequestContext(request, {
+        'listens': listens
+    })    
+    
+    return render_to_response('podcast.xml', context)
+    
 def watch(request, slug=None):
     page = get_object_or_404(Page, slug__exact='watch')
     watch_list = Watch.objects.order_by('-insert_date')
