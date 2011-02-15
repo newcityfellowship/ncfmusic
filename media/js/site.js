@@ -28,8 +28,8 @@ $(document).ready(function (){
     var mp3holder = $(this).find('.mp3holder');
     var progressbar = $(this).find('.innerprogressbar');
     var timeinfo = $(this).find('.time');
-    var playbutton = $('#play'+mp3holder.attr('id'));
-    var mp3file = mp3holder.attr('rel');
+    var playbutton = $('#play'+mp3holder.attr('id')); 
+    var mp3file = mp3holder.attr('rel'); 
     mp3holder.jPlayer( {
       ready: function () {
         mp3file && this.element.jPlayer("setFile", mp3file); // Defines the mp3
@@ -52,6 +52,7 @@ $(document).ready(function (){
   //setup the click handlers for the play buttons
   $('.audioplay').click(function(){
     var toplay = $("#" + $(this).attr('rel'));
+
     if(toplay.jPlayer( "getData", "diag.isPlaying")){
       toplay.jPlayer("pause");
       $(this).removeClass('playing').addClass('paused');
@@ -86,7 +87,7 @@ function convertMillsecToMinutes(millsecs){
 }
 
 function randomHomeHeaderImageUrl(){
-  var numberofavailableimages = 14;
+  var numberofavailableimages = 13;
   rand = Math.floor(Math.random()*numberofavailableimages);
   return '/media/images/home-header-'+ rand +'.jpg'; 
 }
