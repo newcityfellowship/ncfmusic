@@ -1,13 +1,13 @@
 <li>
   <div class='actionmenu'>
-		<span class='label'>Download:</span>
-		<a href='{{ song.sheet_music.url }}'>Sheet Music</a>
-		<span> |</span>
-		<a href='{{ song.slides.url }}'>Slides</a>
-		<span> |</span>
-		<a href='{{ song.lyrics.url }}'>Lyrics</a>
-	</div>
-	<h3><a href="{{ article.get_absolute_url }}">{{ song.title }}</a></h3>
+    <span class='label'>Download:</span>
+    {% if song.sheet_music %}<a href='{{ song.sheet_music.url }}'>Sheet Music</a>
+    {% if song.slides %}<span> |</span>{% endif %}{% endif %}
+    {% if song.slides %}<a href='{{ song.slides.url }}'>Slides</a>{% endif %}
+    {% if song.sheet_music or song.slides %}{% if song.lyrics %}<span> |</span>{% endif %}{% endif %}
+    {% if song.lyrics %}<a href='{{ song.lyrics.url }}'>Lyrics</a>{% endif %}
+  </div>
+  <h3><a href="{{ article.get_absolute_url }}">{{ song.title }}</a></h3>
   <div class='break'></div>
   <div class='details'>
     <span>
@@ -17,11 +17,11 @@
     <span>
       <a href='{{ song.church.get_absolute_url }}'>{{ song.church }}</a>
     </span>
-		<span> |</span>
+    <span> |</span>
     <span class='expander' rel='song{{ song.id }}-detail'>View Song Info &#x2B07;</span>
   </div>
   <div class='break'></div>
-	<div class='extendeddetails' id='song{{ song.id }}-detail'>
+  <div class='extendeddetails' id='song{{ song.id }}-detail'>
     <table>
       <tr>
         <td class='category'>Songwriter:</td>
@@ -46,13 +46,13 @@
           {% endfor %}
         </td>
       </tr>
-			<tr>
+      <tr>
         <td class='category'>Release Date:</td>
         <td class='listing'>
           {{ song.release_date|date:"F j, Y"}}
         </td>
       </tr>
-			<tr>
+      <tr>
         <td class='category'>Album Title:</td>
         <td class='listing'>
           {{ song.album_title}}
