@@ -683,6 +683,9 @@ h2.sectionname {
 #left-nav .letternav a{
   font-weight: bold;
   padding: 3px;
+}
+
+#left-nav .letternav a:link{
   text-decoration: underline;
 }
 
