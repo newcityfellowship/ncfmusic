@@ -287,7 +287,9 @@ def songs(request, start_letter=None):
     #   I'm sure there's a better way to do this, but it's late and my brain's tired, so this will work
     sections = {}
     for letter in map(chr, range(65, 91)):
-        sections[letter] = song_list.filter(title__startswith=letter)
+        section_list = song_list.filter(title__startswith=letter)
+        if section_list:
+            sections[letter] = section_list
     
     if start_letter:
         song_list = sections[start_letter]
