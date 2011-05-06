@@ -273,14 +273,16 @@ def songs(request, start_letter=None):
     
     song_list = Song.objects.order_by('title')
     
-    if ('q' in request.GET) and request.GET['q'].strip():
+    from django.db.models import Q
+    q = request.GET.get('q').strip()
+    if q:
+        song_list = song_list.filter(Q(album_title__icontains=q) | Q(songwriter__name__icontains=q) | Q(title__icontains=q))
         if ('type' in request.GET) and request.GET['type'].strip():
             song_list = {
-                'sheet_music': song_list.filter(sheet_music__isnull=False),
-                'lyrics': song_list.filter(lyrics__isnull=False),
-                'slides': song_list.filter(slides__isnull=False),
+                'sheet_music': song_list.filter(Q(sheet_music__isnull=False) | Q(sheet_music='')),
+                'lyrics': song_list.filter(Q(lyrics__isnull=False) | Q(lyrics='')),
+                'slides': song_list.filter(Q(slides__isnull=False) | Q(slides='')),
             }[request.GET['type']]
-
     
     #   I'm sure there's a better way to do this, but it's late and my brain's tired, so this will work
     sections = {}
