@@ -274,7 +274,7 @@ def songs(request, start_letter=None):
     song_list = Song.objects.order_by('title')
     
     from django.db.models import Q
-    q = request.GET.get('q').strip()
+    q = request.GET.get('q', '').strip()
     if q:
         song_list = song_list.filter(Q(album_title__icontains=q) | Q(songwriter__name__icontains=q) | Q(title__icontains=q))
         if ('type' in request.GET) and request.GET['type'].strip():
