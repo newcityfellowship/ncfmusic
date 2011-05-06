@@ -9,7 +9,8 @@
  	<h2 class='pagename'>Songs</h2>
   {% for letter,songs in sections.iteritems %} 
     {% if songs %}
-		<h2 class='sectionname'>{{letter}}</h2><a name='{{letter}}'></a>
+		<a name='{{letter}}'></a>
+		<h2 class='sectionname'>{{letter}}</h2>
     <ul class='aggregation'>
   		{% for song in songs %}   
     		{% include "songs/song_item.html" %}
