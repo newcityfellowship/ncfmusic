@@ -6,6 +6,8 @@
     {% if song.slides %}<a href='{{ song.slides.url }}'>Slides</a>{% endif %}
     {% if song.sheet_music or song.slides %}{% if song.lyrics %}<span> |</span>{% endif %}{% endif %}
     {% if song.lyrics %}<a href='{{ song.lyrics.url }}'>Lyrics</a>{% endif %}
+    {% if song.sheet_music or song.slides or song.lyrics %}{% if song.mp3 %}<span> |</span>{% endif %}{% endif %}
+    {% if song.mp3 %}<a href='{{ song.mp3.url }}'>MP3</a>{% endif %}
   </div>
   <h3><a href="{{ article.get_absolute_url }}">{{ song.title }}</a></h3>
   <div class='break'></div>
