@@ -414,7 +414,7 @@ def musicians(request, slug=None):
         'page': page,
         'musician_list': musician_list,
         'churches': churches,
-        'contribs': musician_list,
+        'contribs': Contributor.objects.filter(listed_contributor=True).order_by('name'),
         'expanded' : 'musicians'
     })
     
