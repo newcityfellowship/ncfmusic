@@ -403,9 +403,14 @@ def musicians(request, slug=None):
     else:
         musician_list = Contributor.objects.filter(listed_contributor=True).order_by('name')
     
+    churches = Church.objects.order_by('name')
+    
     context = RequestContext(request, {
         'page': page,
         'musician_list': musician_list,
+        'churches': churches,
+        'contribs': musician_list,
+        'expanded' : 'contribs'
     })
     
     return render_to_response('musicians.html', context)
