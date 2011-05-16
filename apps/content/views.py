@@ -402,8 +402,8 @@ def musicians(request, slug=None):
     
     #   If we have musician slug we'll put them at the top of the list
     if slug:
-        musician_list = get_object_or_404(Contributor, slug__exact=slug)
-        musician_list = musician_list | Contributor.objects.exclude(slug__exact=slug).filter(listed_contributor=True).order_by('name')
+        musician = get_object_or_404(Contributor, slug__exact=slug)
+        musician_list = Contributor.objects.filter(slug__exact=slug) | Contributor.objects.exclude(slug__exact=slug).filter(listed_contributor=True).order_by('name')
     else:
         musician_list = Contributor.objects.filter(listed_contributor=True).order_by('name')
     
