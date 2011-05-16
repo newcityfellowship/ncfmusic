@@ -1,9 +1,9 @@
 <li>
   <h3>{{ musician.name }}</h3>
   <p>
-    <a href="{{ musician.church.get_absolute_url }}">{{ musician.church }}</a><br />
-    <a href="mailto:{{ musician.email }}">{{ musician.email }}</a><br />
-    <a href="{{ musician.website }}">{{ musician.website }}</a><br />
-    <a href="{{ musician.buy_music_url }}">Buy Music</a>
+    {% if musician.church %}<a href="{{ musician.church.get_absolute_url }}">{{ musician.church }}</a><br />{% endif %}
+    {% if musician.email %}<a href="mailto:{{ musician.email }}">{{ musician.email }}</a><br />{% endif %}
+    {% if musician.website %}<a href="{{ musician.website }}">{{ musician.website }}</a><br />{% endif %}
+    {% if musician.buy_music_url %}<a href="{{ musician.buy_music_url }}">Buy Music</a>{% endif %}
 	</p>
 </li>
