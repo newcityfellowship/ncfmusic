@@ -322,8 +322,12 @@ def events(request, month=None, year=None):
     
     #   I'm sure there's a better way to do this, but it's late and my brain's tired, so this will work
     months = {}
-    first = events_list.order_by('start_date')[0]
-    last = events_list.order_by('-start_date')[0]
+    try:
+        first = events_list.order_by('start_date')[0]
+        last = events_list.order_by('-start_date')[0]
+    except IndexError:
+        first = datetime.date(2011, 1, 1)
+        last = datetime.date.today()
     
     thisdate = datetime.date(first.year, first.month, 1)
     while thisdate <= last:
