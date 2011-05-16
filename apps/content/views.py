@@ -410,7 +410,7 @@ def musicians(request, slug=None):
         'musician_list': musician_list,
         'churches': churches,
         'contribs': musician_list,
-        'expanded' : 'contribs'
+        'expanded' : 'musicians'
     })
     
     return render_to_response('musicians.html', context)
