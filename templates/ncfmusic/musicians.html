@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block headerclasses %} class="interior contrib" {% endblock headerclasses %}
+
+{% block content %}
+<div class='interior contribs' id='content'>
+  {% include "contribs/sidebar.html" %}
+  <div id='maincontent'>
+    <h2 class='pagename'>
+      Musicians
+    </h2>
+    <ul class='aggregation'>
+  {% for musician in musician_list %}   
+    {% include "contribs/musician_item.html" %}
+  {% endfor %}      
+    </ul>
+    <div class='break'></div>
+</div>
+<div class='break'></div>
+{% endblock content %}
