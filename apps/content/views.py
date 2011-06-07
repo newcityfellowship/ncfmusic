@@ -316,7 +316,7 @@ def songs(request, start_letter=None):
 def events(request, month=None, year=None):
     import datetime
     
-    page = get_object_or_404(Page, slug__exact='events')
+    # page = get_object_or_404(Page, slug__exact='events')
     
     events_list = Event.objects.order_by('start_date')
     
@@ -329,8 +329,11 @@ def events(request, month=None, year=None):
         first = datetime.date(2011, 1, 1)
         last = datetime.date.today()
     
-    thisdate = datetime.date(first.year, first.month, 1)
-    while thisdate <= last:
+    print('The FIRST is:')
+    print(first)
+    
+    thisdate = datetime.date(first.start_date.year, first.start_date.month, 1)
+    while thisdate <= last.start_date:
         months[thisdate] = events_list.filter(start_date__month=thisdate.month, start_date__year=thisdate.year)
         if thisdate.month == 12:
             thisdate = datetime.date(thisdate.year+1, 1, 1)

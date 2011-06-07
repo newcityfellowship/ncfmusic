@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block headerclasses %} class="interior learn" {% endblock headerclasses %}
+
+{% block content %}
+<div class='interior learn' id='content'>
+  {% include "events/sidebar.html" %}
+  <div id='maincontent'>
+    <h2 class='pagename'>
+      Events
+    </h2>
+    <ul class='aggregation'>
+  {% for event in events.object_list %}   
+    <li>
+      <h3><a href="{{ article.get_absolute_url }}">{{ event.title }}</a></h3>
+      <div class='break'></div>
+      <div class='details'>
+        <span>{{ event.start_date|date:"F j, Y" }}</span>
+        <span> |</span>
+        <span>
+          <a href='{{ article.author.get_absolute_url }}'>{{ event.time }}</a>
+        </span>
+        <span> |</span>
+        <span>
+          <a href='{{ article.church.get_absolute_url }}'>{{ event.church }}</a>
+        </span>
+      </div>
+      <div class='break'></div>
+      <div class='teaser'>
+        <p>
+          {{ event.teaser|safe }}
+        </p>
+      </div>
+    </li>
+  {% endfor %}      
+    </ul>
+    <div class='break'></div>
+    <div id='pagination'>
+{% ifnotequal events.number 1 %}     
+      <div class='first'>
+        <a href="?page=1">first</a>
+      </div>
+{% else %}
+      <div class='first inactive'>first</div>
+{% endifnotequal %}
+{% if events.has_previous %}
+      <div class='previous'>
+        <a href="?page={{ events.previous_page_number }}">&lt; previous</a>
+      </div>
+{% else %}          
+      <div class='previous inactive'>&lt; previous</div>
+{% endif %}
+      <div class='pages'>
+        <span>page</span>
+        <span class='number'>{{ tutorials.number }}</span>
+        <span> of</span>
+        <span class='number'>{{ tutorials.num_pages }}</span>
+      </div>
+{% if tutorials.has_next %}
+      <div class='next'>
+        <a href='?page={{ events.next_page_number }}'>next &gt;</a>
+      </div>
+{% else %}
+      <div class='next inactive'>next &gt;</div>
+{% endif %}
+{% ifnotequal tutorials.number tutorials.num_pages %}
+      <div class='last'>
+        <a href='?page={{ events.num_pages }}'>last</a>
+      </div>
+{% else %}
+      <div class='last inactive'>last</div>
+{% endifnotequal %}   
+    </div>
+    <div class='break'></div>
+  </div>
+  <div class='break'></div>
+</div>
+{% endblock content %}
