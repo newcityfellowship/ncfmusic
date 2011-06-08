@@ -429,7 +429,7 @@ h2.sectionname {
   
 .aggregation li a {
   color: #666666;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .aggregation li a:hover {
