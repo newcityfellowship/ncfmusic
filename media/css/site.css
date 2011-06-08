@@ -426,6 +426,17 @@ h2.sectionname {
 
 .aggregation li .teaser {
   margin-top: 10px; }
+  
+.aggregation li a {
+  color: #666666;
+  text-decoration: underline;
+}
+
+.aggregation li a:hover {
+  color: #007A6D;
+  text-decoration: none;
+}
+
 
 .aggregation li .thumb {
   float: left;
