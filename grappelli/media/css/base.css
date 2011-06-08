@@ -32,3 +32,12 @@
 
 /*  Grappelli Default Skin: Adds Border-Radius & Background-Gradients to the Grappelli Basic Skin */
 @import url('grappelli-skin-default.css');
+
+
+.container-flexible {
+    clear: both;
+    float: none;
+    height: 100%;
+    position: relative;
+    width: auto;
+}
