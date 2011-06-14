@@ -4,44 +4,48 @@
 
 {% block content %}
 <div class='interior learn' id='content'>
-  {% include "learn/sidebar.html" %}
+  {% include "events/sidebar.html" %}
   <div id='maincontent'>
     <h2 class='pagename'>
-      Learn
+      Events
     </h2>
     <ul class='aggregation'>
-  {% for learn in learns.object_list %}   
-    {% if learn.tutorial %}
-      {% with learn.tutorial as tutorial %}
-        {% include "learn/tutorial_item.html" %}
-      {% endwith %}
-    {% endif %}
-    
-    {% if learn.talk %}
-      {% with learn.talk as talk %}
-        {% include "learn/talk_item.html" %}
-      {% endwith %}
-    {% endif %}
-    
-    {% if learn.article %}
-      {% with learn.article as article %}
-        {% include "learn/article_item.html" %}
-      {% endwith %}
-    {% endif %}
+  {% for event in events.object_list %}   
+    <li>
+      <h3><a href="{{ article.get_absolute_url }}">{{ event.title }}</a></h3>
+      <div class='break'></div>
+      <div class='details'>
+        <span>{{ event.start_date|date:"F j, Y" }}</span>
+        <span> |</span>
+        <span>
+          <a href='{{ article.author.get_absolute_url }}'>{{ event.time }}</a>
+        </span>
+        <span> |</span>
+        <span>
+          <a href='{{ article.church.get_absolute_url }}'>{{ event.church }}</a>
+        </span>
+      </div>
+      <div class='break'></div>
+      <div class='teaser'>
+        <p>
+          {{ event.teaser|safe }}
+        </p>
+      </div>
+    </li>
   {% endfor %}      
     </ul>
     <div class='break'></div>
     <div id='pagination'>
-{% ifnotequal tutorials.number 1 %}     
+{% ifnotequal events.number 1 %}     
       <div class='first'>
         <a href="?page=1">first</a>
       </div>
 {% else %}
       <div class='first inactive'>first</div>
 {% endifnotequal %}
-{% if tutorials.has_previous %}
+{% if events.has_previous %}
       <div class='previous'>
-        <a href="?page={{ tutorials.previous_page_number }}">&lt; previous</a>
+        <a href="?page={{ events.previous_page_number }}">&lt; previous</a>
       </div>
 {% else %}          
       <div class='previous inactive'>&lt; previous</div>
@@ -54,14 +58,14 @@
       </div>
 {% if tutorials.has_next %}
       <div class='next'>
-        <a href='?page={{ tutorials.next_page_number }}'>next &gt;</a>
+        <a href='?page={{ events.next_page_number }}'>next &gt;</a>
       </div>
 {% else %}
       <div class='next inactive'>next &gt;</div>
 {% endif %}
 {% ifnotequal tutorials.number tutorials.num_pages %}
       <div class='last'>
-        <a href='?page={{ tutorials.num_pages }}'>last</a>
+        <a href='?page={{ events.num_pages }}'>last</a>
       </div>
 {% else %}
       <div class='last inactive'>last</div>

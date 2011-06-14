@@ -62,27 +62,30 @@ p, h3, h3 a {
 
 #header.home {
   height: 473px;
-  background-image: url(/media/images/home-header-8.jpg); }
+  background-image: url(/media/images/home-header-8.jpg);
+}
 
-#header.interior {
-  height: 273px; }
+.interiorhead {
+  height: 273px;
+}
 
-#header.about {
-  background-image: url(/media/images/about-hero.jpg); }
+.abouthead {
+  background-image: url(/media/images/about-hero.jpg); 
+}
 
-#header.listen {
+.listenhead {
   background-image: url(/media/images/listen-hero.jpg); }
   
-#header.learn {
+.learnhead {
   background-image: url(/media/images/learn-hero.jpg); }
 
-#header.contrib {
+.contribhead {
   background-image: url(/media/images/contrib-hero.jpg); }  
 
-#header.watch {
+.watchhead {
   background-image: url(/media/images/watch-hero.jpg); }
   
-#header.songs {
+.songshead {
   background-image: url(/media/images/song-hero.jpg);}
 
 #nav {
@@ -220,7 +223,9 @@ h2.sectionname {
 
 .title .viewall {
   float: right;
-  border: none; }
+  border: 1px solid none;
+  
+}
 
 .audioplay {
   width: 20px;
@@ -426,6 +431,17 @@ h2.sectionname {
 
 .aggregation li .teaser {
   margin-top: 10px; }
+  
+.aggregation li a {
+  color: #666666;
+  text-decoration: none;
+}
+
+.aggregation li a:hover {
+  color: #007A6D;
+  text-decoration: none;
+}
+
 
 .aggregation li .thumb {
   float: left;

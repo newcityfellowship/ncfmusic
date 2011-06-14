@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block headerclasses %} class="interior interiorhead learn learnhead" {% endblock headerclasses %}
+
+{% block content %}
+<div class='interior learn' id='content'>
+  <div id='left-nav'>
+    <div class='title'>
+      <span>Upcoming Events</span>
+    </div>
+    <ul class='topnavlist'>
+      {% for e in events %}
+        <li class='navsection'>
+          <div class='topcat'>
+            <div class='catname'>
+              <a href='/events/{{e.slug}}'>{{e.title}}</a>
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div id='maincontent'>
+    <h2 class='pagename'>
+      Events
+    </h2>
+    <ul class='aggregation'>
+
+			<li>
+			  <h3><a href="{{ event.get_absolute_url }}">{{ event.title }}</a></h3>
+			  <div class='break'></div>
+			  <div class='details'>
+			    <span>{{ event.start_date|date:"F j, Y" }}</span>
+			    <span> |</span>
+			    <span>
+			      {{ event.time }}
+			    </span>
+			    <span> |</span>
+			    <span>
+			      <a href='{{ event.church.get_absolute_url }}'>{{ event.church }}</a>
+			    </span>
+			  </div>
+			  <div class='break'></div>
+			  <div class='teaser'>
+			      {{ event.article_body|safe }}
+			  </div>
+			</li> 
+
+
+
+    </ul>
+    <div class='break'></div>
+  </div>
+  <div class='break'></div>
+</div>
+{% endblock content %}

@@ -1,0 +1,16 @@
+<div id='left-nav'>
+  <div class='title'>
+    <span>Upcoming Events</span>
+  </div>
+  <ul class='topnavlist'>
+    {% for e in events.object_list %}
+      <li class='navsection'>
+        <div class='topcat'>
+          <div class='catname'>
+            <a href='/events/{{e.slug}}'>{{e.title}}</a>
+          </div>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+</div>

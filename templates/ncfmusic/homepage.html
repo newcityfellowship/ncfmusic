@@ -5,10 +5,10 @@
 {% block headercallout %}        
         <div class='headercallout listen'>
           <div class='title'>
-            <span>Listen</span>
             <a class='viewall' href='/listen'>
               <img src='{{ MEDIA_URL }}/images/title-all-songs.png' />
             </a>
+            <span>Listen</span>
           </div>
           <ul class='contents'>
   {% for song in songs %}
@@ -34,10 +34,10 @@
       <div class='home' id='content'>
         <div id='leftcallout'>
           <div class='title'>
-            <span>Watch</span>
             <a class='viewall' href='/watch'>
               <img src='{{ MEDIA_URL }}/images/title-all-videos.png' />
             </a>
+            <span>Watch</span>
           </div>
           <iframe src="http://player.vimeo.com/video/{{ watch.vimeo_id }}" width="367" height="208" frameborder="0"></iframe>
           <h3>
@@ -47,16 +47,16 @@
         </div>
         <div id='rightcol'>
           <div id='ad'>
-            <a href='#'>
+            <a href='/events/new-city-music-conference/'>
               <img src='{{ MEDIA_URL }}/images/music-conference.png' />
             </a>
           </div>
           <div id='learn'>
             <div class='title'>
-              <span>Learn</span>
               <a class='viewall' href='/articles'>
                 <img src='{{ MEDIA_URL }}/images/title-all-articles.png' />
               </a>
+              <span>Learn</span>
             </div>
             <ul>
   {% for article in learn %}              

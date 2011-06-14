@@ -1,10 +1,10 @@
+var debuggers = 0;
 $(document).ready(function (){
-  
   $('#nav #homelink').bind('click', function(){window.location = '/';});
   
   $('#utilnav ul li.search a').bind('click', function(){
     $('#utilnav .search .searchbox').animate({
-      width: 'toggle',
+      width: 'toggle'
     },'slow');
     return false;
   });
@@ -29,18 +29,15 @@ $(document).ready(function (){
     var progressbar = $(this).find('.innerprogressbar');
     var timeinfo = $(this).find('.time');
     var playbutton = $('#play'+mp3holder.attr('id')); 
-    var mp3file = mp3holder.attr('rel'); 
-    mp3holder.jPlayer( {
-      ready: function () {
-        mp3file && this.element.jPlayer("setFile", mp3file); // Defines the mp3
-      }
-    });
-    
+    var mp3file = mp3holder.attr('rel');
+    var ready = function () {
+      mp3file && this.element.jPlayer("setFile", mp3file); // Defines the mp3
+    }; 
+    mp3holder.jPlayer( { ready: ready });
     mp3holder.jPlayer("onProgressChange", function(lp,ppr,ppa,pt,tt) {
       progressbar.css('width', ppa+"%");
       timeinfo.html(convertMillsecToMinutes(pt) + " / " + convertMillsecToMinutes(tt));
     });
-    
     mp3holder.jPlayer("onSoundComplete", function() {
       timeinfo.html('');
       progressbar.css('width', "0%");
