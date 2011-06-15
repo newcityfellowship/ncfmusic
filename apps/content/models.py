@@ -105,6 +105,9 @@ class Watch(models.Model):
     def __unicode__(self):
         return self.title
         
+    def get_absolute_url(self):
+        return '/watch/%s' % self.slug
+        
     class Meta:
         verbose_name_plural = 'Watches'
         

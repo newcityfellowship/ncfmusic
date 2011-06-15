@@ -83,7 +83,7 @@ def watch(request, slug=None):
     watch_list = Watch.objects.order_by('-insert_date')
     
     if slug:
-        watch = get_object_or_404(Watch, slug__exect=slug)
+        watch = get_object_or_404(Watch, slug__exact=slug)
     else:
         watch = watch_list[0];
     

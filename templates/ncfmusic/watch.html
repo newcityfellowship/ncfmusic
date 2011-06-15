@@ -37,7 +37,7 @@
                 <img src='{{ video.vimeo_thumb}}' />
               </a>
               <h2>
-                <a href='#'>{{ video.title }}</a>
+                <a href='{{ video.get_absolute_url }}'>{{ video.title }}</a>
               </h2>
               <div class='details'>
                 <span>{{ video.title }}</span>
