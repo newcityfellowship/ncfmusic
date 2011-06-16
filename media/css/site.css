@@ -737,6 +737,11 @@ h2.sectionname {
   color: #2E8D7E;
 }
 
+.articlebody {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
 .articlebody p, .articlebody blockquote{
   margin-top: 10px;
   margin-bottom: 10px;
