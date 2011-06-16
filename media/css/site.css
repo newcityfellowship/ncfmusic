@@ -736,3 +736,13 @@ h2.sectionname {
 .actionmenu a:hover{
   color: #2E8D7E;
 }
+
+.articlebody p{
+  margin-bottom: 15px;
+}
+
+.articlebody blockquote{
+  padding: 10px 30px 10px 30px;
+  font-style: italic;
+  background-color: #F1F1F1;
+}
