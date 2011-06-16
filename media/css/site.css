@@ -737,12 +737,21 @@ h2.sectionname {
   color: #2E8D7E;
 }
 
-.articlebody p{
-  margin-bottom: 15px;
+.articlebody p, .articlebody blockquote{
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .articlebody blockquote{
   padding: 10px 30px 10px 30px;
   font-style: italic;
   background-color: #F1F1F1;
+}
+
+.articlebody ul{
+  list-style: disc;
+}
+
+.articlebody ul li{
+  border: none;
 }
