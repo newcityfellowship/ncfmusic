@@ -285,7 +285,8 @@ def songs(request, start_letter=None):
             }[request.GET['type']]
     
     #   I'm sure there's a better way to do this, but it's late and my brain's tired, so this will work
-    sections = {}
+    from django.utils.datastructures import SortedDict
+    sections = SortedDict()
     for letter in map(chr, range(65, 91)):
         sections[letter] = song_list.filter(title__startswith=letter)
     
@@ -451,7 +452,7 @@ def search(request):
         listen_query = get_query(query_string, ['title', 'album_title',])
         listen = Listen.objects.filter(listen_query).order_by('-release_date')
 
-        watch_query = get_query(query_string, ['title', 'description', 'church',])
+        watch_query = get_query(query_string, ['title', 'description', 'church__name',])
         watch = Watch.objects.filter(watch_query).order_by('-date')
         
         tutorial_query = get_query(query_string, ['title', 'teaser',])
