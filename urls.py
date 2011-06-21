@@ -8,6 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     (r'^grappelli/',    include('grappelli.urls')),
     (r'^admin/doc/',    include('django.contrib.admindocs.urls')),
+    (r'^admin/filebrowser/', include('filebrowser.urls')),
     (r'^admin/',        include(admin.site.urls)),
 )
 

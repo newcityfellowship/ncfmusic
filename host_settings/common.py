@@ -96,6 +96,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'ncfmusic.apps.content',
     'ncfmusic.apps.heroshots',
+    'filebrowser',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -104,3 +105,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "grappelli.context_processors.admin_template_path",
     'django.core.context_processors.media',
 )
+
+FILEBROWSER_DIRECTORY = 'ext/filebrowser'

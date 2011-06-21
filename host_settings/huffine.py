@@ -23,6 +23,7 @@ INSTALLED_APPS = (
     'ncfmusic.apps.content',
     'ncfmusic.apps.heroshots',
     'debug_toolbar',
+    'filebrowser',
 )
 
 MIDDLEWARE_CLASSES = (
