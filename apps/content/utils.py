@@ -1,4 +1,5 @@
 import re
+from django.db.models import Q
 
 '''
  From django_annoying @ http://bitbucket.org/offline/django-annoying/src/tip/annoying/functions.py

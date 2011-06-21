@@ -444,7 +444,7 @@ def musicians(request, slug=None):
     return render_to_response('musicians.html', context)
     
 def search(request):
-    page = get_object_or_404(Page, slug__exact='search')
+    # page = get_object_or_404(Page, slug__exact='search')
     
     if ('q' in request.GET) and request.GET['q'].strip():
         query_string = request.GET['q']
