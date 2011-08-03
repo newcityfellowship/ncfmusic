@@ -32,36 +32,36 @@
     </ul>
     <div class='break'></div>
     <div id='pagination'>
-{% ifnotequal tutorials.number 1 %}     
+{% ifnotequal learns.number 1 %}     
       <div class='first'>
         <a href="?page=1">first</a>
       </div>
 {% else %}
       <div class='first inactive'>first</div>
 {% endifnotequal %}
-{% if tutorials.has_previous %}
+{% if learns.has_previous %}
       <div class='previous'>
-        <a href="?page={{ tutorials.previous_page_number }}">&lt; previous</a>
+        <a href="?page={{ learns.previous_page_number }}">&lt; previous</a>
       </div>
 {% else %}          
       <div class='previous inactive'>&lt; previous</div>
 {% endif %}
       <div class='pages'>
         <span>page</span>
-        <span class='number'>{{ tutorials.number }}</span>
+        <span class='number'>{{ learns.number }}</span>
         <span> of</span>
-        <span class='number'>{{ tutorials.num_pages }}</span>
+        <span class='number'>{{ learns.paginator.num_pages }}</span>
       </div>
-{% if tutorials.has_next %}
+{% if learns.has_next %}
       <div class='next'>
-        <a href='?page={{ tutorials.next_page_number }}'>next &gt;</a>
+        <a href='?page={{ learns.next_page_number }}'>next &gt;</a>
       </div>
 {% else %}
       <div class='next inactive'>next &gt;</div>
 {% endif %}
-{% ifnotequal tutorials.number tutorials.num_pages %}
+{% ifnotequal learns.number learns.paginator.num_pages %}
       <div class='last'>
-        <a href='?page={{ tutorials.num_pages }}'>last</a>
+        <a href='?page={{ learns.paginator.num_pages }}'>last</a>
       </div>
 {% else %}
       <div class='last inactive'>last</div>

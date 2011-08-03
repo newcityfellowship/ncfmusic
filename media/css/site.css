@@ -757,6 +757,17 @@ h2.sectionname {
   list-style: disc;
 }
 
-.articlebody ul li{
+.articlebody ul li, .articlebody ol li{
   border: none;
+  list-style: inherit;
+  margin: 0 0 0 15px;
 }
+
+
+
+/*.aggregation li {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #DDDDDD;
+  clear: left; }*/

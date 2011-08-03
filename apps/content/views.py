@@ -47,7 +47,7 @@ def about(request):
     
 def listen(request):
     contentpage = get_object_or_404(Page, slug__exact='listen')
-    listen_list = Listen.objects.order_by('-insert_date')
+    listen_list = Listen.objects.order_by('-record_date', '-insert_date')
     
     paginator = Paginator(listen_list, 5)
     
@@ -154,6 +154,7 @@ def tutorials(request, slug=None):
         tutorial_list = Tutorial.objects.filter(church__slug=slug).order_by('-date')
     else:
         tutorial_list = Tutorial.objects.order_by('-date')
+    print tutorial_list
     
     paginator = Paginator(tutorial_list, 3)
     
@@ -234,7 +235,7 @@ def talks(request):
     return render_to_response('learns.html', context)
     
 def articles(request):
-    article_list = Article.objects.order_by('-insert_date')
+    article_list = Article.objects.order_by('-date')
     
     paginator = Paginator(article_list, 4)
     
@@ -253,7 +254,7 @@ def articles(request):
         'page': page,
         'learns': articles,
         'expanded': 'articles',
-        'article_list': article_list[:5], #   For the sidebar
+        'article_list': article_list[:10], #   For the sidebar
         'tutorial_list': tutorial_list, 
         'talk_list': talk_list
     })

@@ -52,20 +52,20 @@
 {% endif %}
       <div class='pages'>
         <span>page</span>
-        <span class='number'>{{ tutorials.number }}</span>
+        <span class='number'>{{ events.number }}</span>
         <span> of</span>
-        <span class='number'>{{ tutorials.num_pages }}</span>
+        <span class='number'>{{ events.paginator.num_pages }}</span>
       </div>
-{% if tutorials.has_next %}
+{% if events.has_next %}
       <div class='next'>
         <a href='?page={{ events.next_page_number }}'>next &gt;</a>
       </div>
 {% else %}
       <div class='next inactive'>next &gt;</div>
 {% endif %}
-{% ifnotequal tutorials.number tutorials.num_pages %}
+{% ifnotequal events.number events.paginator.num_pages %}
       <div class='last'>
-        <a href='?page={{ events.num_pages }}'>last</a>
+        <a href='?page={{ events.paginator.num_pages }}'>last</a>
       </div>
 {% else %}
       <div class='last inactive'>last</div>

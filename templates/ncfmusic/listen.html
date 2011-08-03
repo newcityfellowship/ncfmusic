@@ -93,7 +93,7 @@
                 <span>page</span>
                 <span class='number'>{{ listens.number }}</span>
                 <span> of</span>
-                <span class='number'>{{ listens.num_pages }}</span>
+                <span class='number'>{{ listens.paginator.num_pages }}</span>
               </div>
   {% if listens.has_next %}
               <div class='next'>
@@ -102,9 +102,9 @@
   {% else %}
               <div class='next inactive'>next &gt;</div>
   {% endif %}
-  {% ifnotequal listens.number listens.num_pages %}
+  {% ifnotequal listens.number listens.paginator.num_pages %}
               <div class='last'>
-                <a href='?page={{ listens.num_pages }}'>last</a>
+                <a href='?page={{ listens.paginator.num_pages }}'>last</a>
               </div>
   {% else %}
               <div class='last inactive'>last</div>

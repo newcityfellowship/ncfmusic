@@ -72,7 +72,7 @@
             <span>page</span>
             <span class='number'>{{ watches.number }}</span>
             <span> of</span>
-            <span class='number'>{{ watches.num_pages }}</span>
+            <span class='number'>{{ watches.paginator.num_pages }}</span>
           </div>
   {% if watches.has_next %}
           <div class='next'>
@@ -81,9 +81,9 @@
   {% else %}
           <div class='next inactive'>next &gt;</div>
   {% endif %}
-  {% ifnotequal watches.number watches.num_pages %}
+  {% ifnotequal watches.number watches.paginator.num_pages %}
           <div class='last'>
-            <a href='?page={{ watches.num_pages }}'>last</a>
+            <a href='?page={{ watches.paginator.num_pages }}'>last</a>
           </div>
   {% else %}
           <div class='last inactive'>last</div>
