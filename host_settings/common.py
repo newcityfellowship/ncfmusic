@@ -1,7 +1,7 @@
 # Django settings for myproject project.
 import os
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -86,12 +86,16 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'grappelli',
+    'admin_tools',
+    'admin_tools.theming',
+    'admin_tools.menu',
+    'admin_tools.dashboard',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    'grappelli',
     'django.contrib.admin',
     'django.contrib.admindocs',
     'ncfmusic.apps.content',
@@ -104,6 +108,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     "grappelli.context_processors.admin_template_path",
     'django.core.context_processors.media',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    
 )
 
 FILEBROWSER_DIRECTORY = 'ext/filebrowser'
+
+ADMIN_TOOLS_INDEX_DASHBOARD = 'ncfmusic.dashboard.CustomIndexDashboard'
+#ADMIN_TOOLS_APP_INDEX_DASHBOARD = 'ncfmusic.dashboard.CustomAppIndexDashboard'
+
