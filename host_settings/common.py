@@ -111,3 +111,4 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 FILEBROWSER_DIRECTORY = 'ext/filebrowser'
 
+handler500 = 'ncfmusic.apps.content.views.server_error'
