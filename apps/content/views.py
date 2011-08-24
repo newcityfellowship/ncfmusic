@@ -479,8 +479,9 @@ def search(request):
         contributor_query = get_query(query_string, ['name', 'title',])
         contributors = Contributor.objects.filter(contributor_query).order_by('name')
         
+        import datetime
         event_query = get_query(query_string, ['title', 'teaser', 'article_body',])
-        events = Event.objects.filter(event_query).order_by('title')
+        events = Event.objects.filter(event_query).filter(end_date__gte=datetime.datetime.now()).order_by('title')
         
         context = RequestContext(request, {
             #'page': page,
