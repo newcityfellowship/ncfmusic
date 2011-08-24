@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block headerclasses %} class="interior interiorhead songs songshead" {% endblock headerclasses %}
+
+{% block content %}
+<div class='interior songs' id='content'>
+  <div id='maincontent'>
+  {% if songs %}
+ 	<h2 class='pagename'>Songs</h2>
+    <ul class='aggregation'>
+  		{% for song in songs %}   
+    		{% include "songs/song_item.html" %}
+  		{% endfor %}      
+    </ul>
+    <div class='break'></div>
+  {% endif %}
+  {% if listens %}
+  <h2 class='pagename'>Listens</h2>
+    <ul class='aggregation'>
+      {% for listen in listens %}
+        {% include "listens/listen_item.html" %}
+      {% endfor %}
+    </ul>
+    <div class='break'></div>
+  {% endif %}
+	
+	{% if articles %}
+	<h2 class='pagename'>Articles</h2>
+	  <ul class='aggregation'>
+	    {% for article in articles %}
+        {% include "learn/article_item.html" %}
+      {% endfor %}
+    </ul>
+	{% endif %}
+	{% if tutorials %}
+	<h2 class='pagename'>Tutorials</h2>
+	  <ul class='aggregation'>
+	    {% for tutorial in tutorials %}
+        {% include "learn/tutorial_item.html" %}
+      {% endfor %}
+    </ul>
+	{% endif %}
+	
+	{% if talks %}
+	<h2 class='pagename'>Talks</h2>
+	  <ul class='aggregation'>
+	    {% for talk in talks %}
+        {% include "learn/talk_item.html" %}
+      {% endfor %}
+    </ul>
+	{% endif %}
+	
+	{% if churches %}
+	<h2 class='pagename'>Churches</h2>
+	  <ul class='aggregation'>
+	    {% for church in churches %}   
+        {% include "contribs/church_item.html" %}
+      {% endfor %}
+    </ul>
+	{% endif %}
+	
+	{% if contributors %}
+	<h2 class='pagename'>Musicians</h2>
+	  <ul class='aggregation'>
+      {% for musician in contributors %}   
+        {% include "contribs/musician_item.html" %}
+      {% endfor %}      
+    </ul>
+	{% endif %}
+	
+	{% if events %}
+	<h2 class='pagename'>Events</h2>
+	  <ul class='aggregation'>
+	    {% for event in events %}   
+        {% include "events/event_item.html" %}
+      {% endfor %}
+	  </ul>
+	{% endif %}
+	
+	{% if watches %}
+	<h2 class='pagename'>Watch</h2>
+	  <div class='relatedvideos'>
+      <ul>
+      {% for video in watches %}
+        {% include "watch/watch_item.html" %}
+      {% endfor %}
+      </ul>
+      <div class='break'></div>
+    </div>
+	{% endif %}
+
+
+</div>
+<div class='break'></div>
+{% endblock content %}

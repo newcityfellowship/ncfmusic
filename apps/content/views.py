@@ -373,13 +373,19 @@ def songs(request, start_letter=None):
 #     
 #     return render_to_response('events.html', context)
     
-def events(request):
-    events_list = Event.objects.order_by('start_date')
+def events(request, month=None, year=None):
+    import datetime
+    
+    events_list = Event.objects.filter(end_date__gte=datetime.datetime.now()).order_by('start_date')
+    if year:
+        events_list = events_list.filter(start_date__year=year)
+    if month:
+        events_list = events_list.filter(start_date__month=month)
     # page = get_object_or_404(Page, slug__exact='events')
     #event = get_object_or_404(Event, slug__exact=slug)
     
     context = RequestContext(request, {
-        'event': events_list[0],
+        'event': len(events_list) and events_list[0] or {},
         'events': events_list
     })
     
@@ -445,49 +451,48 @@ def musicians(request, slug=None):
     return render_to_response('musicians.html', context)
     
 def search(request):
-    # page = get_object_or_404(Page, slug__exact='search')
+    #page = get_object_or_404(Page, slug__exact='search')
     
-    if ('q' in request.GET) and request.GET['q'].strip():
-        query_string = request.GET['q']
-        
+    query_string = request.GET.get('q', '').strip()
+    if query_string:
         listen_query = get_query(query_string, ['title', 'album_title',])
-        listen = Listen.objects.filter(listen_query).order_by('-release_date')
+        listens = Listen.objects.filter(listen_query).order_by('-record_date')
 
         watch_query = get_query(query_string, ['title', 'description', 'church__name',])
-        watch = Watch.objects.filter(watch_query).order_by('-date')
+        watches = Watch.objects.filter(watch_query).order_by('-date')
         
-        tutorial_query = get_query(query_string, ['title', 'teaser',])
-        tutorial = Tutorial.objects.filter(tutorial_query).order_by('-insert_date')
+        tutorial_query = get_query(query_string, ['title', 'teaser', 'author__name', 'church__name',])
+        tutorials = Tutorial.objects.filter(tutorial_query).order_by('-insert_date')
         
-        talk_query = get_query(query_string, ['title', 'teaser',])
-        talk = Talk.objects.filter(talk_query).order_by('-date')
+        talk_query = get_query(query_string, ['title', 'teaser', 'author__name', 'church__name',])
+        talks = Talk.objects.filter(talk_query).order_by('-date')
         
-        article_query = get_query(query_string, ['title', 'teaser', 'article_body',])
-        article = Article.objects.filter(article_query).order_by('-date')
+        article_query = get_query(query_string, ['title', 'teaser', 'article_body', 'author__name', 'church__name',])
+        articles = Article.objects.filter(article_query).order_by('-date')
         
-        song_query = get_query(query_string, ['title',])
-        song = Song.objects.filter(song_query).order_by('-release_date')
+        song_query = get_query(query_string, ['title', 'album_title', 'songwriter__name',])
+        songs = Song.objects.filter(song_query).order_by('-release_date')
         
         church_query = get_query(query_string, ['name', 'address', 'city', 'state', 'postal_code',])
-        church = Church.objects.filter(church_query).order_by('name')
+        churches = Church.objects.filter(church_query).order_by('name')
         
         contributor_query = get_query(query_string, ['name', 'title',])
-        contributor = Contributor.objects.filter(contributor_query).order_by('name')
+        contributors = Contributor.objects.filter(contributor_query).order_by('name')
         
         event_query = get_query(query_string, ['title', 'teaser', 'article_body',])
-        event = Event.objects.filter(event_query).order_by('title')
+        events = Event.objects.filter(event_query).order_by('title')
         
         context = RequestContext(request, {
-            'page': page,
-            'listen': listen,
-            'watch': watch,
-            'tutorial': tutorial,
-            'talk': talk,
-            'article': article,
-            'song': song,
-            'church': church,
-            'contributor': contributor,
-            'event': event,
+            #'page': page,
+            'listens': listens,
+            'watches': watches,
+            'tutorials': tutorials,
+            'talks': talks,
+            'articles': articles,
+            'songs': songs,
+            'churches': churches,
+            'contributors': contributors,
+            'events': events,
         })
 
         return render_to_response('search.html', context)

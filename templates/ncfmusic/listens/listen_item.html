@@ -1,0 +1,52 @@
+<li>
+  <button class='audioplay paused' id='playsong{{ listen.id }}' rel='song{{ listen.id }}'></button>
+  <h3 class='floater'>{{ listen.title }}</h3>
+  <div class='audioplayer'>
+    <div class='mp3holder' id='song{{ listen.id }}' rel='{{ listen.mp3.url }}'></div>
+    <div class='time'></div>
+    <div class='outerprogressbar'>
+      <div class='innerprogressbar'></div>
+    </div>
+  </div>
+  <div class='details floater'>
+    <span>{{ listen.release_date|date:"F j, Y"}}</span>
+    <span> |</span>
+    <span>
+      <a href='{{ listen.songwriter.get_absolute_url }}'>{{ listen.songwriter }}</a>
+    </span>
+    <span> |</span>
+    <span>
+      <a href='{{ listen.church.get_absolute_url }}'>{{ listen.church }}</a>
+    </span>
+    <span> |</span>
+    <span class='expander' rel='song{{ listen.id }}-detail'>View Song Info &#x2B07;</span>
+  </div>
+  <div class='extendeddetails' id='song{{ listen.id }}-detail'>
+    <table>
+      <tr>
+        <td class='category'>Songwriter:</td>
+        <td class='listing'>
+          <a href='{{ listen.songwriter.get_absolute_url }}'>{{ listen.songwriter }}</a>
+        </td>
+      </tr>
+      <tr>
+        <td class='category'>Producer:</td>
+        <td class='listing'>
+          <a href='{{ listen.producer.get_absolute_url }}'>{{ listen.producer }}</a>
+        </td>
+      </tr>
+      <tr>
+        <td class='category'>Vocals:</td>
+        <td class='listing'>
+          {% for contributor in listen.vocals.all %}
+          <a href="{{ contributer.get_absolute_url }}">{{ contributer }}</a>
+            {% if not forloop.last %}
+            <span>,</span>
+            {% endif %}
+          {% endfor %}
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class='break'></div>
+</li>

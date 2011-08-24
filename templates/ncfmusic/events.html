@@ -10,29 +10,13 @@
       Events
     </h2>
     <ul class='aggregation'>
+      {% if events %}
   {% for event in events.object_list %}   
-    <li>
-      <h3><a href="{{ article.get_absolute_url }}">{{ event.title }}</a></h3>
-      <div class='break'></div>
-      <div class='details'>
-        <span>{{ event.start_date|date:"F j, Y" }}</span>
-        <span> |</span>
-        <span>
-          <a href='{{ article.author.get_absolute_url }}'>{{ event.time }}</a>
-        </span>
-        <span> |</span>
-        <span>
-          <a href='{{ article.church.get_absolute_url }}'>{{ event.church }}</a>
-        </span>
-      </div>
-      <div class='break'></div>
-      <div class='teaser'>
-        <p>
-          {{ event.teaser|safe }}
-        </p>
-      </div>
-    </li>
-  {% endfor %}      
+    {% include "events/event_item.html" %}
+  {% endfor %}    
+      {% else %}
+      <li><h3>No Upcoming Events</h3></li>
+      {% endif %}
     </ul>
     <div class='break'></div>
     <div id='pagination'>

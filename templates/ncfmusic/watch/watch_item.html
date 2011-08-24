@@ -1,0 +1,17 @@
+<li>
+  <a href='{{ video.get_absolute_url }}'>
+    <img src='{{ video.vimeo_thumb}}' />
+  </a>
+  <h2>
+    <a href='{{ video.get_absolute_url }}'>{{ video.title }}</a>
+  </h2>
+  <div class='details'>
+    <span>{{ video.title }}</span>
+    <span> |</span>
+    <span>{{ video.date|date:"F j, Y" }}</span>
+    <span> |</span>
+    <span>
+      <a href='{{ video.church.get_absolute_url }}'>{{ video.church }}</a>
+    </span>
+  </div>
+</li>
