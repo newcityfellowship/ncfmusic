@@ -39,7 +39,13 @@
             </a>
             <span>Watch</span>
           </div>
+        {% if watch.vimeo_id %}
           <iframe src="http://player.vimeo.com/video/{{ watch.vimeo_id }}" width="367" height="208" frameborder="0"></iframe>
+        {% else %}
+          {% if watch.youtube_id %}
+          <iframe id="player" type="text/html" width="367" height="208" src="http://www.youtube.com/embed/{{ watch.youtube_id }}?enablejsapi=1&origin=http://ncfmusic.com" frameborder="0"></iframe>
+          {% endif %}
+        {% endif %}
           <h3>
             <a href='#'>{{ watch.title }}</a>
           </h3>

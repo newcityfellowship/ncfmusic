@@ -1,5 +1,8 @@
 from django.db import models
 from ncfmusic.apps.content.utils import *
+import gdata.youtube
+import gdata.youtube.service
+from gdata.service import RequestError
 
 class Listen(models.Model):
     title = models.CharField(max_length=256)
@@ -88,6 +91,43 @@ def _get_vimeo_id(vimeo_url):
         return obj.get('id')
     else:
         return ''
+
+@memoize
+def _get_youtube_id(youtube_url):
+    import urlparse
+
+    try:
+        return urlparse.parse_qs(urlparse.urlparse(youtube_url).query)['v'][0]
+    except:
+        return ''
+
+#@memoize
+def _get_youtube_data(video_id):
+    try:
+        yt_service = gdata.youtube.service.YouTubeService()
+        return yt_service.GetYouTubeVideoEntry(video_id=video_id)
+    except RequestError:
+        return None
+
+
+def _get_youtube_embed(video_id):
+    return '<iframe id="player" type="text/html" width="640" height="360" src="http://www.youtube.com/embed/%s?enablejsapi=1&origin=http://ncfmusic.com" frameborder="0"></iframe>' % video_id
+
+def _get_youtube_thumb(video_id):
+    entry = _get_youtube_data(video_id)
+    if entry:
+        return entry.media.thumbnail[0].url
+
+    return ''
+
+def _get_youtube_duration(video_id):
+    entry = _get_youtube_data(video_id)
+    if entry:
+        duration = int(entry.media.duration.seconds)
+        return "%d:%d" % (int(duration/60), (duration%60))
+    
+    return ''
+
     
 class Watch(models.Model):
     title = models.CharField(max_length=256)
@@ -95,13 +135,23 @@ class Watch(models.Model):
     description = models.TextField(null=True, blank=True)
     church = models.ForeignKey('Church', null=True)
     date = models.DateField(null=True, blank=True)
-    vimeo_url = models.CharField(max_length=256)
+    vimeo_url = models.CharField(max_length=256, null=True, blank=True, unique=True)
     vimeo_id = models.CharField(max_length=16, null=True, blank=True, help_text="If left blank we'll try to figure it out from the vimeo url.")
     vimeo_embed_code = models.CharField(max_length=1024, null=True, blank=True, help_text="If left blank we'll try to figure it out from the vimeo url")
-    vimeo_thumb = models.CharField(max_length=256, null=True, blank=True, help_text="If left blank we'll try to figure it out from the vimeo url")
-    duration = models.CharField(max_length=16, null=True, blank=True, help_text="If left blank we'll try to figure it out from the vimeo url")
+    youtube_url = models.CharField(max_length=256, null=True, blank=True, unique=True)
+    youtube_id = models.CharField(max_length=16, null=True, blank=True, help_text="If left blank we'll try to figure it out from the YouTube url.")
+    youtube_embed_code = models.CharField(max_length=1024, null=True, blank=True, help_text="If left blank we'll try to figure it out from the YouTube url")
+    vimeo_thumb = models.CharField(verbose_name='Video Thumb', max_length=256, null=True, blank=True, help_text="If left blank we'll try to figure it out from the Vimeo or YouTube url")
+    duration = models.CharField(max_length=16, null=True, blank=True, help_text="If left blank we'll try to figure it out from the Vimeo or YouTube url")
     insert_date = models.DateField(auto_now_add=True, editable=False)
     
+    @property
+    def embed_code(self):
+        if self.vimeo_embed_code:
+            return self.vimeo_embed_code
+        else:
+            return self.youtube_embed_code
+
     def __unicode__(self):
         return self.title
         
@@ -110,16 +160,35 @@ class Watch(models.Model):
         
     class Meta:
         verbose_name_plural = 'Watches'
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+
+        if not self.vimeo_url and not self.youtube_url:
+            raise ValidationError('You must provide either a Vimeo URL or a YouTube URL.')
+
+        if self.vimeo_url and self.youtube_url:
+            raise ValidationError('You cannot have both a Vimeo URL and a YouTube URL.')
         
     def save(self, *args, **kwargs):
-        if not self.vimeo_id:
-            self.vimeo_id = _get_vimeo_id(self.vimeo_url)
-        if not self.vimeo_embed_code:
-            self.vimeo_embed_code = _get_embed_code(self.vimeo_url)
-        if not self.vimeo_thumb:
-            self.vimeo_thumb = _get_vimeo_thumb(self.vimeo_url)
-        if not self.duration:
-            self.duration = _get_vimeo_duration(self.vimeo_url)
+        if self.vimeo_url:
+            if not self.vimeo_id:
+                self.vimeo_id = _get_vimeo_id(self.vimeo_url)
+            if not self.vimeo_embed_code:
+                self.vimeo_embed_code = _get_embed_code(self.vimeo_url)
+            if not self.vimeo_thumb:
+                self.vimeo_thumb = _get_vimeo_thumb(self.vimeo_url)
+            if not self.duration:
+                self.duration = _get_vimeo_duration(self.vimeo_url)
+        if self.youtube_url:
+            if not self.youtube_id:
+                self.youtube_id = _get_youtube_id(self.youtube_url)
+            if not self.youtube_embed_code:
+                self.youtube_embed_code = _get_youtube_embed(self.youtube_id)
+            if not self.vimeo_thumb:
+                self.vimeo_thumb = _get_youtube_thumb(self.youtube_id)
+            if not self.duration:
+                self.duration = _get_youtube_duration(self.youtube_id)
         super(Watch, self).save(*args, **kwargs) # Call the "real" save() method.
 
 
