@@ -6,6 +6,27 @@
     {% for letter,songs in sections.iteritems %} 
       <a {% if songs %}href="#{{ letter }}"{% endif %}>{{ letter }}</a>
     {% endfor %}
-	
-	</div>
+  </div>
+
+  <div class="left-nav-spacer">&nbsp;</div>
+
+  <div class='title'>
+    <span>By Resource Type</span>
+  </div>
+  <div class='filter'>
+    <a href="/resources/type/watch">Watch</a><br />
+    <a href="/resources/type/listen">Listen</a><br />
+    <a href="/resources/type/read">Read</a>
+  </div>
+
+  <div class="left-nav-spacer">&nbsp;</div>
+
+  <div class='title'>
+    <span>By Genre</span>
+  </div>
+  <div class='filter'>
+    {% for genre in genres %}
+    <a href="/resources/genre/{{ genre.slug }}/">{{ genre.name }}</a>
+    {% endfor %}
+  </div>
 </div>

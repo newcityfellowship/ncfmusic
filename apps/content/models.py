@@ -1,8 +1,11 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 from ncfmusic.apps.content.utils import *
 import gdata.youtube
 import gdata.youtube.service
 from gdata.service import RequestError
+
 
 class Listen(models.Model):
     title = models.CharField(max_length=256)
@@ -244,6 +247,20 @@ class Article(Learn):
     def get_absolute_url(self):
         return '/articles/%s' % self.slug
     
+class Genre(models.Model):
+    name = models.CharField(max_length=64)
+    slug = models.SlugField(max_length=255, unique=True)
+
+    def __unicode__(self):
+        return self.name
+
+class ResourceManager(models.Manager):
+    def get_query_set(self):
+        qs = super(ResourceManager, self).get_query_set()
+
+        return sorted(qs.all(), key=lambda s: s.effective_date, reverse=True)
+
+
 class Song(models.Model):
     title = models.CharField(max_length=256)
     slug = models.SlugField(max_length=255)
@@ -258,10 +275,43 @@ class Song(models.Model):
     release_date = models.DateField()
     album_title = models.CharField(max_length=256, null=True, blank=True)
     mp3 = models.FileField(upload_to='ext/songs', null=True, blank=True)
-    
+    genre = models.ForeignKey('Genre', null=True)
+    related_videos = models.ManyToManyField('Watch')
+    related_articles = models.ManyToManyField('Article')
+    related_talks = models.ManyToManyField('Talk')
+    insert_date = models.DateField(auto_now_add=True, editable=False)
+    effective_date = models.DateField(editable=False, null=False, blank=False)
+
+    objects = models.Manager()
+    effective_objects = ResourceManager()
+
     def __unicode__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return '/resource/%s/' % self.slug
+
+    def get_effective_date(self):
+        dates = [self.insert_date]
+        videos = self.related_videos.order_by('-insert_date')
+        articles = self.related_articles.order_by('-insert_date')
+        talks = self.related_talks.order_by('-insert_date')
+
+        if videos.count():
+            dates.append(videos[0].insert_date)
     
+        if articles.count():
+            dates.append(articles[0].insert_date)
+
+        if talks.count():
+            dates.append(talks[0].insert_date)
+
+        return max(dates)
+    
+    def save(self, *args, **kwargs):
+        self.effective_date = self.get_effective_date()
+        super(Song, self).save(*args, **kwargs)
+
 class Event(models.Model):
     title = models.CharField(max_length=256)
     slug = models.SlugField(max_length=255)
@@ -330,5 +380,9 @@ class Page(models.Model):
     def __unicode__(self):
         return self.slug
     
-    
-    
+
+class BlogEntry(models.Model):
+    entry_date = models.DateTimeField()
+    author = models.ForeignKey(User, editable=False)
+    related_songs = models.ManyToManyField('Song')
+    text = models.TextField()

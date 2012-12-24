@@ -124,6 +124,11 @@ admin.site.register(Contact, ContactAdmin)
 
 admin.site.register(Page)
 
+class GenreAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
+
+admin.site.register(Genre, GenreAdmin)
+
 
         
         

@@ -449,6 +449,10 @@ h2.sectionname {
   width: 175px;
   padding-bottom: 10px; }
 
+.relatedvideos {
+  min-height: 300px;
+}  
+
 .audioplayer {
   width: 300px;
   height: 25px;
@@ -481,7 +485,7 @@ h2.sectionname {
   margin-left: 0px;
   margin-top: 5px; }
 
-.details, .extendeddetails table tr td.listing {
+.details, .extendeddetails table tr td.listing, .extendeddetails table tr.links {
   color: #666666;
   text-transform: uppercase;
   font-size: 10px;
@@ -495,6 +499,10 @@ h2.sectionname {
 .details a:hover, .extendeddetails table tr td.listing a:hover, .details .expander:hover {
   color: #007A6D;
   text-decoration: none; }
+
+.extendeddetails table tr.links {
+  text-transform: none;
+}
 
 .details .expander {
   cursor: pointer; }
@@ -705,8 +713,22 @@ h2.sectionname {
   text-decoration: underline;
 }
 
+#left-nav .left-nav-spacer {
+  background-color: white;
+  min-height: 20px;
+}
+
+#left-nav .filter {
+  text-transform: uppercase;
+  padding: 17px;
+  font-weight: bold;
+}
+
+#left-nav .filter a {
+  line-height: 2em;
+}
+
 .actionmenu{
-  background-color: #F1F1F1;
   padding: 3px;
   padding-right: 7px;
   padding-left: 7px;
@@ -715,7 +737,6 @@ h2.sectionname {
   font-size: 12px;
   text-transform: uppercase;
   font-weight: bold;
-  float: right;
   margin-top: -2px;
 }
 
@@ -724,8 +745,10 @@ h2.sectionname {
   margin-left: 3px;
 }
 
-.actionmenu .label{
+.actionmenu .label, 
+.downloads .label {
   color: #414141;
+  font-weight: bold;
 }
 
 .actionmenu a{
@@ -735,6 +758,24 @@ h2.sectionname {
 
 .actionmenu a:hover{
   color: #2E8D7E;
+}
+
+.downloads {
+  float: right;
+  font-family: 'PT Sans Narrow';
+  font-size: 12px;
+  margin-right: 25px;
+  width: 304px;
+  background-color: #F1F1F1;
+  padding: 7px;
+}
+
+.aggregation li .downloads a {
+  color: black;
+}
+
+.aggregation button {
+  margin-top: 0;
 }
 
 .articlebody {
