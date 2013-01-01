@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block extraheaders %}<meta property="fb:app_id" content="486835418029921"/>{% endblock extraheaders %}
+
+{% block headerclasses %} class="interior interiorhead learn learnhead" {% endblock headerclasses %}
+
+{% block content %}
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=486835418029921";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div class='interior learn' id='content'>
+  {% include "blog/sidebar.html" %}
+  <div id='maincontent'>
+    <h2 class='pagename'>
+      Blog
+    </h2>
+    <ul class='aggregation'>
+      <li>
+        <h3><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></h3>
+        <div class='break'></div>
+        <div class='details'>
+          <span>{{ object.date|date:"F j, Y" }}</span>
+          <span> |</span>
+          <span>
+            <a href='{{ object.author.get_absolute_url }}'>{{ object.author }}</a>
+          </span>
+          <span> |</span>
+          <span>
+            <a href='{{ object.church.get_absolute_url }}'>{{ object.church }}</a>
+          </span>
+        </div>
+        <div class="details">
+          <span>
+            {% for category in object.categories.all %}
+            <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </span>
+        </div>
+        <div class='break'></div>
+        <div class='articlebody'>
+            {{ object.text|safe }}
+        </div>
+      </li>
+    </ul>
+    <div class='break'></div>
+    {% if object.related_songs %}
+      <h2 class='pagename'>Related Songs</h2>
+      <ul class='aggregation'>
+        {% for song in object.related_songs.all %}   
+            {% include "songs/song_item.html" %}
+        {% endfor %}      
+      </ul>
+      <div class='break'></div>
+    {% endif %}
+    <h2 class='pagename'>Comments</h2>
+    <div class="fb-comments" data-href="http://ncfmusic.com{{ object.get_absolute_url }}" data-width="470" data-num-posts="10"></div>
+  </div>
+  <div class='break'></div>
+</div>
+{% endblock content %}

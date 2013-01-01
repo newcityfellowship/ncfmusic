@@ -3,8 +3,9 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>New City Music</title>
-    <link href='{{ MEDIA_URL }}/css/site.css' rel='stylesheet' type='text/css' />
+    
     <link href='http://yui.yahooapis.com/3.1.1/build/cssreset/reset-min.css' rel='stylesheet' type='text/css' />
+    <link href='{{ MEDIA_URL }}/css/site.css' rel='stylesheet' type='text/css' />
     <link href='//fonts.googleapis.com/css?family=PT+Sans+Narrow:regular,bold&amp;subset=cyrillic' rel='stylesheet' type='text/css' />
     <link rel="icon" href="/media/images/favicon.gif" type="image/x-icon">
     <link rel="shortcut icon" href="/media/images/favicon.gif" type="image/x-icon">
@@ -29,6 +30,8 @@
       })();
 
     </script>
+
+    {% block extraheaders %}{% endblock %}
   </head>
   <body>
     <div id='wrapper'>
@@ -55,7 +58,7 @@
               <a {% ifequal page.slug "about" %}class="selected" {% endifequal %}href='/about/'>About</a>
             </li>
             <li>
-              <a {% ifequal page.slug "blog" %}class="selected" {% endifequal %}href='/blog/'>Blog</a>
+              <a {% ifequal content_page.slug "blog" %}class="selected" {% endifequal %}href='/blog/'>Blog</a>
             </li>
             <li>
               <a {% ifequal page.slug "learn" %}class="selected" {% endifequal %}href='/learn/'>Learn</a>

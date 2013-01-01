@@ -285,6 +285,9 @@ class Song(models.Model):
     objects = models.Manager()
     effective_objects = ResourceManager()
 
+    class Meta:
+        ordering = ['title',]
+
     def __unicode__(self):
         return self.title
 
@@ -379,10 +382,31 @@ class Page(models.Model):
     
     def __unicode__(self):
         return self.slug
-    
 
-class BlogEntry(models.Model):
-    entry_date = models.DateTimeField()
-    author = models.ForeignKey(User, editable=False)
+class BlogCategory(models.Model):
+    name = models.CharField(max_length=128)
+    slug = models.SlugField(max_length=255)
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return '/blog/category/%s/' % self.slug
+
+class BlogEntry(Learn):
     related_songs = models.ManyToManyField('Song')
     text = models.TextField()
+    categories = models.ManyToManyField('BlogCategory')
+    
+    class Meta:
+        verbose_name_plural = 'Blog Entries'
+        ordering = ['-date',]
+
+    def __unicode__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return '/blog/%s/' % self.slug
+
+    def possibly_related(self):
+        return BlogEntry.objects.filter(related_songs__in=self.related_songs.all()).exclude(pk=self.pk).distinct()

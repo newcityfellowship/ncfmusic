@@ -1,0 +1,22 @@
+<div id='left-nav'>
+  <div class='title'>
+    <span>Blog</span>
+  </div>
+  <ul class='topnavlist'>
+        <li class='navsection'>
+      <div class='topcat'>
+        <div class='navexpander'>-</div>
+        <div class='catname'>
+          <a href='/blog/'>Categories</a>
+        </div>
+      </div>
+      <ul class='subnavlist'>
+{% for category in categories %}
+        <li>
+          {% ifequal category_slug category.slug %}<strong>{% endifequal %}<a href='{{ category.get_absolute_url }}'>{{ category.name }}</a>{% ifequal category_slug category.slug %}</strong>{% endifequal %}
+        </li>
+{% endfor %}
+      </ul>
+    </li>
+  </ul>
+</div>

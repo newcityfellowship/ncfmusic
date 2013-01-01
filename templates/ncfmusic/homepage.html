@@ -34,31 +34,46 @@
       <div class='home' id='content'>
         <div id='leftcallout'>
           <div class='title'>
-            <a class='viewall' href='/watch'>
-              <img src='{{ MEDIA_URL }}/images/title-all-videos.png' />
+            <a class='viewall' href='/blog'>
+              <img src='{{ MEDIA_URL }}/images/title-all-articles.png' />
             </a>
-            <span>Watch</span>
+            <span>Blog</span>
           </div>
-        {% if watch.vimeo_id %}
-          <iframe src="http://player.vimeo.com/video/{{ watch.vimeo_id }}?title=0&byline=0&portrait=0" width="367" height="208" frameborder="0"></iframe>
-        {% else %}
-          {% if watch.youtube_id %}
-          <iframe id="player" type="text/html" width="367" height="208" src="http://www.youtube.com/embed/{{ watch.youtube_id }}?enablejsapi=1&origin=http://ncfmusic.com" frameborder="0"></iframe>
-          {% endif %}
-        {% endif %}
-          <h3>
-            <a href='#'>{{ watch.title }}</a>
-          </h3>
-          <p>{{ watch.description|safe }}</p>
+          <ul>
+            {% for entry in entries %}
+            <li>
+              <h3>
+                <a href="{{ entry.get_absolute_url }}">{{ entry.title }}</a>
+              </h3>
+              <p>{{ entry.teaser|safe }}</p>
+            </li>
+            {% endfor %}
+          </ul>
         </div>
         <div id='rightcol'>
+          <div id='watch'>
+            <div class='title'>
+              <span>Video</span>
+            </div>
+            {% if watch.vimeo_id %}
+              <iframe src="http://player.vimeo.com/video/{{ watch.vimeo_id }}?title=0&byline=0&portrait=0" width="367" height="208" frameborder="0"></iframe>
+            {% else %}
+              {% if watch.youtube_id %}
+              <iframe id="player" type="text/html" width="367" height="208" src="http://www.youtube.com/embed/{{ watch.youtube_id }}?enablejsapi=1&origin=http://ncfmusic.com" frameborder="0"></iframe>
+              {% endif %}
+              <h3>
+                <a href='#'>{{ watch.title }}</a>
+              </h3>
+              <p>{{ watch.description|safe }}</p>
+            {% endif %}
+          </div>
           {% comment %}
           <div id='ad'>
             <a href='/events/new-city-music-conference/'>
               <img src='{{ MEDIA_URL }}/images/music-conference.png' />
             </a>
           </div>
-          {% endcomment %}
+          
           <div id='learn'>
             <div class='title'>
               <a class='viewall' href='/articles'>
@@ -77,6 +92,7 @@
   {% endfor %}              
             </ul>
           </div>
+          {% endcomment %}
           <div id='findasong'>
             <form action='/songs/' method='get'>
               <div class='typechooser'>

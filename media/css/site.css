@@ -24,6 +24,10 @@ p, h3, h3 a {
 .break {
   clear: both; }
 
+strong {
+  font-weight: bold;
+}
+
 #wrapper {
   width: 990px;
   background-color: #FFFFFF;
@@ -301,9 +305,15 @@ h2.sectionname {
   margin-left: 387px; }
 
 .home #rightcol #learn {
-  width: 563px;
+  width: 368px;
   height: 234px;
   overflow: hidden; }
+
+.home #rightcol #watch {
+  width: 563px;
+  height: 334px;
+  overflow: hidden;
+}
 
 
 .home #rightcol #learn ul li {

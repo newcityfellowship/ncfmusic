@@ -1,9 +1,10 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.db.models import Q
 from django.views.decorators.cache import cache_page
+from django.views.generic.list_detail import object_list
 
 from ncfmusic.apps.content.models import *
 from ncfmusic.apps.content.forms import *
@@ -14,6 +15,7 @@ def home(request):
     songs = Listen.objects.order_by('-insert_date')[:3]
     watch = Watch.objects.order_by('-insert_date')[0]
     learn = Article.objects.order_by('-insert_date')[:2]
+    entries = BlogEntry.objects.order_by('-insert_date')[:3]
     
     heroshots = Category.objects.filter(slug='homepage')
     
@@ -29,7 +31,8 @@ def home(request):
         'watch': watch,
         'learn': learn,
         'form': form,
-        'heroshots': heroshots
+        'heroshots': heroshots,
+        'entries': entries,
     })
     
     return render_to_response('homepage.html', context)
@@ -48,28 +51,7 @@ def about(request):
     return render_to_response('about.html', context);
     
 def listen(request):
-    contentpage = get_object_or_404(Page, slug__exact='listen')
-    listen_list = Listen.objects.order_by('-record_date', '-insert_date')
-    
-    paginator = Paginator(listen_list, 5)
-    
-    try:
-        page = int(request.GET.get('page', '1'))
-    except ValueError:
-        page = 1
-        
-    try:
-        listens = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-        listens = paginator.page(paginator.num_pages)
-        
-    context = RequestContext(request, {
-        'contentpage': contentpage,
-        'page': page,
-        'listens': listens
-    })
-    
-    return render_to_response('listen.html', context)
+    return HttpResponsePermanentRedirect('/resources/')
     
 def podcast(request):
     listens = Listen.objects.order_by('-insert_date')
@@ -535,6 +517,25 @@ def search(request):
     else:
         #   No query params, head back to the home page
         return HttpResponseRedirect('/')
+
+def blog_category_list(request, slug):
+    qs = BlogEntry.objects.filter(categories__slug=slug)
+
+    paginator = Paginator(qs, 5)
+    
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    page_obj = paginator.page(page)
+
+    return object_list(request, queryset=qs, extra_context={
+        'content_page': Page.objects.get(slug='blog'),
+        'categories': BlogCategory.objects.order_by('name'),
+        'page_obj': page_obj,
+        'category_slug': slug,
+    })
     
     
 from django.conf import settings
