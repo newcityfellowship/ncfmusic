@@ -97,6 +97,7 @@ INSTALLED_APPS = (
     'ncfmusic.apps.content',
     'ncfmusic.apps.heroshots',
     'filebrowser',
+    'south',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
