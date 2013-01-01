@@ -8,240 +8,115 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Listen'
-        db.create_table('content_listen', (
+        # Adding model 'BlogEntry'
+        db.create_table('content_blogentry', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=255)),
-            ('mp3', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
-            ('songwriter', self.gf('django.db.models.fields.related.ForeignKey')(related_name='listen_songwriter', to=orm['content.Contributor'])),
-            ('producer', self.gf('django.db.models.fields.CharField')(max_length=128, null=True, blank=True)),
-            ('instruments', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='listen_instruments', null=True, to=orm['content.Contributor'])),
-            ('record_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
-            ('album_title', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
-            ('church', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['content.Church'])),
-            ('insert_date', self.gf('django.db.models.fields.DateField')(auto_now_add=True, blank=True)),
-            ('source', self.gf('django.db.models.fields.CharField')(max_length=1024, null=True, blank=True)),
+            ('entry_date', self.gf('django.db.models.fields.DateTimeField')()),
+            ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('text', self.gf('django.db.models.fields.TextField')()),
         ))
-        db.send_create_signal('content', ['Listen'])
+        db.send_create_signal('content', ['BlogEntry'])
 
-        # Adding M2M table for field vocals on 'Listen'
-        db.create_table('content_listen_vocals', (
+        # Adding M2M table for field related_songs on 'BlogEntry'
+        db.create_table('content_blogentry_related_songs', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('listen', models.ForeignKey(orm['content.listen'], null=False)),
-            ('contributor', models.ForeignKey(orm['content.contributor'], null=False))
+            ('blogentry', models.ForeignKey(orm['content.blogentry'], null=False)),
+            ('song', models.ForeignKey(orm['content.song'], null=False))
         ))
-        db.create_unique('content_listen_vocals', ['listen_id', 'contributor_id'])
+        db.create_unique('content_blogentry_related_songs', ['blogentry_id', 'song_id'])
 
-        # Adding model 'Watch'
-        db.create_table('content_watch', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=255)),
-            ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('church', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['content.Church'], null=True)),
-            ('date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
-            ('vimeo_url', self.gf('django.db.models.fields.CharField')(max_length=256, unique=True, null=True, blank=True)),
-            ('vimeo_id', self.gf('django.db.models.fields.CharField')(max_length=16, null=True, blank=True)),
-            ('vimeo_embed_code', self.gf('django.db.models.fields.CharField')(max_length=1024, null=True, blank=True)),
-            ('youtube_url', self.gf('django.db.models.fields.CharField')(max_length=256, unique=True, null=True, blank=True)),
-            ('youtube_id', self.gf('django.db.models.fields.CharField')(max_length=16, null=True, blank=True)),
-            ('youtube_embed_code', self.gf('django.db.models.fields.CharField')(max_length=1024, null=True, blank=True)),
-            ('vimeo_thumb', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
-            ('duration', self.gf('django.db.models.fields.CharField')(max_length=16, null=True, blank=True)),
-            ('insert_date', self.gf('django.db.models.fields.DateField')(auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('content', ['Watch'])
+        # Adding field 'Song.genre'
+        # db.add_column('content_song', 'genre',
+        #               self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True),
+        #               keep_default=False)
 
-        # Adding model 'Learn'
-        db.create_table('content_learn', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=255)),
-            ('date', self.gf('django.db.models.fields.DateField')()),
-            ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['content.Contributor'])),
-            ('church', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['content.Church'])),
-            ('teaser', self.gf('django.db.models.fields.TextField')()),
-            ('insert_date', self.gf('django.db.models.fields.DateField')(auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('content', ['Learn'])
-
-        # Adding model 'Tutorial'
-        db.create_table('content_tutorial', (
-            ('learn_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['content.Learn'], unique=True, primary_key=True)),
-            ('vimeo_url', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('vimeo_id', self.gf('django.db.models.fields.CharField')(max_length=16, null=True, blank=True)),
-            ('vimeo_embed_code', self.gf('django.db.models.fields.CharField')(max_length=1024, null=True, blank=True)),
-            ('vimeo_thumb', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
-            ('duration', self.gf('django.db.models.fields.CharField')(max_length=16, null=True, blank=True)),
-        ))
-        db.send_create_signal('content', ['Tutorial'])
-
-        # Adding model 'Talk'
-        db.create_table('content_talk', (
-            ('learn_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['content.Learn'], unique=True, primary_key=True)),
-            ('duration', self.gf('django.db.models.fields.CharField')(max_length=16)),
-            ('mp3', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
-        ))
-        db.send_create_signal('content', ['Talk'])
-
-        # Adding model 'Article'
-        db.create_table('content_article', (
-            ('learn_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['content.Learn'], unique=True, primary_key=True)),
-            ('article_body', self.gf('django.db.models.fields.TextField')()),
-        ))
-        db.send_create_signal('content', ['Article'])
-
-        # Adding model 'Song'
-        db.create_table('content_song', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=255)),
-            ('songwriter', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['content.Contributor'])),
-            ('church', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['content.Church'])),
-            ('sheet_music', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
-            ('slides', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
-            ('lyrics', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
-            ('producer', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
-            ('release_date', self.gf('django.db.models.fields.DateField')()),
-            ('album_title', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
-            ('mp3', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
-        ))
-        db.send_create_signal('content', ['Song'])
-
-        # Adding M2M table for field vocals on 'Song'
-        db.create_table('content_song_vocals', (
+        # Adding M2M table for field related_videos on 'Song'
+        db.create_table('content_song_related_videos', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('song', models.ForeignKey(orm['content.song'], null=False)),
-            ('contributor', models.ForeignKey(orm['content.contributor'], null=False))
+            ('watch', models.ForeignKey(orm['content.watch'], null=False))
         ))
-        db.create_unique('content_song_vocals', ['song_id', 'contributor_id'])
+        db.create_unique('content_song_related_videos', ['song_id', 'watch_id'])
 
-        # Adding M2M table for field instruments on 'Song'
-        db.create_table('content_song_instruments', (
+        # Adding M2M table for field related_articles on 'Song'
+        db.create_table('content_song_related_articles', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('song', models.ForeignKey(orm['content.song'], null=False)),
-            ('contributor', models.ForeignKey(orm['content.contributor'], null=False))
+            ('article', models.ForeignKey(orm['content.article'], null=False))
         ))
-        db.create_unique('content_song_instruments', ['song_id', 'contributor_id'])
+        db.create_unique('content_song_related_articles', ['song_id', 'article_id'])
 
-        # Adding model 'Event'
-        db.create_table('content_event', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=255)),
-            ('start_date', self.gf('django.db.models.fields.DateField')()),
-            ('end_date', self.gf('django.db.models.fields.DateField')()),
-            ('time', self.gf('django.db.models.fields.CharField')(max_length=64)),
-            ('church', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['content.Church'])),
-            ('city', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('teaser', self.gf('django.db.models.fields.TextField')()),
-            ('article_body', self.gf('django.db.models.fields.TextField')()),
-            ('photo', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
+        # Adding M2M table for field related_talks on 'Song'
+        db.create_table('content_song_related_talks', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('song', models.ForeignKey(orm['content.song'], null=False)),
+            ('talk', models.ForeignKey(orm['content.talk'], null=False))
         ))
-        db.send_create_signal('content', ['Event'])
-
-        # Adding model 'Church'
-        db.create_table('content_church', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=255)),
-            ('address', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('city', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('state', self.gf('django.db.models.fields.CharField')(max_length=128, null=True, blank=True)),
-            ('postal_code', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('coords', self.gf('django.db.models.fields.CharField')(max_length=128)),
-        ))
-        db.send_create_signal('content', ['Church'])
-
-        # Adding model 'Contributor'
-        db.create_table('content_contributor', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=255)),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=128, null=True, blank=True)),
-            ('church', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['content.Church'], null=True, blank=True)),
-            ('city', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
-            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75, null=True, blank=True)),
-            ('phone', self.gf('django.db.models.fields.CharField')(max_length=32, null=True, blank=True)),
-            ('website', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
-            ('buy_music_url', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
-            ('listed_contributor', self.gf('django.db.models.fields.BooleanField')(default=True)),
-        ))
-        db.send_create_signal('content', ['Contributor'])
-
-        # Adding model 'Contact'
-        db.create_table('content_contact', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('email_address', self.gf('django.db.models.fields.EmailField')(max_length=75)),
-            ('insert_date', self.gf('django.db.models.fields.DateField')(auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('content', ['Contact'])
-
-        # Adding model 'Page'
-        db.create_table('content_page', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=255)),
-            ('content', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('heroshot', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['heroshots.Image'], null=True, blank=True)),
-        ))
-        db.send_create_signal('content', ['Page'])
+        db.create_unique('content_song_related_talks', ['song_id', 'talk_id'])
 
 
     def backwards(self, orm):
-        # Deleting model 'Listen'
-        db.delete_table('content_listen')
+        # Deleting model 'BlogEntry'
+        db.delete_table('content_blogentry')
 
-        # Removing M2M table for field vocals on 'Listen'
-        db.delete_table('content_listen_vocals')
+        # Removing M2M table for field related_songs on 'BlogEntry'
+        db.delete_table('content_blogentry_related_songs')
 
-        # Deleting model 'Watch'
-        db.delete_table('content_watch')
+        # Deleting field 'Song.genre'
+        #db.delete_column('content_song', 'genre')
 
-        # Deleting model 'Learn'
-        db.delete_table('content_learn')
+        # Removing M2M table for field related_videos on 'Song'
+        db.delete_table('content_song_related_videos')
 
-        # Deleting model 'Tutorial'
-        db.delete_table('content_tutorial')
+        # Removing M2M table for field related_articles on 'Song'
+        db.delete_table('content_song_related_articles')
 
-        # Deleting model 'Talk'
-        db.delete_table('content_talk')
-
-        # Deleting model 'Article'
-        db.delete_table('content_article')
-
-        # Deleting model 'Song'
-        db.delete_table('content_song')
-
-        # Removing M2M table for field vocals on 'Song'
-        db.delete_table('content_song_vocals')
-
-        # Removing M2M table for field instruments on 'Song'
-        db.delete_table('content_song_instruments')
-
-        # Deleting model 'Event'
-        db.delete_table('content_event')
-
-        # Deleting model 'Church'
-        db.delete_table('content_church')
-
-        # Deleting model 'Contributor'
-        db.delete_table('content_contributor')
-
-        # Deleting model 'Contact'
-        db.delete_table('content_contact')
-
-        # Deleting model 'Page'
-        db.delete_table('content_page')
+        # Removing M2M table for field related_talks on 'Song'
+        db.delete_table('content_song_related_talks')
 
 
     models = {
+        'auth.group': {
+            'Meta': {'object_name': 'Group'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '80'}),
+            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
+        },
+        'auth.permission': {
+            'Meta': {'ordering': "('content_type__app_label', 'content_type__model', 'codename')", 'unique_together': "(('content_type', 'codename'),)", 'object_name': 'Permission'},
+            'codename': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
+        },
+        'auth.user': {
+            'Meta': {'object_name': 'User'},
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
+            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
+            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
+        },
         'content.article': {
             'Meta': {'object_name': 'Article', '_ormbases': ['content.Learn']},
             'article_body': ('django.db.models.fields.TextField', [], {}),
             'learn_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['content.Learn']", 'unique': 'True', 'primary_key': 'True'})
+        },
+        'content.blogentry': {
+            'Meta': {'object_name': 'BlogEntry'},
+            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
+            'entry_date': ('django.db.models.fields.DateTimeField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'related_songs': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['content.Song']", 'symmetrical': 'False'}),
+            'text': ('django.db.models.fields.TextField', [], {})
         },
         'content.church': {
             'Meta': {'object_name': 'Church'},
@@ -328,11 +203,15 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Song'},
             'album_title': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'church': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['content.Church']"}),
+            #'genre': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'instruments': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'sont_instruments'", 'null': 'True', 'to': "orm['content.Contributor']"}),
             'lyrics': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'mp3': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'producer': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
+            'related_articles': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['content.Article']", 'symmetrical': 'False'}),
+            'related_talks': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['content.Talk']", 'symmetrical': 'False'}),
+            'related_videos': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['content.Watch']", 'symmetrical': 'False'}),
             'release_date': ('django.db.models.fields.DateField', [], {}),
             'sheet_music': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'slides': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
@@ -373,6 +252,13 @@ class Migration(SchemaMigration):
             'youtube_embed_code': ('django.db.models.fields.CharField', [], {'max_length': '1024', 'null': 'True', 'blank': 'True'}),
             'youtube_id': ('django.db.models.fields.CharField', [], {'max_length': '16', 'null': 'True', 'blank': 'True'}),
             'youtube_url': ('django.db.models.fields.CharField', [], {'max_length': '256', 'unique': 'True', 'null': 'True', 'blank': 'True'})
+        },
+        'contenttypes.contenttype': {
+            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
+            'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         'heroshots.category': {
             'Meta': {'object_name': 'Category'},

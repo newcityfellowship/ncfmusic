@@ -124,7 +124,35 @@ admin.site.register(Contact, ContactAdmin)
 
 admin.site.register(Page)
 
+class GenreAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
 
+admin.site.register(Genre, GenreAdmin)
+
+class BlogCategoryAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}
+
+admin.site.register(BlogCategory, BlogCategoryAdmin)
+
+
+class BlogEntryAdmin(admin.ModelAdmin):
+    list_display = ('title', 'date')
+    prepopulated_fields = {'slug': ('title',)}
+    
+    class Media:
+        js = [
+            '/media/admin/tinymce/jscripts/tiny_mce/tiny_mce.js', 
+            '/media/admin/tinymce_setup/tinymce_setup.js',
+        ]
+
+    def save_model(self, request, obj, form, change):
+        try:
+            author = obj.author
+        except User.DoesNotExist:
+            obj.author = request.user
         
+        obj.save()
+
+admin.site.register(BlogEntry, BlogEntryAdmin)
         
         

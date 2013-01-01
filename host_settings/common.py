@@ -112,4 +112,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 FILEBROWSER_DIRECTORY = 'ext/filebrowser'
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'cache_table',
+    }
+}
 
+CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
+
+LOGIN_REDIRECT_URL = '/admin/'

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block headerclasses %} class="interior interiorhead songs songshead" {% endblock headerclasses %}
+
+{% block content %}
+<div class='interior songs' id='content'>
+  <div id='maincontent'>
+    <h2 class='pagename'>Songs</h2>
+    <ul class='aggregation'>
+        {% include "songs/song_item.html" %}
+    </ul>
+    <div class='break'></div>
+  
+  {% if song.related_articles %}
+    <h2 class='pagename'>Articles</h2>
+    <ul class='aggregation'>
+      {% for article in song.related_articles.all %}
+        {% include "learn/article_item.html" %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+
+  {% if song.related_talks %}
+    <h2 class='pagename'>Talks</h2>
+    <ul class='aggregation'>
+    {% for talk in song.related_talks.all %}
+      {% include "learn/talk_item.html" %}
+    {% endfor %}
+    </ul>
+  {% endif %}
+  <div class='break'></div>
+    
+
+  {% if song.related_videos %}
+    <h2 class='pagename'>Watch</h2>
+      <div class='relatedvideos'>
+      <ul>
+      {% for video in song.related_videos.all %}
+        {% include "watch/watch_item.html" %}
+      {% endfor %}
+      </ul>
+      <div class='break'></div>
+    </div>
+  {% endif %}
+
+
+</div>
+<div class='break'></div>
+{% endblock content %}

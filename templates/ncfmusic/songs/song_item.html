@@ -1,34 +1,51 @@
 <li>
   <div class='actionmenu'>
-    <span class='label'>Download:</span>
+    {% if song.mp3 %}
+    <div class='audioplayer'>
+      <div class='mp3holder' id='song{{ song.id }}' rel='{{ song.mp3.url }}'></div>
+      <div class='time'></div>
+      <div class='outerprogressbar'>
+        <div class='innerprogressbar'></div>
+      </div>
+    </div>
+    {% endif %}
+    {% comment %}<span class='label'>Download:</span>
     {% if song.sheet_music %}<a href='{{ song.sheet_music.url }}'>Sheet Music</a>
     {% if song.slides %}<span> |</span>{% endif %}{% endif %}
     {% if song.slides %}<a href='{{ song.slides.url }}'>Slides</a>{% endif %}
     {% if song.sheet_music or song.slides %}{% if song.lyrics %}<span> |</span>{% endif %}{% endif %}
     {% if song.lyrics %}<a href='{{ song.lyrics.url }}'>Lyrics</a>{% endif %}
     {% if song.sheet_music or song.slides or song.lyrics %}{% if song.mp3 %}<span> |</span>{% endif %}{% endif %}
-    {% if song.mp3 %}<a href='{{ song.mp3.url }}'>MP3</a>{% endif %}
+    {% if song.mp3 %}<a href='{{ song.mp3.url }}'>MP3</a>{% endif %}{% endcomment %}
   </div>
-  <h3><a href="{{ article.get_absolute_url }}">{{ song.title }}</a></h3>
+  {% if song.mp3 %}<button class='audioplay paused' id='playsong{{ song.id }}' rel='song{{ song.id }}'></button>{% endif %}
+  <h3><a href="{{ song.get_absolute_url }}">{{ song.title }}</a></h3>
   <div class='break'></div>
   <div class='details'>
     <span>
-      <a href='{{ song.songwriter.get_absolute_url }}'>{{ song.songwriter }}</a>
+      {{ song.songwriter }}
     </span>
     <span> |</span>
     <span>
-      <a href='{{ song.church.get_absolute_url }}'>{{ song.church }}</a>
+      {{ song.church }}
     </span>
     <span> |</span>
     <span class='expander' rel='song{{ song.id }}-detail'>View Song Info &#x2B07;</span>
   </div>
   <div class='break'></div>
   <div class='extendeddetails' id='song{{ song.id }}-detail'>
+    <div class='downloads'>
+      <span class='label'>Download:</span><br />
+      {% if song.sheet_music %}<a href='{{ song.sheet_music.url }}'>Sheet Music</a><br />{% endif %}
+      {% if song.slides %}<a href='{{ song.slides.url }}'>Slides</a><br />{% endif %}
+      {% if song.lyrics %}<a href='{{ song.lyrics.url }}'>Lyrics</a><br />{% endif %}
+      {% if song.mp3 %}<a href='{{ song.mp3.url }}'>MP3</a><br />{% endif %}
+    </div>
     <table>
       <tr>
         <td class='category'>Songwriter:</td>
         <td class='listing'>
-          <a href='{{ song.songwriter.get_absolute_url }}'>{{ song.songwriter }}</a>
+          {{ song.songwriter }}
         </td>
       </tr>
       <tr>
@@ -41,7 +58,7 @@
         <td class='category'>Vocals:</td>
         <td class='listing'>
           {% for contributor in song.vocals.all %}
-          <a href="{{ contribuer.get_absolute_url }}">{{ contribuer }}</a>
+          {{ contribuer }}
             {% if not forloop.last %}
             <span>,</span>
             {% endif %}
@@ -59,6 +76,35 @@
         <td class='listing'>
           {{ song.album_title}}
         </td>
+      </tr>
+      <tr>
+        <td class='category'>Links:</td>
+      </tr>
+      
+      {% for video in song.related_videos.all %}
+      <tr class='links'>
+        <td>WATCH: </td>
+        <td><a href="{{ video.get_absolute_url }}">{{ video.title }}</a></td>
+      </tr>
+      {% endfor %}
+
+      {% for article in song.related_articles.all %}
+      <tr class='links'>
+        <td>READ:</td>
+        <td><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></td>
+      </tr>
+      {% endfor %}
+
+      {% for talk in song.related_talks.all %}
+      <tr class='links'>
+        <td>LISTEN:</td>
+        <td><a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a></td>
+      </tr>
+      {% endfor %}
+
+      <tr class='links'>
+        <td>LINK:</td>
+        <td><a href="{{ song.get_absolute_url }}">http://ncfmusic.com{{ song.get_absolute_url }}</a></td>
       </tr>
     </table>
   </div>

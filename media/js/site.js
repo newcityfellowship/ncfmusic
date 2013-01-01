@@ -33,7 +33,7 @@ $(document).ready(function (){
     var ready = function () {
       mp3file && this.element.jPlayer("setFile", mp3file); // Defines the mp3
     }; 
-    mp3holder.jPlayer( { ready: ready });
+    mp3holder.jPlayer( { ready: ready, 'swfPath': '/media/js/' });
     mp3holder.jPlayer("onProgressChange", function(lp,ppr,ppa,pt,tt) {
       progressbar.css('width', ppa+"%");
       timeinfo.html(convertMillsecToMinutes(pt) + " / " + convertMillsecToMinutes(tt));

@@ -1,7 +1,10 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.db.models import Q
+from django.views.decorators.cache import cache_page
+from django.views.generic.list_detail import object_list
 
 from ncfmusic.apps.content.models import *
 from ncfmusic.apps.content.forms import *
@@ -12,6 +15,7 @@ def home(request):
     songs = Listen.objects.order_by('-insert_date')[:3]
     watch = Watch.objects.order_by('-insert_date')[0]
     learn = Article.objects.order_by('-insert_date')[:2]
+    entries = BlogEntry.objects.order_by('-insert_date')[:3]
     
     heroshots = Category.objects.filter(slug='homepage')
     
@@ -27,7 +31,8 @@ def home(request):
         'watch': watch,
         'learn': learn,
         'form': form,
-        'heroshots': heroshots
+        'heroshots': heroshots,
+        'entries': entries,
     })
     
     return render_to_response('homepage.html', context)
@@ -46,28 +51,7 @@ def about(request):
     return render_to_response('about.html', context);
     
 def listen(request):
-    contentpage = get_object_or_404(Page, slug__exact='listen')
-    listen_list = Listen.objects.order_by('-record_date', '-insert_date')
-    
-    paginator = Paginator(listen_list, 5)
-    
-    try:
-        page = int(request.GET.get('page', '1'))
-    except ValueError:
-        page = 1
-        
-    try:
-        listens = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-        listens = paginator.page(paginator.num_pages)
-        
-    context = RequestContext(request, {
-        'contentpage': contentpage,
-        'page': page,
-        'listens': listens
-    })
-    
-    return render_to_response('listen.html', context)
+    return HttpResponsePermanentRedirect('/resources/')
     
 def podcast(request):
     listens = Listen.objects.order_by('-insert_date')
@@ -269,13 +253,16 @@ def article(request, slug):
         'article_list': article_list[:5], #   For the sidebar
     })
     return render_to_response('article.html', context)
-    
-def songs(request, start_letter=None):
-    
-    song_list = Song.objects.order_by('title')
-    
-    from django.db.models import Q
+
+@cache_page(60 * 15)
+def resources(request, start_letter=None, resource_type=None, genre=None):
+    import datetime
+
+    page = get_object_or_404(Page, slug__exact='resources')
+
     q = request.GET.get('q', '').strip()
+    song_list = Song.objects.all()
+
     if q:
         song_list = song_list.filter(Q(album_title__icontains=q) | Q(songwriter__name__icontains=q) | Q(title__icontains=q))
         if ('type' in request.GET) and request.GET['type'].strip():
@@ -284,6 +271,18 @@ def songs(request, start_letter=None):
                 'lyrics': song_list.filter(Q(lyrics__isnull=False) | Q(lyrics='')),
                 'slides': song_list.filter(Q(slides__isnull=False) | Q(slides='')),
             }[request.GET['type']]
+
+    else:
+        if resource_type:
+            if resource_type == 'watch':
+                song_list = song_list.filter(related_videos__isnull=False).distinct()
+            elif resource_type == 'listen':
+                song_list = song_list.filter(related_talks__isnull=False).distinct()
+            elif resource_type == 'read':
+                song_list = song_list.filter(related_articles__isnull=False).distinct()
+
+        elif genre:
+            song_list = song_list.filter(slug=genre)
     
     #   I'm sure there's a better way to do this, but it's late and my brain's tired, so this will work
     from django.utils.datastructures import SortedDict
@@ -293,24 +292,31 @@ def songs(request, start_letter=None):
     
     if start_letter:
         song_list = sections[start_letter]
+
+    #   Sort the song_list by effective date
+    song_list = sorted(song_list, key=lambda s: s.effective_date, reverse=True)
             
-    paginator = Paginator(song_list, 4)
-    
-    try:
-        page = int(request.GET.get('page', '1'))
-    except ValueError:
-        page = 1
-        
-    try:
-        songs = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-        songs = paginator.page(paginator.num_pages)
+    # paginator = Paginator(song_list, 4)
+    # print 'paginated: %s' % datetime.datetime.now()
+
+    # try:
+    #     page = int(request.GET.get('page', '1'))
+    # except ValueError:
+    #     page = 1
+       
+    # print 'here: %s' % datetime.datetime.now() 
+    # try:
+    #     songs = paginator.page(page)
+    # except (EmptyPage, InvalidPage):
+    #     songs = paginator.page(paginator.num_pages)
 
     context = RequestContext(request, {
         'page': page,
-        'songs': songs,
+        #'songs': songs,
+        'songs': song_list,
         'sections': sections,
-        'start_letter': start_letter
+        'start_letter': start_letter,
+        'genres': Genre.objects.order_by('name'),
     })
     
     return render_to_response('songs.html', context)
@@ -373,6 +379,17 @@ def songs(request, start_letter=None):
 #     
 #     return render_to_response('events.html', context)
     
+def resource(request, slug):
+    song = get_object_or_404(Song, slug__exact=slug)
+    page = get_object_or_404(Page, slug__exact='resources')
+
+    context = RequestContext(request, {
+        'song': song,
+        'page': page,
+    })
+
+    return render_to_response('song.html', context)
+
 def events(request, month=None, year=None):
     import datetime
     
@@ -500,6 +517,25 @@ def search(request):
     else:
         #   No query params, head back to the home page
         return HttpResponseRedirect('/')
+
+def blog_category_list(request, slug):
+    qs = BlogEntry.objects.filter(categories__slug=slug)
+
+    paginator = Paginator(qs, 5)
+    
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    page_obj = paginator.page(page)
+
+    return object_list(request, queryset=qs, extra_context={
+        'content_page': Page.objects.get(slug='blog'),
+        'categories': BlogCategory.objects.order_by('name'),
+        'page_obj': page_obj,
+        'category_slug': slug,
+    })
     
     
 from django.conf import settings

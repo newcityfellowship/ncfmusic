@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block headerclasses %} class="interior interiorhead learn learnhead" {% endblock headerclasses %}
+
+{% block content %}
+<div class='interior learn' id='content'>
+  {% include "blog/sidebar.html" %}
+  <div id='maincontent'>
+    <h2 class='pagename'>
+      Learn
+    </h2>
+    <ul class='aggregation'>
+  {% for entry in object_list %}
+    {% include "blog/blogentry_item.html" %}
+  {% endfor %}
+    </ul>
+    <div class='break'></div>
+    <div id='pagination'>
+{% ifnotequal page_obj.number 1 %}     
+      <div class='first'>
+        <a href="?page=1">first</a>
+      </div>
+{% else %}
+      <div class='first inactive'>first</div>
+{% endifnotequal %}
+{% if page_obj.has_previous %}
+      <div class='previous'>
+        <a href="?page={{ page_obj.previous_page_number }}">&lt; previous</a>
+      </div>
+{% else %}          
+      <div class='previous inactive'>&lt; previous</div>
+{% endif %}
+      <div class='pages'>
+        <span>page</span>
+        <span class='number'>{{ page_obj.number }}</span>
+        <span> of</span>
+        <span class='number'>{{ page_obj.paginator.num_pages }}</span>
+      </div>
+{% if page_obj.has_next %}
+      <div class='next'>
+        <a href='?page={{ page_obj.next_page_number }}'>next &gt;</a>
+      </div>
+{% else %}
+      <div class='next inactive'>next &gt;</div>
+{% endif %}
+{% ifnotequal page_obj.number page_obj.paginator.num_pages %}
+      <div class='last'>
+        <a href='?page={{ page_obj.paginator.num_pages }}'>last</a>
+      </div>
+{% else %}
+      <div class='last inactive'>last</div>
+{% endifnotequal %}   
+    </div>
+    <div class='break'></div>
+  </div>
+  <div class='break'></div>
+</div>
+{% endblock content %}

@@ -3,8 +3,9 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>New City Music</title>
-    <link href='{{ MEDIA_URL }}/css/site.css' rel='stylesheet' type='text/css' />
+    
     <link href='http://yui.yahooapis.com/3.1.1/build/cssreset/reset-min.css' rel='stylesheet' type='text/css' />
+    <link href='{{ MEDIA_URL }}/css/site.css' rel='stylesheet' type='text/css' />
     <link href='//fonts.googleapis.com/css?family=PT+Sans+Narrow:regular,bold&amp;subset=cyrillic' rel='stylesheet' type='text/css' />
     <link rel="icon" href="/media/images/favicon.gif" type="image/x-icon">
     <link rel="shortcut icon" href="/media/images/favicon.gif" type="image/x-icon">
@@ -29,6 +30,8 @@
       })();
 
     </script>
+
+    {% block extraheaders %}{% endblock %}
   </head>
   <body>
     <div id='wrapper'>
@@ -52,25 +55,19 @@
           <div id='homelink'></div>
           <ul>
             <li>
-              <a {% ifequal page.slug "about" %}class="selected" {% endifequal %}href='/about'>About</a>
+              <a {% ifequal page.slug "about" %}class="selected" {% endifequal %}href='/about/'>About</a>
             </li>
             <li>
-              <a {% ifequal page.slug "listen" %}class="selected" {% endifequal %}href='/listen'>Listen</a>
+              <a {% ifequal content_page.slug "blog" %}class="selected" {% endifequal %}href='/blog/'>Blog</a>
             </li>
             <li>
-              <a {% ifequal page.slug "watch" %}class="selected" {% endifequal %}href='/watch'>Watch</a>
+              <a {% ifequal page.slug "learn" %}class="selected" {% endifequal %}href='/learn/'>Learn</a>
             </li>
             <li>
-              <a {% ifequal page.slug "learn" %}class="selected" {% endifequal %}href='/learn'>Learn</a>
+              <a {% ifequal page.slug "resources" %}class="selected" {% endifequal %}href='/resources/'>Resources</a>
             </li>
             <li>
-              <a {% ifequal page.slug "songs" %}class="selected" {% endifequal %}href='/songs'>Songs</a>
-            </li>
-            <li>
-              <a {% ifequal page.slug "contributors" %}class="selected" {% endifequal %}href='/contributors'>Contributors</a>
-            </li>
-            <li>
-              <a {% ifequal page.slug "events" %}class="selected" {% endifequal %}href='/events'>Events</a>
+              <a {% ifequal page.slug "conference" %}class="selected" {% endifequal %}href='/conferene/'>Conference</a>
             </li>
           </ul>
         </div>
