@@ -254,6 +254,9 @@ def article(request, slug):
     })
     return render_to_response('article.html', context)
 
+def songs(request, start_letter=None):
+    return HttpResponsePermanentRedirect('/resources/')
+
 @cache_page(60 * 15)
 def resources(request, start_letter=None, resource_type=None, genre=None):
     import datetime

@@ -1,3 +1,8 @@
+import simplejson
+import urllib2
+import re
+import urlparse
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -25,8 +30,6 @@ class Listen(models.Model):
         return self.title
         
 def _get_vimeo_json(vimeo_url):
-    import re
-
     m = re.search('/(\d+)$', vimeo_url)
     if m:
         vimeo_id = m.group(1)
@@ -39,7 +42,6 @@ def _get_vimeo_json(vimeo_url):
 
 @memoize    
 def _get_vimeo_json_with_api_url(api_url):
-    import urllib2
     conn = urllib2.Request(url=api_url, headers={'User-Agent' : 'New City Music'})
     
     try:
@@ -54,51 +56,60 @@ def _get_embed_code(vimeo_url):
     """
     Figure out the embed code
     """
-    
-    import simplejson
-
-    objarr = simplejson.loads(_get_vimeo_json(vimeo_url))
-    if len(objarr):
-        obj = simplejson.loads(_get_vimeo_json(vimeo_url))[0]
-
-        #return '<object width="640" height="360"><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=%s&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=0&amp;show_portrait=0&amp;color=ffffff&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id=%s&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=0&amp;show_portrait=0&amp;color=ffffff&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="640" height="360"></embed></object>' % (obj.get('id'), obj.get('id'))
-    
-        return '<iframe src="http://player.vimeo.com/video/%s" width="640" height="360" frameborder="0"></iframe>' % obj.get('id')
-    else:
+    try:
+        objarr = simplejson.loads(_get_vimeo_json(vimeo_url))
+    except simplejson.JSONDecodeError:
         return ''
+    else:
+        if len(objarr):
+            obj = simplejson.loads(_get_vimeo_json(vimeo_url))[0]
+
+            #return '<object width="640" height="360"><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=%s&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=0&amp;show_portrait=0&amp;color=ffffff&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id=%s&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=0&amp;show_portrait=0&amp;color=ffffff&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="640" height="360"></embed></object>' % (obj.get('id'), obj.get('id'))
+        
+            return '<iframe src="http://player.vimeo.com/video/%s" width="640" height="360" frameborder="0"></iframe>' % obj.get('id')
+        else:
+            return ''
 
 def _get_vimeo_thumb(vimeo_url):
-    import simplejson
-    objarr = simplejson.loads(_get_vimeo_json(vimeo_url))
-    if len(objarr):
-        obj = objarr[0]
-        return obj.get('thumbnail_medium')
-    else:
+    try:
+        objarr = simplejson.loads(_get_vimeo_json(vimeo_url))
+    except simplejson.JSONDecodeError:
         return ''
+    else:
+        if len(objarr):
+            obj = objarr[0]
+            return obj.get('thumbnail_medium')
+        else:
+            return ''
         
 def _get_vimeo_duration(vimeo_url):
-    import simplejson
-    objarr = simplejson.loads(_get_vimeo_json(vimeo_url))
-    if len(objarr):
-        obj = objarr[0]
-        duration = int(obj.get('duration'))
-        return "%d:%d" % (int(duration/60), (duration%60))
-    else:
+    try:
+        objarr = simplejson.loads(_get_vimeo_json(vimeo_url))
+    except simplejson.JSONDecodeError:
         return ''
+    else:
+        if len(objarr):
+            obj = objarr[0]
+            duration = int(obj.get('duration'))
+            return "%d:%d" % (int(duration/60), (duration%60))
+        else:
+            return ''
         
 def _get_vimeo_id(vimeo_url):
-    import simplejson
-    objarr = simplejson.loads(_get_vimeo_json(vimeo_url))
-    if len(objarr):
-        obj = objarr[0]
-        return obj.get('id')
-    else:
+    try:
+        objarr = simplejson.loads(_get_vimeo_json(vimeo_url))
+    except simplejson.JSONDecodeError:
         return ''
+    else:
+        if len(objarr):
+            obj = objarr[0]
+            return obj.get('id')
+        else:
+            return ''
+
 
 @memoize
 def _get_youtube_id(youtube_url):
-    import urlparse
-
     try:
         return urlparse.parse_qs(urlparse.urlparse(youtube_url).query)['v'][0]
     except:

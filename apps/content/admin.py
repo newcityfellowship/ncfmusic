@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django import forms
 
 from ncfmusic.apps.content.models import *
 
@@ -10,7 +11,18 @@ class ListenAdmin(admin.ModelAdmin):
 
 admin.site.register(Listen, ListenAdmin)
 
+class WatchAdminForm(forms.ModelForm):
+    class Meta:
+        model = Watch
+
+    def clean_vimeo_url(self):
+        return self.cleaned_data['vimeo_url'] or None
+
+    def clean_youtube_url(self):
+        return self.cleaned_data['youtube_url'] or None
+
 class WatchAdmin(admin.ModelAdmin):
+    form = WatchAdminForm
     list_display = ('title', 'church', 'date', )
     list_filter = ('church', 'date', )
     search_fields = ('title', )
