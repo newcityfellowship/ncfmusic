@@ -287,9 +287,9 @@ class Song(models.Model):
     album_title = models.CharField(max_length=256, null=True, blank=True)
     mp3 = models.FileField(upload_to='ext/songs', null=True, blank=True)
     genre = models.ForeignKey('Genre', null=True)
-    related_videos = models.ManyToManyField('Watch')
-    related_articles = models.ManyToManyField('Article')
-    related_talks = models.ManyToManyField('Talk')
+    related_videos = models.ManyToManyField('Watch', null=True, blank=True)
+    related_articles = models.ManyToManyField('Article', null=True, blank=True)
+    related_talks = models.ManyToManyField('Talk', null=True, blank=True)
     insert_date = models.DateField(auto_now_add=True, editable=False)
     effective_date = models.DateField(editable=False, null=False, blank=False)
 

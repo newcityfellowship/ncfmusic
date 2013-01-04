@@ -138,7 +138,6 @@ def tutorials(request, slug=None):
         tutorial_list = Tutorial.objects.filter(church__slug=slug).order_by('-date')
     else:
         tutorial_list = Tutorial.objects.order_by('-date')
-    print tutorial_list
     
     paginator = Paginator(tutorial_list, 3)
     
@@ -285,7 +284,7 @@ def resources(request, start_letter=None, resource_type=None, genre=None):
                 song_list = song_list.filter(related_articles__isnull=False).distinct()
 
         elif genre:
-            song_list = song_list.filter(slug=genre)
+            song_list = song_list.filter(genre__slug=genre)
     
     #   I'm sure there's a better way to do this, but it's late and my brain's tired, so this will work
     from django.utils.datastructures import SortedDict
