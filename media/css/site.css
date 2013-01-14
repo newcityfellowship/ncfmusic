@@ -310,7 +310,7 @@ h2.sectionname {
   overflow: hidden; }
 
 .home #rightcol #watch {
-  width: 563px;
+  width: 368px;
   height: 334px;
   overflow: hidden;
 }
@@ -373,10 +373,14 @@ h2.sectionname {
   font-size: 14px;
   font-weight: bold; }
 
+#content.interior {
+  min-height: 270px;
+}
+
 #content.interior .colphoto {
   float: left; }
 
-#content.about .articlebody {
+#content.about .articlebody, #content.conference .articlebody {
   margin-left: 210px;
   margin-right: 290px; }
 

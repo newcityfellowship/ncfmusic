@@ -51,6 +51,12 @@
           </ul>
         </div>
         <div id='rightcol'>
+          <div id='ad'>
+            <a href='/conference/'>
+              <img src='{{ MEDIA_URL }}/images/2013_Conference_Callout.jpg' />
+            </a>
+          </div>
+
           <div id='watch'>
             <div class='title'>
               <span>Video</span>
@@ -67,13 +73,9 @@
               <p>{{ watch.description|safe }}</p>
             {% endif %}
           </div>
-          {% comment %}
-          <div id='ad'>
-            <a href='/events/new-city-music-conference/'>
-              <img src='{{ MEDIA_URL }}/images/music-conference.png' />
-            </a>
-          </div>
           
+          
+          {% comment %}
           <div id='learn'>
             <div class='title'>
               <a class='viewall' href='/articles'>

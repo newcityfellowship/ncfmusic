@@ -134,7 +134,14 @@ class ContactAdmin(admin.ModelAdmin):
     
 admin.site.register(Contact, ContactAdmin)
 
-admin.site.register(Page)
+class PageAdmin(admin.ModelAdmin):
+    class Media:
+        js = [
+            '/media/admin/tinymce/jscripts/tiny_mce/tiny_mce.js', 
+            '/media/admin/tinymce_setup/tinymce_setup.js',
+        ]
+
+admin.site.register(Page, PageAdmin)
 
 class GenreAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}

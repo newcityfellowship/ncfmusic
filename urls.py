@@ -65,6 +65,7 @@ urlpatterns += patterns('ncfmusic.apps.content.views',
     (r'^resources/genre/(?P<genre>[\w-]+)/$',       'resources'),
     (r'^resources/genre/(?P<genre>[\w-]+)/type/(?P<resource_type>[\w-]+)/$', 'resources'),
     (r'^resource/(?P<slug>[\w-]+)/$',               'resource'),
+    (r'^conference/$',                              'conference'),
     (r'^$',                                         'home'),
 )
 

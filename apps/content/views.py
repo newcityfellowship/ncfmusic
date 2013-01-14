@@ -48,7 +48,7 @@ def about(request):
         'page': page
     })
     
-    return render_to_response('about.html', context);
+    return render_to_response('about.html', context)
     
 def listen(request):
     return HttpResponsePermanentRedirect('/resources/')
@@ -539,6 +539,15 @@ def blog_category_list(request, slug):
         'category_slug': slug,
     })
     
+
+def conference(request):
+    page = get_object_or_404(Page, slug__exact='conference')
+
+    context = RequestContext(request, {
+            'page': page,
+    })
+
+    return render_to_response('conference.html', context)
     
 from django.conf import settings
 from django import http
