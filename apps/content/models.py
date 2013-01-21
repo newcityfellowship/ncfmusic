@@ -323,8 +323,10 @@ class Song(models.Model):
         return max(dates)
     
     def save(self, *args, **kwargs):
+        super(Song, self).save(*args, **kwargs)
         self.effective_date = self.get_effective_date()
         super(Song, self).save(*args, **kwargs)
+
 
 class Event(models.Model):
     title = models.CharField(max_length=256)
