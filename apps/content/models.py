@@ -2,6 +2,7 @@ import simplejson
 import urllib2
 import re
 import urlparse
+import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -323,7 +324,9 @@ class Song(models.Model):
         return max(dates)
     
     def save(self, *args, **kwargs):
-        super(Song, self).save(*args, **kwargs)
+        if not self.id:
+            self.effective_date = datetime.date.today()
+            super(Song, self).save(*args, **kwargs)
         self.effective_date = self.get_effective_date()
         super(Song, self).save(*args, **kwargs)
 
