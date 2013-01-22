@@ -1,15 +1,20 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
-from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect, Http404
 from django.db.models import Q
 from django.views.decorators.cache import cache_page
 from django.views.generic.list_detail import object_list
+from django.conf import settings
+from django import http
+from django.template import Context, loader
 
 from ncfmusic.apps.content.models import *
 from ncfmusic.apps.content.forms import *
 from ncfmusic.apps.content.utils import *
 from ncfmusic.apps.heroshots.models import *
+
+from ncfmusic.lib.tiny_paypal import PayPal
 
 def home(request):
     songs = Listen.objects.order_by('-insert_date')[:3]
@@ -548,10 +553,81 @@ def conference(request):
     })
 
     return render_to_response('conference.html', context)
+
+def conference_registration(request):
+    page = get_object_or_404(Page, slug__exact='conference')
+
+    if request.method == 'POST':
+        form = ConferenceRegistrationForm(request.POST)
+        if form.is_valid():
+            reg = form.save(commit=False)
+
+            paypal = PayPal()
+            pp_token = paypal.SetExpressCheckout(settings.CONFERENCE_COST)
+            reg.cost = settings.CONFERENCE_COST
+            reg.pp_token = pp_token
+            reg.save()
+            express_token = paypal.GetExpressCheckoutDetails(pp_token)
+            url = paypal.PAYPAL_URL + express_token
+            return HttpResponseRedirect(url)
+    else:
+        form = ConferenceRegistrationForm()
+
+    context = RequestContext(request, {
+        'page': page,
+        'form': form,
+    })
+
+    return render_to_response('conference_registration.html', context)
     
-from django.conf import settings
-from django import http
-from django.template import Context, loader
+def paypal_return(request):
+    page = get_object_or_404(Page, slug__exact='conference')
+
+    token = request.GET.get('token', '')
+    pp = PayPal()
+
+    payer_id = request.GET.get('PayerID')
+    paypal_details = pp.GetExpressCheckoutDetails(token, return_all=True)
+
+    if request.method == 'POST':
+        token = request.POST.get('token')
+        payer_id = request.POST.get('payer_id')
+        reg = ConferenceRegistration.objects.get(pp_token=token)
+        amount = float(reg.cost)
+        payment_details = pp.DoExpressCheckoutPayment(token=token, payer_id=payer_id, amt=amount)
+
+        if 'Success' in payment_details['ACK']:
+            reg.has_paid = True
+            reg.payer_id = payer_id
+            reg.save()
+
+            return HttpResponseRedirect('/conference/registration/thanks/')
+        else:
+            raise Http404
+    else:
+        if 'Success' in paypal_details['ACK']:
+            
+            reg = ConferenceRegistration.objects.get(pp_token=token)
+            amount = reg.cost
+            token = paypal_details['TOKEN'][0]
+
+            context = RequestContext(request, {
+                'page': page,
+                'amount': amount,
+                'token': token,
+                'payer_id': payer_id
+            })
+
+            return render_to_response('paypal_return.html', context)
+
+def conference_registration_thanks(request):
+    page = get_object_or_404(Page, slug__exact='conference')
+
+    context = RequestContext(request, {
+        'page': page,
+    })
+
+    return render_to_response('conference_registration_thanks.html', context)
 
 def server_error(request, template_name='500.html'):
     """

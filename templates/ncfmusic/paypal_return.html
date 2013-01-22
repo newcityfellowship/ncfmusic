@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block headerclasses %} class="interior interiorhead about abouthead" {% endblock headerclasses %}
+
+{% block content %}
+<div class='interior conference' id='content'>
+        <h2 class='pagename'>
+          New City
+          <span class='textlogo'>
+            Music Conference
+          </span>
+        </h2>
+        <img class='colphoto' src='/media/images/2013_Conference_Callout.jpg' />
+        <div class='articlebody'>
+            <h2>Please review your order and click continue</h2>
+            <h3>You are purchasing a conference registration for a total charge of ${{ amount }}</h3>
+            <form action="." method="post" accept-charset="utf-8">
+                {% csrf_token %}
+                <input type="hidden" name="token" value="{{ token }}">
+                <input type="hidden" name="payer_id" value="{{ payer_id }}">
+
+
+            <p><input type="submit" value="Continue"></p>
+            </form>
+                    
+        </div>
+      </div>
+{% endblock content %}      
+
+
