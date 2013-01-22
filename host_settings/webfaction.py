@@ -32,7 +32,7 @@ PAYPAL_API_SIGNATURE = 'AFcWxV21C7fd0v3bYYYRCpSSRl31AbAqRq085Xvb27QCS7PSd7fcLMTd
 PAYPAL_API_ENDPOINT = 'https://api-3t.sandbox.paypal.com/nvp'   # Sandbox URL, not production
 PAYPAL_URL = 'https://www.sandbox.paypal.com/cgi-bin/webscr&cmd=_express-checkout&token='
 
-PAYPAL_RETURNURL = 'http://localhost:8000/paypal-return/'
-PAYPAL_CANCELURL = 'http://localhost:8000/paypal-cancel/'
+PAYPAL_RETURNURL = 'http://ncfmusic.com/paypal-return/'
+PAYPAL_CANCELURL = 'http://ncfmusic.com/paypal-cancel/'
 
 CONFERENCE_COST = 20
