@@ -173,5 +173,12 @@ class BlogEntryAdmin(admin.ModelAdmin):
         obj.save()
 
 admin.site.register(BlogEntry, BlogEntryAdmin)
-        
+
+class ConferenceRegistrantInline(admin.StackedInline):
+    model = ConferenceRegistrant
+
+class ConferenceRegistrationAdmin(admin.ModelAdmin):
+    inlines = [ConferenceRegistrantInline]
+
+admin.site.register(ConferenceRegistration, ConferenceRegistrationAdmin)
         
