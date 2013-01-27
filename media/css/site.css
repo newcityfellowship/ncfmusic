@@ -380,9 +380,14 @@ h2.sectionname {
 #content.interior .colphoto {
   float: left; }
 
-#content.about .articlebody, #content.conference .articlebody {
+#content.about .articlebody {
   margin-left: 210px;
   margin-right: 290px; }
+
+#content.conference .articlebody {
+  margin-left: 210px;
+  margin-right: 40px;
+}
 
 .navcol {
   width: 270px;
@@ -818,7 +823,88 @@ h2.sectionname {
   margin: 0 0 0 15px;
 }
 
+#registration-form label {
+  font-weight: bold;
+  width: 200px;
+  padding-right: 20px;
+}
 
+#registration-form input, 
+#registration-form textarea, 
+#registration-form select {
+  width: 460px;
+}
+
+#registration-form input[type="image"] {
+  width: auto;
+}
+
+#registration-form h3 {
+  font-size: 1.7em;
+  font-weight: bold;
+}
+
+#registration-form h4 {
+  font-size: 1.4em;
+  font-weight: bold;
+  padding: 20px 0;
+}
+
+#registration-form .help {
+  font-size: .8em;
+  color: #666666;
+}
+
+#registration-form .rates th, 
+#registration-form .rates td,
+#registration-form .totals th,
+#registration-form .totals td {
+  padding: 50px 0 50px 0;
+}
+
+#registration-form a,
+#registration-form a:visited {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #BC5400;
+}
+
+
+tr.error .control-label,
+tr.error .help-block,
+tr.error .help-inline {
+  color: #b94a48;
+}
+tr.error .checkbox,
+tr.error .radio,
+tr.error input,
+tr.error select,
+tr.error textarea,
+tr.error label {
+  color: #b94a48;
+}
+tr.error input,
+tr.error select,
+tr.error textarea {
+  border-color: #b94a48;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+tr.error input:focus,
+tr.error select:focus,
+tr.error textarea:focus {
+  border-color: #953b39;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d59392;
+}
+tr.error .input-prepend .add-on,
+tr.error .input-append .add-on {
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #b94a48;
+}
 
 /*.aggregation li {
   margin-top: 10px;

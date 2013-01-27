@@ -2,6 +2,108 @@
 
 {% block headerclasses %} class="interior interiorhead about abouthead" {% endblock headerclasses %}
 
+{% block extraheaders %}
+<script type='text/javascript'>
+  var single_cost = {% if early %}{{ settings.CONFERENCE_COSTS.early }}{% else %}{{ settings.CONFERENCE_COSTS.single }}{% endif %};
+  var group_cost = {{ settings.CONFERENCE_COSTS.group }};
+  var student_cost = {{ settings.CONFERENCE_COSTS.student }};
+
+  var total_cost = single_cost;
+
+  function is_group() {
+    return ($('input[name="registrant-first_name[]"]').size() > 0);
+  }
+
+  function calc_total() {
+    var per = is_group() ? group_cost : single_cost;
+    
+    total_cost = 0;
+    $('select[name="student"],select[name="registrant-student[]"]').each(function(i, el) {
+      total_cost += ($(el).val() == 'No') ? per : student_cost;
+    });
+
+    $('#total').text('$' + total_cost + '.00');
+  }
+
+  $(document).ready(function() {
+    calc_total();
+
+    $('select[name="student"],select[name="registrant-student[]"]').live('change', function() {
+      calc_total();
+    });
+    
+    var registrant_template = $('<tr />').append(
+      $('<td />').attr('colspan', '2').append(
+        $('<h4 />').text('Member #')
+      )
+    ).after(
+      $('<tr />').append(
+        $('<td />').append(
+          $('<label />').attr('for', 'registrant-first_name[]').text('First Name *')
+        )
+  
+      ).append(
+        $('<td />').append(
+          $('<input />').attr('type', 'text').attr('name', 'registrant-first_name[]')
+        )
+      )
+    ).after(
+      $('<tr />').append(
+        $('<td />').append(
+          $('<label />').attr('for', 'registrant-last_name[]').text('Last Name *')
+        )
+      ).append(
+        $('<td />').append(
+          $('<input />').attr('type', 'text').attr('name', 'registrant-last_name[]')
+        )
+      )
+    ).after(
+      $('<tr />').append(
+        $('<td />').append(
+          $('<label />').attr('for', 'registrant-email[]').text('Email *')
+        )
+      ).append(
+        $('<td />').append(
+          $('<input />').attr('type', 'text').attr('name', 'registrant-email[]')
+        )
+      )
+    ).after(
+      $('<tr />').append(
+        $('<td />').append(
+          $('<label />').attr('for', 'registrant-gender[]').text('Gender *')
+        )
+      ).append(
+        $('<td />').append(
+          $('<select />').attr('name', 'registrant-gender[]')
+            .append($('<option />').attr('value', 'M').text('Male'))
+            .append($('<option />').attr('value', 'F').text('Female'))
+        )
+      )
+    ).after(
+      $('<tr />').append(
+        $('<td />').append(
+          $('<label />').attr('for', 'registrant-student[]').text('Are you a student? *')
+        )
+      ).append(
+        $('<td />').append(
+          $('<select />').attr('name', 'registrant-student[]')
+            .append($('<option />').attr('value', 'No').text('No'))
+            .append($('<option />').attr('value', 'Yes').text('Yes'))
+        )
+      )
+    );
+    $('.add-registrant').click(function(e) {
+      e.preventDefault();
+      var new_registrant = registrant_template.clone();
+      new_registrant.find('h4').text('Member #' + ($('input[name="registrant-first_name[]"]').size()+1));
+      $(this).parent('td').parent('tr').before(new_registrant);
+      calc_total()
+    });
+  });
+
+</script>
+{% endblock extraheaders %}
+
 {% block content %}
 <div class='interior conference' id='content'>
         <h2 class='pagename'>
@@ -12,10 +114,207 @@
         </h2>
         <img class='colphoto' src='/media/images/2013_Conference_Callout.jpg' />
         <div class='articlebody'>
-          <form action="." method="post">
+          <p>
+            Welcome to the 2013 NCFMUSIC conference registration!
+          </p>
+
+          <p>
+            If you have come this far, you are looking for networking, resources, spiritual refreshing and great worship with fellow singers and musicians in multi- and cross-cultural ministries.
+          </p>
+ 
+          <p>
+            Conference Registration will be open right up until the conference begins July 25th. Walk-ins are welcome!
+          </p>
+
+          <p>
+            Early Registration deadline is midnight July 1st.
+          </p>
+          <form action="." method="post" id="registration-form">
             {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Pay with PayPal">
+            {% if form.errors or registrant_errors %}
+              <div class='alert alert-error'>
+                  <strong>Please fix the errors marked below.</strong>
+              </div>
+            {% endif %}
+
+            <table cellpadding="2" cellspacing="2">
+              <tbody>
+
+                <tr>
+                  <td colspan="2"><h3>Leader Information</h3></td>
+                </tr>
+                <tr{% if form.first_name.errors %} class='error'{% endif %}>
+                  <th>{{ form.first_name.label_tag }}</th>
+                  <td>{{ form.first_name }}</td>
+                </tr>
+                <tr{% if form.last_name.errors %} class='error'{% endif %}>
+                  <th>{{ form.last_name.label_tag }}</th>
+                  <td>{{ form.last_name }}</td>
+                </tr>
+                <tr{% if form.email.errors %} class='error'{% endif %}>
+                  <th>{{ form.email.label_tag }}</th>
+                  <td>{{ form.email }}</td>
+                </tr>
+                <tr{% if form.address.errors %} class='error'{% endif %}>
+                  <th>{{ form.address.label_tag }}</th>
+                  <td>{{ form.address }}</td>
+                </tr>
+                <tr{% if form.city.errors %} class='error'{% endif %}>
+                  <th>{{ form.city.label_tag }}</th>
+                  <td>{{ form.city }}</td>
+                </tr>
+                <tr{% if form.state.errors %} class='error'{% endif %}>
+                  <th>{{ form.state.label_tag }}</th>
+                  <td>{{ form.state }}</td>
+                </tr>
+                <tr{% if form.postal_code.errors %} class='error'{% endif %}>
+                  <th>{{ form.postal_code.label_tag }}</th>
+                  <td>{{ form.postal_code }}</td>
+                </tr>
+                <tr{% if form.country.errors %} class='error'{% endif %}>
+                  <th>{{ form.country.label_tag }}</th>
+                  <td>{{ form.country }}</td>
+                </tr>
+                <tr{% if form.phone_number.errors %} class='error'{% endif %}>
+                  <th>{{ form.phone_number.label_tag }}</th>
+                  <td>{{ form.phone_number }}</td>
+                </tr>
+                <tr{% if form.gender.errors %} class='error'{% endif %}>
+                  <th>{{ form.gender.label_tag }}</th>
+                  <td>{{ form.gender }}</td>
+                </tr>
+                <tr{% if form.dob.errors %} class='error'{% endif %}>
+                  <th>{{ form.dob.label_tag }}</th>
+                  <td>{{ form.dob }}</td>
+                </tr>
+                <tr{% if form.student.errors %} class='error'{% endif %}>
+                  <th>{{ form.student.label_tag }}</th>
+                  <td>{{ form.student }}</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td class='help'>
+                    Students receive a discounted rate.
+                  </td>
+                </tr>
+                <tr{% if form.church_name.errors %} class='error'{% endif %}>
+                  <th>{{ form.church_name.label_tag }}</th>
+                  <td>{{ form.church_name }}</td>
+                </tr>
+                <tr{% if form.how_serving.errors %} class='error'{% endif %}>
+                  <th valign='top'>{{ form.how_serving.label_tag }}</th>
+                  <td>{{ form.how_serving }}</td>
+                </tr>
+                <tr{% if form.skills.errors %} class='error'{% endif %}>
+                  <th valign='top'>{{ form.skills.label_tag }}</th>
+                  <td>{{ form.skills }}</td>
+                </tr>
+                <tr{% if form.wanting_to_learn.errors %} class='error'{% endif %}>
+                  <th valign='top'>{{ form.wanting_to_learn.label_tag }}</th>
+                  <td>{{ form.wanting_to_learn }}</td>
+                </tr>
+                <tr{% if form.housing.errors %} class='error'{% endif %}>
+                  <th>{{ form.housing.label_tag }}</th>
+                  <td>{{ form.housing }}</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td class='help'>
+                    <p>Chattanooga has a range of hotels. They are clustered downtown, Lookout Mountain, East Ridge, and Shallowford Road.</p>
+
+                    <p>There will be a church shuttle to Shallowford Road and East Ridge.</p>
+
+                    <p>All Chattanooga hotels in these areas are within 15 minutes of NCF.</p>
+
+                    <p>If needed, there will be housing in private homes available with early registration only.</p>
+                  </td>
+                </tr>
+                <tr{% if form.special_housing_needs.errors %} class='error'{% endif %}>
+                  <th valign='top'>{{ form.special_housing_needs.label_tag }}</th>
+                  <td>{{ form.special_housing_needs }}</td>
+                </tr>
+                <tr{% if form.food_allergies.errors %} class='error'{% endif %}>
+                  <th>{{ form.food_allergies.label_tag }}</th>
+                  <td>{{ form.food_allergies }}</td>
+                </tr>
+                <tr{% if form.ride_from_airport.errors %} class='error'{% endif %}>
+                  <th>{{ form.ride_from_airport.label_tag }}</th>
+                  <td>{{ form.ride_from_airport }}</td>
+                </tr>
+                <tr{% if form.flight_information.errors %} class='error'{% endif %}>
+                  <th>{{ form.flight_information.label_tag }}</th>
+                  <td>{{ form.flight_information }}</td>
+                </tr>
+
+                <tr class='rates'>
+                  <th valign='top'><label>Conference Rates:</label></th>
+                  <td>
+                    Individual: ${% if early %}{{ settings.CONFERENCE_COSTS.early }}{% else %}{{ settings.CONFERENCE_COSTS.single }}{% endif %}.00<br />
+                    Group: ${{ settings.CONFERENCE_COSTS.group }}.00 / registrant<br />
+                    Student: ${{ settings.CONFERENCE_COSTS.student }}.00
+                  </td>
+                </tr>
+
+                <tr>
+                  <td colspan="2"><h3>Group Information</h3></td>
+                </tr>
+
+                {% for registrant in registrants %}
+                <tr>
+                  <td colspan="2">
+                    <h4>Member #{{ forloop.counter }}</h4>
+                  </td>
+                </tr>
+                <tr{% if not registrant.first_name %} class='error'{% endif %}>
+                  <th><label>First Name *</label></th>
+                  <td><input type='text' name='registrant-first_name[]' value='{{ registrant.first_name }}' /></td>
+                </tr>
+                <tr{% if not registrant.last_name %} class='error'{% endif %}>
+                  <th><label>Last Name *</label></th>
+                  <td><input type='text' name='registrant-last_name[]' value='{{ registrant.last_name }}' /></td>
+                </tr>
+                <tr{% if not registrant.email %} class='error'{% endif %}>
+                  <th><label>Email *</label></th>
+                  <td><input type='text' name='registrant-email[]' value='{{ registrant.email }}' /></td>
+                </tr>
+                <tr{% if not registrant.gender %} class='error'{% endif %}>
+                  <th><label>Gender *</label></th>
+                  <td>
+                    <select name='registrant-gender[]'>
+                      <option value='M'{% ifequal registrant.gender "M" %} selected="selected"{% endifequal %}>Male</option>
+                      <option value='F'{% ifequal registrant.gender "F" %} selected="selected"{% endifequal %}>Female</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr{% if not registrant.student %} class='error'{% endif %}>
+                  <th><label>Are you a student? *</label></th>
+                  <td>
+                    <select name='registrant-student[]'>
+                      <option value='No'{% ifequal registrant.student "No" %} selected="selected"{% endifequal %}>No</option>
+                      <option value='Yes'{% ifequal registrant.student "Yes" %} selected="selected"{% endifequal %}>Yes</option>
+                    </select>
+                  </td>
+                </tr>
+                {% endfor %}
+
+
+                <tr>
+                  <td><a href='#' class='add-registrant'>Add Group Member +</td>
+                </tr>
+
+                <tr class='totals'>
+                  <th><label>Total Cost:</label></th>
+                  <td id='total'></td>
+                </tr>
+
+                <tr>
+                  <td colspan="2" align="right">
+                    <input type='image' src="https://www.paypalobjects.com/en_US/i/btn/btn_xpressCheckout.gif" >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
           </form>
         </div>
       </div>

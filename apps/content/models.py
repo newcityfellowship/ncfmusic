@@ -434,8 +434,8 @@ GENDER_CHOICES = (
 
 HOUSING_CHOICES = (
     ('No', 'Nope, I live nearby'),
-    ('Yes', 'Yes, I need free lodging with an NCF Family'),
     ('Hotel', "Nah, I'm getting a hotel room"),
+    ('Yes', 'Yes, I need free lodging with an NCF Family'),
 )
 
 YES_NO_CHOICES = (
@@ -445,30 +445,42 @@ YES_NO_CHOICES = (
 
 class ConferenceRegistration(models.Model):
     insert_date = models.DateField(auto_now_add=True, editable=False)
-    first_name = models.CharField(max_length=256, verbose_name='First Name')
-    last_name = models.CharField(max_length=256, verbose_name='Last Name')
-    email = models.EmailField()
-    address = models.CharField(max_length=1024, null=True, blank=True)
-    city = models.CharField(max_length=256, null=True, blank=True)
-    state = models.CharField(max_length=256, null=True, blank=True)
-    postal_code = models.CharField(max_length=32, null=True, blank=True)
+    first_name = models.CharField(max_length=256, verbose_name='First Name *')
+    last_name = models.CharField(max_length=256, verbose_name='Last Name *')
+    email = models.EmailField(verbose_name='Email *')
+    address = models.CharField(max_length=1024, verbose_name='Address *')
+    city = models.CharField(max_length=256, verbose_name='City *')
+    state = models.CharField(max_length=256, verbose_name='State *')
+    postal_code = models.CharField(max_length=32, verbose_name='Postal Code *')
     country = models.CharField(max_length=128, null=True, blank=True)
-    phone_number = models.CharField(max_length=32, null=True, blank=True, verbose_name='Phone Number')
-    gender = models.CharField(max_length=1, null=True, blank=True, choices=GENDER_CHOICES)
+    phone_number = models.CharField(max_length=32, verbose_name='Phone Number *')
+    gender = models.CharField(max_length=1, blank=False, default='M', choices=GENDER_CHOICES, verbose_name='Gender *')
     dob = models.DateField(null=True, blank=True, verbose_name='Date of Birth')
-    church_name = models.CharField(max_length=256, null=True, blank=True, verbose_name='What is your church or ministry name?')
+    church_name = models.CharField(max_length=256, verbose_name='What is your church or ministry name? *')
     how_serving = models.TextField(null=True, blank=True, verbose_name='How are you serving these days?')
     skills = models.TextField(null=True, blank=True, verbose_name='What are your musical skills?')
     wanting_to_learn = models.TextField(null=True, blank=True, verbose_name='What are you most wanting to learn more about at this conference?')
-    housing = models.CharField(max_length=5, null=True, blank=True, choices=HOUSING_CHOICES, verbose_name='Do you need housing?')
+    housing = models.CharField(max_length=5, blank=False, default='No', choices=HOUSING_CHOICES, verbose_name='Do you need housing? *')
     special_housing_needs = models.TextField(null=True, blank=True, verbose_name='Do you have special housing needs?')
     food_allergies = models.CharField(max_length=3, choices=YES_NO_CHOICES, blank=False, default='No', verbose_name='Do you have any food allergies?')
     ride_from_airport = models.CharField(max_length=3, choices=YES_NO_CHOICES, blank=False, default='No', verbose_name='Do you need a ride from the airport?')
     flight_information = models.CharField(max_length=1024, null=True, blank=True, verbose_name="Give us your flight information and we'll come get you.")
+    student = models.CharField(max_length=3, choices=YES_NO_CHOICES, blank=False, default='No', verbose_name='Are you a student? *')
     has_paid = models.BooleanField(default=False)
     cost = models.FloatField()
     pp_token = models.CharField(max_length=256, null=True, blank=True)
     payer_id = models.CharField(max_length=256, null=True, blank=True)
+
+    def __unicode__(self):
+        return '%s %s' % (self.first_name, self.last_name)
+
+class ConferenceRegistrant(models.Model):
+    registration = models.ForeignKey(ConferenceRegistration)
+    first_name = models.CharField(max_length=256, verbose_name='First Name')
+    last_name = models.CharField(max_length=256, verbose_name='Last Name')
+    email = models.EmailField()
+    gender = models.CharField(max_length=1, blank=False, default='M', choices=GENDER_CHOICES, verbose_name='Gender')
+    student = models.CharField(max_length=3, choices=YES_NO_CHOICES, blank=False, default='No', verbose_name='Are you a student?')
 
     def __unicode__(self):
         return '%s %s' % (self.first_name, self.last_name)

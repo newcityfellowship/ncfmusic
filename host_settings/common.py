@@ -1,5 +1,5 @@
 # Django settings for myproject project.
-import os
+import os, datetime
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -124,3 +124,12 @@ CACHES = {
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 
 LOGIN_REDIRECT_URL = '/admin/'
+
+CONFERENCE_COSTS = {
+    'single': 75,
+    'early': 50,
+    'group': 50,
+    'student': 50
+}
+
+CONFERENCE_EARLY_DEADLINE = datetime.date(2013, 7, 1)

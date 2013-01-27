@@ -1,4 +1,5 @@
 from host_settings.common import *
+import datetime
 
 DEBUG = True
 
@@ -81,7 +82,14 @@ PAYPAL_URL = 'https://www.sandbox.paypal.com/cgi-bin/webscr&cmd=_express-checkou
 PAYPAL_RETURNURL = 'http://localhost:8000/paypal-return/'
 PAYPAL_CANCELURL = 'http://localhost:8000/paypal-cancel/'
 
-CONFERENCE_COST = 20
+CONFERENCE_COSTS = {
+    'single': 75,
+    'early': 50,
+    'group': 50,
+    'student': 50
+}
+
+CONFERENCE_EARLY_DEADLINE = datetime.date(2013, 1, 1)
 
 #Buyer
 #benthu_1341257872_per@gmail.com

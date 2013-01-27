@@ -16,6 +16,8 @@ from ncfmusic.apps.heroshots.models import *
 
 from ncfmusic.lib.tiny_paypal import PayPal
 
+import datetime, re
+
 def home(request):
     songs = Listen.objects.order_by('-insert_date')[:3]
     watch = Watch.objects.order_by('-insert_date')[0]
@@ -263,8 +265,6 @@ def songs(request, start_letter=None):
 
 @cache_page(60 * 15)
 def resources(request, start_letter=None, resource_type=None, genre=None):
-    import datetime
-
     page = get_object_or_404(Page, slug__exact='resources')
 
     q = request.GET.get('q', '').strip()
@@ -398,8 +398,6 @@ def resource(request, slug):
     return render_to_response('song.html', context)
 
 def events(request, month=None, year=None):
-    import datetime
-    
     events_list = Event.objects.filter(end_date__gte=datetime.datetime.now()).order_by('start_date')
     if year:
         events_list = events_list.filter(start_date__year=year)
@@ -503,7 +501,6 @@ def search(request):
         contributor_query = get_query(query_string, ['name', 'title',])
         contributors = Contributor.objects.filter(contributor_query).order_by('name')
         
-        import datetime
         event_query = get_query(query_string, ['title', 'teaser', 'article_body',])
         events = Event.objects.filter(event_query).filter(end_date__gte=datetime.datetime.now()).order_by('title')
         
@@ -557,16 +554,70 @@ def conference(request):
 def conference_registration(request):
     page = get_object_or_404(Page, slug__exact='conference')
 
+    registrant_errors = False
+    registrants = []
     if request.method == 'POST':
         form = ConferenceRegistrationForm(request.POST)
-        if form.is_valid():
+        registrant_fields = ['first_name', 'last_name', 'email', 'gender', 'student']
+
+        registrant_count = len(request.POST.getlist('registrant-first_name[]'))
+        print 'registrant_count: %s' % registrant_count
+        for i in range(registrant_count):
+            registrant = {}
+            for field in registrant_fields:
+                val = request.POST.getlist('registrant-%s[]' % field)[i]
+                registrant[field] = val
+                if not val:
+                    registrant_errors = True
+
+            registrants.append(registrant)
+        print registrants
+
+        if form.is_valid() and not registrant_errors:
             reg = form.save(commit=False)
 
+            per = len(registrants) and settings.CONFERENCE_COSTS['group'] or settings.CONFERENCE_COSTS['single']
+
+            total_cost = (reg.student == 'Yes') and settings.CONFERENCE_COSTS['student'] or per
+
+            purchase_details = {
+                'L_PAYMENTREQUEST_0_NAME0': '2013 New City Music Conference Registration',
+                'L_PAYMENTREQUEST_0_DESC0': '%s %s Registration' % (reg.first_name, reg.last_name),
+                'L_PAYMENTREQUEST_0_AMT0': per,
+                'L_PAYMENTREQUEST_0': 1,
+            }
+            i = 1
+            for registrant in registrants:
+                reg_per = (registrant['student'] == 'Yes') and settings.CONFERENCE_COSTS['student'] or per
+                total_cost += reg_per
+
+
+                purchase_details.update({
+                    'L_PAYMENTREQUEST_0_NAME%d' % i: '2013 New City Music Conference Registration',
+                    'L_PAYMENTREQUEST_0_DESC%d' % i: '%s %s Registration' % (registrant['first_name'], registrant['last_name']),
+                    'L_PAYMENTREQUEST_0_AMT%d' % i: reg_per,
+                    'L_PAYMENTREQUEST_0_QTY%d' % i: 1,
+                })
+                i += 1
+
+
+            purchase_details.update({
+                'PAYMENTREQUEST_0_ITEMAMT': total_cost,
+                'PAYMENTREQUEST_0_AMT': total_cost,
+            })
+
             paypal = PayPal()
-            pp_token = paypal.SetExpressCheckout(settings.CONFERENCE_COST)
-            reg.cost = settings.CONFERENCE_COST
+            pp_token = paypal.SetExpressCheckout(total_cost, **purchase_details)
+            reg.cost = total_cost
             reg.pp_token = pp_token
             reg.save()
+
+            for registrant in registrants:
+                reg_per = (registrant['student'] == 'Yes') and settings.CONFERENCE_COSTS['student'] or per
+
+                r = ConferenceRegistrant(registration=reg, first_name=registrant['first_name'], last_name=registrant['last_name'], email=registrant['email'], gender=registrant['gender'], student=registrant['student'])
+                r.save()
+
             express_token = paypal.GetExpressCheckoutDetails(pp_token)
             url = paypal.PAYPAL_URL + express_token
             return HttpResponseRedirect(url)
@@ -576,6 +627,10 @@ def conference_registration(request):
     context = RequestContext(request, {
         'page': page,
         'form': form,
+        'early': (datetime.date.today() < settings.CONFERENCE_EARLY_DEADLINE),
+        'settings': settings,
+        'registrant_errors': registrant_errors,
+        'registrants': registrants,
     })
 
     return render_to_response('conference_registration.html', context)
