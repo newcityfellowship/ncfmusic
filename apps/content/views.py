@@ -561,7 +561,7 @@ def conference_registration(request):
         registrant_fields = ['first_name', 'last_name', 'email', 'gender', 'student']
 
         registrant_count = len(request.POST.getlist('registrant-first_name[]'))
-        print 'registrant_count: %s' % registrant_count
+        
         for i in range(registrant_count):
             registrant = {}
             for field in registrant_fields:
@@ -571,8 +571,7 @@ def conference_registration(request):
                     registrant_errors = True
 
             registrants.append(registrant)
-        print registrants
-
+        
         if form.is_valid() and not registrant_errors:
             reg = form.save(commit=False)
 

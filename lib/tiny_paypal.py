@@ -59,13 +59,12 @@ class PayPal:
             'PAYMENTREQUEST_0_AMT' : amount,
         }
         params.update(kwargs)
-        print params
+        
         params_string = self.signature + urllib.urlencode(params)
         
-        print params_string
         response = urllib.urlopen(self.API_ENDPOINT, params_string).read()
         response_dict = parse_qs(response)
-        print response_dict
+        
         response_token = response_dict['TOKEN'][0]
         return response_token
     
@@ -165,14 +164,14 @@ class PayPal:
         }
         params.update(extraparams)
         params_string = self.signature + urllib.urlencode(params)
-        print params_string
+        
         response = urllib.urlopen(self.API_ENDPOINT, params_string).read()
         response_tokens = {}
         for token in response.split('&'):
             response_tokens[token.split("=")[0]] = token.split("=")[1]
         for key in response_tokens.keys():
             response_tokens[key] = urllib.unquote(response_tokens[key])
-        print response_tokens
+        
         return response_tokens
     
     def CreateRecurringPaymentsProfile(self, token, startdate, desc, period, freq, amt):

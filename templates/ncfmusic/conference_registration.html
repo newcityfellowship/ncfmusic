@@ -25,78 +25,105 @@
     $('#total').text('$' + total_cost + '.00');
   }
 
+  function set_headers() {
+
+    $('.registrant-table').find('h4').each(function(i, el) {
+      $(this).text('Member #' + (i+1));
+    });
+  }
+
   $(document).ready(function() {
     calc_total();
 
     $('select[name="student"],select[name="registrant-student[]"]').live('change', function() {
       calc_total();
     });
+
+    $('.remove-registrant').live('click', function(e) {
+      e.preventDefault();
+      $(this).parents('table:first').remove();
+      set_headers();
+      calc_total();
+    });
     
     var registrant_template = $('<tr />').append(
-      $('<td />').attr('colspan', '2').append(
-        $('<h4 />').text('Member #')
+      $('<td />').attr('colspan', 2).append(
+        $('<table />').addClass('registrant-table').append(
+          $('<tr />').append(
+            $('<td />').append(
+              $('<h4 />').text('Member #')
+            )
+          ).append(
+            $('<td />').attr('align', 'right').append(
+              $('<a />').attr('href', '#').addClass('remove-registrant').text('X')
+            )
+          ).after(
+            $('<tr />').append(
+              $('<td />').append(
+                $('<label />').attr('for', 'registrant-first_name[]').text('First Name *')
+              )
+        
+            ).append(
+              $('<td />').append(
+                $('<input />').attr('type', 'text').attr('name', 'registrant-first_name[]')
+              )
+            )
+          ).after(
+            $('<tr />').append(
+              $('<td />').append(
+                $('<label />').attr('for', 'registrant-last_name[]').text('Last Name *')
+              )
+            ).append(
+              $('<td />').append(
+                $('<input />').attr('type', 'text').attr('name', 'registrant-last_name[]')
+              )
+            )
+          ).after(
+            $('<tr />').append(
+              $('<td />').append(
+                $('<label />').attr('for', 'registrant-email[]').text('Email *')
+              )
+            ).append(
+              $('<td />').append(
+                $('<input />').attr('type', 'text').attr('name', 'registrant-email[]')
+              )
+            )
+          ).after(
+            $('<tr />').append(
+              $('<td />').append(
+                $('<label />').attr('for', 'registrant-gender[]').text('Gender *')
+              )
+            ).append(
+              $('<td />').append(
+                $('<select />').attr('name', 'registrant-gender[]')
+                  .append($('<option />').attr('value', 'M').text('Male'))
+                  .append($('<option />').attr('value', 'F').text('Female'))
+              )
+            )
+          ).after(
+            $('<tr />').append(
+              $('<td />').append(
+                $('<label />').attr('for', 'registrant-student[]').text('Are you a student? *')
+              )
+            ).append(
+              $('<td />').append(
+                $('<select />').attr('name', 'registrant-student[]')
+                  .append($('<option />').attr('value', 'No').text('No'))
+                  .append($('<option />').attr('value', 'Yes').text('Yes'))
+              )
+            )
+          )
+        )
       )
-    ).after(
-      $('<tr />').append(
-        $('<td />').append(
-          $('<label />').attr('for', 'registrant-first_name[]').text('First Name *')
-        )
-  
-      ).append(
-        $('<td />').append(
-          $('<input />').attr('type', 'text').attr('name', 'registrant-first_name[]')
-        )
-      )
-    ).after(
-      $('<tr />').append(
-        $('<td />').append(
-          $('<label />').attr('for', 'registrant-last_name[]').text('Last Name *')
-        )
-      ).append(
-        $('<td />').append(
-          $('<input />').attr('type', 'text').attr('name', 'registrant-last_name[]')
-        )
-      )
-    ).after(
-      $('<tr />').append(
-        $('<td />').append(
-          $('<label />').attr('for', 'registrant-email[]').text('Email *')
-        )
-      ).append(
-        $('<td />').append(
-          $('<input />').attr('type', 'text').attr('name', 'registrant-email[]')
-        )
-      )
-    ).after(
-      $('<tr />').append(
-        $('<td />').append(
-          $('<label />').attr('for', 'registrant-gender[]').text('Gender *')
-        )
-      ).append(
-        $('<td />').append(
-          $('<select />').attr('name', 'registrant-gender[]')
-            .append($('<option />').attr('value', 'M').text('Male'))
-            .append($('<option />').attr('value', 'F').text('Female'))
-        )
-      )
-    ).after(
-      $('<tr />').append(
-        $('<td />').append(
-          $('<label />').attr('for', 'registrant-student[]').text('Are you a student? *')
-        )
-      ).append(
-        $('<td />').append(
-          $('<select />').attr('name', 'registrant-student[]')
-            .append($('<option />').attr('value', 'No').text('No'))
-            .append($('<option />').attr('value', 'Yes').text('Yes'))
-        )
-      )
-    );
+    );/*
+    );*/
     $('.add-registrant').click(function(e) {
       e.preventDefault();
       var new_registrant = registrant_template.clone();
-      new_registrant.find('h4').text('Member #' + ($('input[name="registrant-first_name[]"]').size()+1));
+      //new_registrant.find('h4').text('Member #' + ($('input[name="registrant-first_name[]"]').size()+1));
+      
       $(this).parent('td').parent('tr').before(new_registrant);
+      set_headers();
       calc_total()
     });
   });
@@ -222,11 +249,13 @@
                   <td class='help'>
                     <p>Chattanooga has a range of hotels. They are clustered downtown, Lookout Mountain, East Ridge, and Shallowford Road.</p>
 
-                    <p>There will be a church shuttle to Shallowford Road and East Ridge.</p>
+                    <ul>
+                      <li>There will be a church shuttle to Shallowford Road and East Ridge.</li>
 
-                    <p>All Chattanooga hotels in these areas are within 15 minutes of NCF.</p>
+                      <li>All Chattanooga hotels in these areas are within 15 minutes of NCF.</li>
 
-                    <p>If needed, there will be housing in private homes available with early registration only.</p>
+                      <li>If needed, there will be housing in private homes available with early registration only.</li>
+                    </ul>
                   </td>
                 </tr>
                 <tr{% if form.special_housing_needs.errors %} class='error'{% endif %}>
