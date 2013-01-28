@@ -59,12 +59,12 @@ class PayPal:
             'PAYMENTREQUEST_0_AMT' : amount,
         }
         params.update(kwargs)
-        
+        print params
         params_string = self.signature + urllib.urlencode(params)
         
         response = urllib.urlopen(self.API_ENDPOINT, params_string).read()
         response_dict = parse_qs(response)
-        
+        print response_dict
         response_token = response_dict['TOKEN'][0]
         return response_token
     
@@ -78,6 +78,7 @@ class PayPal:
         params_string = self.signature + urllib.urlencode(params)
         response = urllib.urlopen(self.API_ENDPOINT, params_string).read()
         response_dict = parse_qs(response)
+
         if return_all:
             return response_dict
         try:

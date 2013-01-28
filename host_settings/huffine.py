@@ -86,14 +86,17 @@ CONFERENCE_COSTS = {
     'single': 75,
     'early': 50,
     'group': 50,
-    'student': 50
+    'student': 30
 }
 
-CONFERENCE_EARLY_DEADLINE = datetime.date(2013, 1, 1)
+CONFERENCE_EARLY_DEADLINE = datetime.date(2013, 7, 1)
 
 #Buyer
 #benthu_1341257872_per@gmail.com
 #358890238
+
+#benthu_1359341446_per@gmail.com
+#359341486
 
 #benthu_1358887459_biz@gmail.com
 #358887374

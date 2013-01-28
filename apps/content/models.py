@@ -6,6 +6,7 @@ import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 from ncfmusic.apps.content.utils import *
 import gdata.youtube
@@ -455,7 +456,7 @@ class ConferenceRegistration(models.Model):
     country = models.CharField(max_length=128, null=True, blank=True)
     phone_number = models.CharField(max_length=32, verbose_name='Phone Number *')
     gender = models.CharField(max_length=1, blank=False, default='M', choices=GENDER_CHOICES, verbose_name='Gender *')
-    dob = models.DateField(null=True, blank=True, verbose_name='Date of Birth')
+    #dob = models.DateField(null=True, blank=True, verbose_name='Date of Birth')
     church_name = models.CharField(max_length=256, verbose_name='What is your church or ministry name? *')
     how_serving = models.TextField(null=True, blank=True, verbose_name='How are you serving these days?')
     skills = models.TextField(null=True, blank=True, verbose_name='What are your musical skills?')
@@ -474,6 +475,22 @@ class ConferenceRegistration(models.Model):
     def __unicode__(self):
         return '%s %s' % (self.first_name, self.last_name)
 
+    def get_is_group(self):
+        if self.conferenceregistrant_set.all():
+            return True
+        else:
+            return False
+    is_group = property(get_is_group)
+
+    def get_leader_cost(self):
+        if self.student == 'Yes':
+            return settings.CONFERENCE_COSTS['student']
+        elif self.conferenceregistrant_set.all():
+            return settings.CONFERENCE_COSTS['group']
+        else:
+            return settings.CONFERENCE_COSTS['single']
+    leader_cost = property(get_leader_cost)
+
 class ConferenceRegistrant(models.Model):
     registration = models.ForeignKey(ConferenceRegistration)
     first_name = models.CharField(max_length=256, verbose_name='First Name')
@@ -484,4 +501,10 @@ class ConferenceRegistrant(models.Model):
 
     def __unicode__(self):
         return '%s %s' % (self.first_name, self.last_name)
+
+    def get_cost(self):
+        print 'get_cost'
+        print self.student
+        return settings.CONFERENCE_COSTS['student'] if self.student == 'Yes' else settings.CONFERENCE_COSTS['group']
+    cost = property(get_cost)
 

@@ -129,7 +129,7 @@ CONFERENCE_COSTS = {
     'single': 75,
     'early': 50,
     'group': 50,
-    'student': 50
+    'student': 30
 }
 
 CONFERENCE_EARLY_DEADLINE = datetime.date(2013, 7, 1)

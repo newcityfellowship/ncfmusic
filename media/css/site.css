@@ -906,6 +906,10 @@ tr.error .input-append .add-on {
   border-color: #b94a48;
 }
 
+a.btn {
+  text-decoration: none;
+}
+
 /*.aggregation li {
   margin-top: 10px;
   margin-bottom: 20px;

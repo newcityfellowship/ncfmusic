@@ -168,7 +168,8 @@
               <tbody>
 
                 <tr>
-                  <td colspan="2"><h3>Leader Information</h3></td>
+                  <td colspan=""><h3>Sign Up Information</h3></td>
+                  <td>If registering a group - provide leader's information</td>
                 </tr>
                 <tr{% if form.first_name.errors %} class='error'{% endif %}>
                   <th>{{ form.first_name.label_tag }}</th>
@@ -209,10 +210,6 @@
                 <tr{% if form.gender.errors %} class='error'{% endif %}>
                   <th>{{ form.gender.label_tag }}</th>
                   <td>{{ form.gender }}</td>
-                </tr>
-                <tr{% if form.dob.errors %} class='error'{% endif %}>
-                  <th>{{ form.dob.label_tag }}</th>
-                  <td>{{ form.dob }}</td>
                 </tr>
                 <tr{% if form.student.errors %} class='error'{% endif %}>
                   <th>{{ form.student.label_tag }}</th>
@@ -278,7 +275,7 @@
                 <tr class='rates'>
                   <th valign='top'><label>Conference Rates:</label></th>
                   <td>
-                    Individual: ${% if early %}{{ settings.CONFERENCE_COSTS.early }}{% else %}{{ settings.CONFERENCE_COSTS.single }}{% endif %}.00<br />
+                    Individual: ${% if early %}{{ settings.CONFERENCE_COSTS.early }}.00 (${{ settings.CONFERENCE_COSTS.single }}.00 after {{ settings.CONFERENCE_EARLY_DEADLINE|date:"F j" }}){% else %}{{ settings.CONFERENCE_COSTS.single }}.00{% endif %}<br />
                     Group: ${{ settings.CONFERENCE_COSTS.group }}.00 / registrant<br />
                     Student: ${{ settings.CONFERENCE_COSTS.student }}.00
                   </td>

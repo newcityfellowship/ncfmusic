@@ -12,15 +12,21 @@
         </h2>
         <img class='colphoto' src='/media/images/2013_Conference_Callout.jpg' />
         <div class='articlebody'>
-            <h2>Please review your order and click continue</h2>
-            <h3>You are purchasing a conference registration for a total charge of ${{ amount }}</h3>
+            <h3>Please review your order and click continue</h3>
+            <h4>You are purchasing conference registrations for the following participants, for a total charge of <strong>${{ amount|floatformat:"2" }}</strong>.</h4>
+            <ul>
+                <li>{{ registration.first_name }} {{ registration.last_name }}: ${{ registration.leader_cost|floatformat:"2" }}</li>
+            {% for reg in registration.conferenceregistrant_set.all %}
+                <li>{{ reg.first_name }} {{ reg.last_name }}: ${{ reg.cost|floatformat:"2" }}</li>
+            {% endfor %}
+            </ul>
             <form action="." method="post" accept-charset="utf-8">
                 {% csrf_token %}
                 <input type="hidden" name="token" value="{{ token }}">
                 <input type="hidden" name="payer_id" value="{{ payer_id }}">
 
 
-            <p><input type="submit" value="Continue"></p>
+            <p><input type="submit" value="Continue" class="btn btn-primary btn-large"></p>
             </form>
                     
         </div>

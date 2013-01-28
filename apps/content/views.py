@@ -579,10 +579,12 @@ def conference_registration(request):
 
             total_cost = (reg.student == 'Yes') and settings.CONFERENCE_COSTS['student'] or per
 
+            print 'per: %s' % total_cost
+
             purchase_details = {
                 'L_PAYMENTREQUEST_0_NAME0': '2013 New City Music Conference Registration',
                 'L_PAYMENTREQUEST_0_DESC0': '%s %s Registration' % (reg.first_name, reg.last_name),
-                'L_PAYMENTREQUEST_0_AMT0': per,
+                'L_PAYMENTREQUEST_0_AMT0': total_cost,
                 'L_PAYMENTREQUEST_0': 1,
             }
             i = 1
@@ -590,6 +592,7 @@ def conference_registration(request):
                 reg_per = (registrant['student'] == 'Yes') and settings.CONFERENCE_COSTS['student'] or per
                 total_cost += reg_per
 
+                print 'reg_per: %s' % reg_per
 
                 purchase_details.update({
                     'L_PAYMENTREQUEST_0_NAME%d' % i: '2013 New City Music Conference Registration',
@@ -669,7 +672,8 @@ def paypal_return(request):
                 'page': page,
                 'amount': amount,
                 'token': token,
-                'payer_id': payer_id
+                'payer_id': payer_id,
+                'registration': reg,
             })
 
             return render_to_response('paypal_return.html', context)
