@@ -503,8 +503,9 @@ class ConferenceRegistrant(models.Model):
         return '%s %s' % (self.first_name, self.last_name)
 
     def get_cost(self):
-        print 'get_cost'
-        print self.student
-        return settings.CONFERENCE_COSTS['student'] if self.student == 'Yes' else settings.CONFERENCE_COSTS['group']
+        if student == 'Yes':
+            return settings.CONFERENCE_COSTS['student'] 
+        else:
+            return settings.CONFERENCE_COSTS['group']
     cost = property(get_cost)
 
