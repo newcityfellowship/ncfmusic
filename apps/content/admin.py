@@ -178,6 +178,8 @@ class ConferenceRegistrantInline(admin.StackedInline):
     model = ConferenceRegistrant
 
 class ConferenceRegistrationAdmin(admin.ModelAdmin):
+    list_display = ('last_name', 'first_name', 'insert_date', 'has_paid',)
+
     inlines = [ConferenceRegistrantInline]
 
 admin.site.register(ConferenceRegistration, ConferenceRegistrationAdmin)
