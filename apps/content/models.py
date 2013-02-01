@@ -483,12 +483,18 @@ class ConferenceRegistration(models.Model):
     is_group = property(get_is_group)
 
     def get_leader_cost(self):
+        print 'get_leader_cost'
+        print self.student
         if self.student == 'Yes':
             return settings.CONFERENCE_COSTS['student']
         elif self.conferenceregistrant_set.all():
             return settings.CONFERENCE_COSTS['group']
         else:
-            return settings.CONFERENCE_COSTS['single']
+            if datetime.date.today() < settings.CONFERENCE_EARLY_DEADLINE:
+                print 'is early'
+                return settings.CONFERENCE_COSTS['early']
+            else:
+                return settings.CONFERENCE_COSTS['single']
     leader_cost = property(get_leader_cost)
 
 class ConferenceRegistrant(models.Model):

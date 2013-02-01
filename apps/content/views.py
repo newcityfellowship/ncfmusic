@@ -554,6 +554,8 @@ def conference(request):
 def conference_registration(request):
     page = get_object_or_404(Page, slug__exact='conference')
 
+    is_early = (datetime.date.today() < settings.CONFERENCE_EARLY_DEADLINE)
+
     registrant_errors = False
     registrants = []
     if request.method == 'POST':
@@ -575,11 +577,12 @@ def conference_registration(request):
         if form.is_valid() and not registrant_errors:
             reg = form.save(commit=False)
 
-            per = len(registrants) and settings.CONFERENCE_COSTS['group'] or settings.CONFERENCE_COSTS['single']
+            #per = len(registrants) and settings.CONFERENCE_COSTS['group'] or settings.CONFERENCE_COSTS['single']
+            per = reg.get_leader_cost()
 
-            total_cost = (reg.student == 'Yes') and settings.CONFERENCE_COSTS['student'] or per
+            #total_cost = (reg.student == 'Yes') and settings.CONFERENCE_COSTS['student'] or per
 
-            print 'per: %s' % total_cost
+            #print 'per: %s' % total_cost
 
             purchase_details = {
                 'L_PAYMENTREQUEST_0_NAME0': '2013 New City Music Conference Registration',
@@ -592,7 +595,7 @@ def conference_registration(request):
                 reg_per = (registrant['student'] == 'Yes') and settings.CONFERENCE_COSTS['student'] or per
                 total_cost += reg_per
 
-                print 'reg_per: %s' % reg_per
+                #print 'reg_per: %s' % reg_per
 
                 purchase_details.update({
                     'L_PAYMENTREQUEST_0_NAME%d' % i: '2013 New City Music Conference Registration',
@@ -629,7 +632,7 @@ def conference_registration(request):
     context = RequestContext(request, {
         'page': page,
         'form': form,
-        'early': (datetime.date.today() < settings.CONFERENCE_EARLY_DEADLINE),
+        'early': is_early,
         'settings': settings,
         'registrant_errors': registrant_errors,
         'registrants': registrants,
