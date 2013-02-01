@@ -578,7 +578,8 @@ def conference_registration(request):
             reg = form.save(commit=False)
 
             #per = len(registrants) and settings.CONFERENCE_COSTS['group'] or settings.CONFERENCE_COSTS['single']
-            per = reg.get_leader_cost()
+            total_cost = per = reg.get_leader_cost()
+
 
             #total_cost = (reg.student == 'Yes') and settings.CONFERENCE_COSTS['student'] or per
 
