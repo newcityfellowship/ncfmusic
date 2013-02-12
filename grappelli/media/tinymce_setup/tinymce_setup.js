@@ -137,8 +137,9 @@ tinyMCE.init({
     // + 'kbd,label[for],legend,noscript,optgroup[label|disabled],option[disabled|label|selected|value],'
     // + 'q[cite],samp,select[disabled|multiple|name|size],small,'
     // + 'textarea[cols|rows|disabled|name|readonly],tt,var,big',
-    // extended_valid_elements : 'embed[width|height|name|flashvars|src|bgcolor|align|play|'
-    // + 'loop|quality|allowscriptaccess|type|pluginspage]'
-    
+    extended_valid_elements : 'embed[width|height|name|flashvars|src|bgcolor|align|play|'
+     + 'loop|quality|allowscriptaccess|type|pluginspage],iframe[width|height|src|frameborder|allowfullscreen|webkitAllowFullScreen|mozallowfullscreen|allowFullScreen]'
+    //<iframe width="560" height="315" src="http://www.youtube.com/embed/AA6Cwpa-rgg" frameborder="0" allowfullscreen></iframe>
+    //<iframe src="http://player.vimeo.com/video/59220781" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe> <p><a href="http://vimeo.com/59220781">Sweet Crude Man Camp</a> from <a href="http://vimeo.com/littlebrownmush">Little Brown Mushroom</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
 });
 

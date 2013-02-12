@@ -411,7 +411,7 @@ class BlogCategory(models.Model):
         return '/blog/category/%s/' % self.slug
 
 class BlogEntry(Learn):
-    related_songs = models.ManyToManyField('Song')
+    related_songs = models.ManyToManyField('Song', null=True, blank=True)
     text = models.TextField()
     categories = models.ManyToManyField('BlogCategory')
     
