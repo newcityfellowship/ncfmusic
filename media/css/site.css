@@ -21,9 +21,18 @@ h3, h3 a {
 p, h3, h3 a {
   margin-bottom: 5px; }
 
-a, a:visited {
+a {
   color: #666666;
   text-decoration: underline;
+  font-weight: bold;
+}
+
+a:visited {
+  color: #333333;
+}
+
+a:hover {
+  color: #bc5400;
 }
 
 .break {
