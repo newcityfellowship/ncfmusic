@@ -21,6 +21,11 @@ h3, h3 a {
 p, h3, h3 a {
   margin-bottom: 5px; }
 
+a {
+  color: 666666;
+  text-decoration: underline;
+}
+
 .break {
   clear: both; }
 
