@@ -49,7 +49,7 @@
       </li>
     </ul>
     <div class='break'></div>
-    {% if object.related_songs %}
+    {% if object.related_songs.all %}
       <h2 class='pagename'>Related Songs</h2>
       <ul class='aggregation'>
         {% for song in object.related_songs.all %}   

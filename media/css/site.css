@@ -23,7 +23,7 @@ p, h3, h3 a {
 
 a {
   color: #666666;
-  text-decoration: underline;
+  text-decoration: none;
   font-weight: bold;
 }
 

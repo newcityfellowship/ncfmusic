@@ -7,6 +7,7 @@ import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 from ncfmusic.apps.content.utils import *
 import gdata.youtube
@@ -216,6 +217,18 @@ class Learn(models.Model):
     church = models.ForeignKey('Church')
     teaser = models.TextField()
     insert_date = models.DateField(auto_now_add=True, editable=False)
+
+    def clean(self):
+        try:
+            count = Learn.objects.exclude(pk=self.id).get(slug__exact=self.slug).count()
+        except BlogEntry.DoesNotExist:
+            count = 0
+        except Exception as e:
+            raise ValidationError('slug must be unique')
+        
+        if count:
+            raise ValidationError('slug must be unique')
+
     
 class Tutorial(Learn):
     vimeo_url = models.CharField(max_length=256)
@@ -240,6 +253,17 @@ class Tutorial(Learn):
         if not self.duration:
             self.duration = _get_vimeo_duration(self.vimeo_url)
         super(Tutorial, self).save(*args, **kwargs) # Call the "real" save() method.
+
+    def clean(self):
+        try:
+            count = Tutorial.objects.exclude(pk=self.id).get(slug__exact=self.slug).count()
+        except BlogEntry.DoesNotExist:
+            count = 0
+        except Exception as e:
+            raise ValidationError('slug must be unique')
+        
+        if count:
+            raise ValidationError('slug must be unique')
     
 class Talk(Learn):
     duration = models.CharField(max_length=16)
@@ -250,6 +274,17 @@ class Talk(Learn):
         
     def get_absolute_url(self):
         return '/talks/%s' % self.slug
+
+    def clean(self):
+        try:
+            count = Talk.objects.exclude(pk=self.id).get(slug__exact=self.slug).count()
+        except BlogEntry.DoesNotExist:
+            count = 0
+        except Exception as e:
+            raise ValidationError('slug must be unique')
+        
+        if count:
+            raise ValidationError('slug must be unique')
     
 class Article(Learn):
     article_body = models.TextField()
@@ -259,6 +294,17 @@ class Article(Learn):
         
     def get_absolute_url(self):
         return '/articles/%s' % self.slug
+
+    def clean(self):
+        try:
+            count = Article.objects.exclude(pk=self.id).get(slug__exact=self.slug).count()
+        except BlogEntry.DoesNotExist:
+            count = 0
+        except Exception as e:
+            raise ValidationError('slug must be unique')
+        
+        if count:
+            raise ValidationError('slug must be unique')
     
 class Genre(models.Model):
     name = models.CharField(max_length=64)
@@ -402,7 +448,7 @@ class Page(models.Model):
 
 class BlogCategory(models.Model):
     name = models.CharField(max_length=128)
-    slug = models.SlugField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True)
 
     def __unicode__(self):
         return self.name
@@ -427,6 +473,17 @@ class BlogEntry(Learn):
 
     def possibly_related(self):
         return BlogEntry.objects.filter(related_songs__in=self.related_songs.all()).exclude(pk=self.pk).distinct()
+
+    def clean(self):
+        try:
+            count = BlogEntry.objects.exclude(pk=self.id).get(slug__exact=self.slug).count()
+        except BlogEntry.DoesNotExist:
+            count = 0
+        except Exception as e:
+            raise ValidationError('slug must be unique')
+        
+        if count:
+            raise ValidationError('slug must be unique')
 
 GENDER_CHOICES = (
     ('M', 'Male'),
