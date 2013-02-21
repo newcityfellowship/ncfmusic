@@ -31,6 +31,9 @@ class Listen(models.Model):
     
     def __unicode__(self):
         return self.title
+
+    class Meta:
+        ordering = ['title',]
         
 def _get_vimeo_json(vimeo_url):
     m = re.search('/(\d+)$', vimeo_url)
@@ -177,6 +180,7 @@ class Watch(models.Model):
         
     class Meta:
         verbose_name_plural = 'Watches'
+        ordering = ['-date',]
 
     def clean(self):
         from django.core.exceptions import ValidationError
@@ -228,6 +232,9 @@ class Learn(models.Model):
         
         if count:
             raise ValidationError('slug must be unique')
+
+    class Meta:
+        ordering = ['-date',]
 
     
 class Tutorial(Learn):
@@ -313,6 +320,9 @@ class Genre(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        ordering = ['name',]
+
 class ResourceManager(models.Manager):
     def get_query_set(self):
         qs = super(ResourceManager, self).get_query_set()
@@ -393,6 +403,9 @@ class Event(models.Model):
     def __unicode__(self):
         return self.title
 
+    class Meta:
+        ordering = ['-start_date',]
+
     
 class Church(models.Model):
     name = models.CharField(max_length=256)
@@ -408,6 +421,7 @@ class Church(models.Model):
         
     class Meta:
         verbose_name_plural = 'Churches'
+        ordering = ['name',]
         
     def get_absolute_url(self):
         return '/churches/%s' % self.slug
@@ -429,12 +443,18 @@ class Contributor(models.Model):
         
     def get_absolute_url(self):
         return '/musicians/%s' % self.slug
+
+    class Meta:
+        ordering = ['name',]
     
 class Contact(models.Model):
     first_name = models.CharField(max_length=256)
     last_name = models.CharField(max_length=256)
     email_address = models.EmailField()
     insert_date = models.DateField(auto_now_add=True, editable=False)
+
+    class Meta:
+        ordering = ['last_name','first_name',]
     
 class Page(models.Model):
     from ncfmusic.apps.heroshots.models import Image
@@ -446,6 +466,9 @@ class Page(models.Model):
     def __unicode__(self):
         return self.slug
 
+    class Meta:
+        ordering = ['slug',]
+
 class BlogCategory(models.Model):
     name = models.CharField(max_length=128)
     slug = models.SlugField(max_length=255, unique=True)
@@ -455,6 +478,9 @@ class BlogCategory(models.Model):
 
     def get_absolute_url(self):
         return '/blog/category/%s/' % self.slug
+
+    class Meta:
+        ordering = ['name',]
 
 class BlogEntry(Learn):
     related_songs = models.ManyToManyField('Song', null=True, blank=True)
@@ -554,6 +580,9 @@ class ConferenceRegistration(models.Model):
                 return settings.CONFERENCE_COSTS['single']
     leader_cost = property(get_leader_cost)
 
+    class Meta:
+        ordering = ['-insert_date',]
+
 class ConferenceRegistrant(models.Model):
     registration = models.ForeignKey(ConferenceRegistration)
     first_name = models.CharField(max_length=256, verbose_name='First Name')
@@ -571,4 +600,7 @@ class ConferenceRegistrant(models.Model):
         else:
             return settings.CONFERENCE_COSTS['group']
     cost = property(get_cost)
+
+    class Meta:
+        ordering = ['last_name','first_name',]
 
