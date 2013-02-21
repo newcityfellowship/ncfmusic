@@ -257,7 +257,7 @@ class Tutorial(Learn):
     def clean(self):
         try:
             count = Tutorial.objects.exclude(pk=self.id).get(slug__exact=self.slug).count()
-        except BlogEntry.DoesNotExist:
+        except Tutorial.DoesNotExist:
             count = 0
         except Exception as e:
             raise ValidationError('slug must be unique')
@@ -278,7 +278,7 @@ class Talk(Learn):
     def clean(self):
         try:
             count = Talk.objects.exclude(pk=self.id).get(slug__exact=self.slug).count()
-        except BlogEntry.DoesNotExist:
+        except Talk.DoesNotExist:
             count = 0
         except Exception as e:
             raise ValidationError('slug must be unique')
@@ -298,7 +298,7 @@ class Article(Learn):
     def clean(self):
         try:
             count = Article.objects.exclude(pk=self.id).get(slug__exact=self.slug).count()
-        except BlogEntry.DoesNotExist:
+        except Article.DoesNotExist:
             count = 0
         except Exception as e:
             raise ValidationError('slug must be unique')
