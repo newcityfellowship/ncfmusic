@@ -707,7 +707,7 @@ def server_error(request, template_name='500.html'):
 
 
 def standalone_page(request, slug):
-    page = get_object_or_404(Page, slug__exact=slug)
+    page = get_object_or_404(Page, slug__exact=slug, standalone=True)
 
     context = RequestContext(request, {
         'page': page,
