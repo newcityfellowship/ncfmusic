@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block headerclasses %} class="interior interiorhead about abouthead" {% if page.heroshot %}style="background-image: url({{ page.heroshot.image.url }});"{% endif %}{% endblock headerclasses %}
+
+{% block content %}
+<div class='interior conference' id='content'>
+        <h2 class='pagename'>
+          {% if page.title %}{{ page.title }}{% endif %}
+          <span class='textlogo'>
+            {% if page.subtitle %}{{ page.subtitle }}{% endif %}
+          </span>
+        </h2>
+        <img class='colphoto' src='/media/images/2013_Conference_Callout.jpg' />
+        <div class='articlebody'>
+          {{ page.content|safe }} 
+        </div>
+      </div>
+{% endblock content %}      
