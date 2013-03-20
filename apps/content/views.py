@@ -704,3 +704,13 @@ def server_error(request, template_name='500.html'):
     return http.HttpResponseServerError(t.render(Context({
         'MEDIA_URL': settings.MEDIA_URL
     })))    
+
+
+def standalone_page(request, slug):
+    page = get_object_or_404(Page, slug__exact=slug)
+
+    context = RequestContext(request, {
+        'page': page,
+    })
+
+    return render_to_response('standalone_page.html', context)

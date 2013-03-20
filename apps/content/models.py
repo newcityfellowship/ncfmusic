@@ -459,9 +459,12 @@ class Contact(models.Model):
 class Page(models.Model):
     from ncfmusic.apps.heroshots.models import Image
     
+    title = models.CharField(max_length=255, null=True, blank=True)
+    subtitle = models.CharField(max_length=255, null=True, blank=True)
     slug = models.SlugField(max_length=255)
     content = models.TextField(blank=True, null=True)
     heroshot = models.ForeignKey(Image, null=True, blank=True)
+    standalone = models.BooleanField(default=False, help_text='Standalone pages will exist at http://ncfmusic.com/<slug>/')
     
     def __unicode__(self):
         return self.slug
