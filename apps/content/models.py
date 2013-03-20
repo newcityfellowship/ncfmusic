@@ -464,7 +464,7 @@ class Page(models.Model):
     slug = models.SlugField(max_length=255)
     content = models.TextField(blank=True, null=True)
     heroshot = models.ForeignKey(Image, null=True, blank=True)
-    standalone = models.BooleanField(default=False, help_text='Standalone pages will exist at http://ncfmusic.com/<slug>/')
+    standalone = models.BooleanField(default=False, help_text='Standalone pages will exist at http://ncfmusic.com/&lt;slug&gt;/')
     
     def __unicode__(self):
         return self.slug
