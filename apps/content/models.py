@@ -227,7 +227,7 @@ class Learn(models.Model):
             count = Learn.objects.exclude(pk=self.id).get(slug__exact=self.slug).count()
         except BlogEntry.DoesNotExist:
             count = 0
-        except Exception as e:
+        except Exception:
             raise ValidationError('slug must be unique')
         
         if count:
