@@ -610,6 +610,7 @@ def conference_registration(request):
             purchase_details.update({
                 'PAYMENTREQUEST_0_ITEMAMT': total_cost,
                 'PAYMENTREQUEST_0_AMT': total_cost,
+                'PAYMENTREQUEST_0_DESC': '2013 New City Music Conference Registration'
             })
 
             paypal = PayPal()
