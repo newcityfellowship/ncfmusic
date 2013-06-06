@@ -682,6 +682,13 @@ def paypal_return(request):
             })
 
             return render_to_response('paypal_return.html', context)
+        else:
+            context = RequestContext(request, {
+                'page': page,
+                'paypal_details': paypal_details,
+            })
+
+            return render_to_response('paypal_error.html', context)
 
 def conference_registration_thanks(request):
     page = get_object_or_404(Page, slug__exact='conference')

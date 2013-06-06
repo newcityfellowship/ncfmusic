@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block headerclasses %} class="interior interiorhead about abouthead" {% endblock headerclasses %}
+
+{% block content %}
+<div class='interior conference' id='content'>
+        <h2 class='pagename'>
+          New City
+          <span class='textlogo'>
+            Music Conference
+          </span>
+        </h2>
+        <img class='colphoto' src='/media/images/2013_Conference_Callout.jpg' />
+        <div class='articlebody'>
+            <h3>Something went wrong!</h3>
+            <h4>Please try again.</h4>
+            <p>Paypal returned the following error: "{{ paypal_details.ACK }}: {{ paypal_details.L_SHORTMESSAGE0 }}"</p>
+        </div>
+      </div>
+{% endblock content %}      
+
+
