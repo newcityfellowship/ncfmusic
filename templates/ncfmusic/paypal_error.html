@@ -14,7 +14,7 @@
         <div class='articlebody'>
             <h3>Something went wrong!</h3>
             <h4>Please try again.</h4>
-            <p>Paypal returned the following error: "{{ paypal_details.ACK }}: {{ paypal_details.L_SHORTMESSAGE0 }}"</p>
+            <p>Paypal returned the following error: "{{ paypal_details.ACK.0 }}: {{ paypal_details.L_SHORTMESSAGE0.0 }}"</p>
         </div>
       </div>
 {% endblock content %}      
