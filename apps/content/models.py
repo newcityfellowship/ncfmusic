@@ -598,7 +598,7 @@ class ConferenceRegistrant(models.Model):
         return '%s %s' % (self.first_name, self.last_name)
 
     def get_cost(self):
-        if student == 'Yes':
+        if self.student == 'Yes':
             return settings.CONFERENCE_COSTS['student'] 
         else:
             return settings.CONFERENCE_COSTS['group']
