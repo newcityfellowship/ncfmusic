@@ -236,10 +236,6 @@
                   <th valign='top'>{{ form.wanting_to_learn.label_tag }}</th>
                   <td>{{ form.wanting_to_learn }}</td>
                 </tr>
-                <tr{% if form.housing.errors %} class='error'{% endif %}>
-                  <th>{{ form.housing.label_tag }}</th>
-                  <td>{{ form.housing }}</td>
-                </tr>
                 <tr>
                   <td></td>
                   <td class='help'>
@@ -249,14 +245,8 @@
                       <li>There will be a church shuttle to Shallowford Road and East Ridge.</li>
 
                       <li>All Chattanooga hotels in these areas are within 15 minutes of NCF.</li>
-
-                      <li>If needed, there will be housing in private homes available with early registration only.</li>
                     </ul>
                   </td>
-                </tr>
-                <tr{% if form.special_housing_needs.errors %} class='error'{% endif %}>
-                  <th valign='top'>{{ form.special_housing_needs.label_tag }}</th>
-                  <td>{{ form.special_housing_needs }}</td>
                 </tr>
                 <tr{% if form.food_allergies.errors %} class='error'{% endif %}>
                   <th>{{ form.food_allergies.label_tag }}</th>
