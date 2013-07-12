@@ -10,7 +10,7 @@ class ContactForm(ModelForm):
 class ConferenceRegistrationForm(ModelForm):
     class Meta:
         model = ConferenceRegistration
-        exclude = ('insert_date', 'has_paid', 'cost', 'pp_token', 'payer_id',)
+        exclude = ('insert_date', 'has_paid', 'cost', 'pp_token', 'payer_id', 'housing',)
         widgets = {
             'how_serving': Textarea(attrs={'rows': 4}),
             'skills': Textarea(attrs={'rows': 4}),
