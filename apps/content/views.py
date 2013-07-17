@@ -740,10 +740,10 @@ def export_registrations(request):
     writer.writerow(['Registartion Date', 'First Name', 'Last Name', 'Email', 'Address', 'City', 'State', 'Postal Code', 'Country', 'Phone', 'Gender', 'Church Name', 'How are you serving these days', 'What are your musical skills', 'What are you most wanting to learn', 'Need housing', 'Special Housing Needs', 'Food Allergies', 'Ride from Airport', 'Flight Information', 'Are you a student', 'Cost',])
 
     for registration in ConferenceRegistration.objects.filter(has_paid=True).order_by('-insert_date'):
-        row = [registration.insert_date, registration.first_name, registration.last_name, registration.email, registration.address, registration.city, registration.state, registration.postal_code, registration.country, registration.phone_number, registration.gender, registration.church_name, registration.how_serving, registration.skills, registration.wanting_to_learn, registration.housing, registration.special_housing_needs, registration.food_allergies, registration.ride_from_airport, registration.flight_information, registration.student, registration.cost,]
+        row = [unicode(registration.insert_date), unicode(registration.first_name), unicode(registration.last_name), unicode(registration.email), unicode(registration.address), unicode(registration.city), unicode(registration.state), unicode(registration.postal_code), unicode(registration.country), unicode(registration.phone_number), unicode(registration.gender), unicode(registration.church_name), unicode(registration.how_serving), unicode(registration.skills), unicode(registration.wanting_to_learn), unicode(registration.housing), unicode(registration.special_housing_needs), unicode(registration.food_allergies), unicode(registration.ride_from_airport), unicode(registration.flight_information), unicode(registration.student), unicode(registration.cost),]
         writer.writerow(row)
         for registrant in ConferenceRegistrant.objects.filter(registration=registration):
-            row = ['', registrant.first_name, registrant.last_name, registrant.email, '', '', '', '', '', '', registrant.gender, '', '', '' '', '', '', '', '', '', '', registrant.student,]
+            row = ['', unicode(registrant.first_name), unicode(registrant.last_name), unicode(registrant.email), '', '', '', '', '', '', unicode(registrant.gender), '', '', '' '', '', '', '', '', '', unicode(registrant.student),]
             writer.writerow(row)
 
 
