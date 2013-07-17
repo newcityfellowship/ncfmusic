@@ -32,6 +32,7 @@ blog_dict = {
 }
 
 urlpatterns += patterns('ncfmusic.apps.content.views',
+    (r'^admin/content/conferenceregistrations/csv/$','export_registrations'),
     (r'^about/$',                                   'about'),
     (r'^listen/$',                                  'listen'),
     (r'^podcast/$',                                 'podcast'),

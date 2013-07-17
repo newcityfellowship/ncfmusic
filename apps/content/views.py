@@ -1,7 +1,7 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
-from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect, Http404
+from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect, Http404, HttpResponseForbidden, HttpResponse
 from django.db.models import Q
 from django.views.decorators.cache import cache_page
 from django.views.generic.list_detail import object_list
@@ -16,7 +16,7 @@ from ncfmusic.apps.heroshots.models import *
 
 from ncfmusic.lib.tiny_paypal import PayPal
 
-import datetime, re
+import datetime, re, csv
 
 def home(request):
     songs = Listen.objects.order_by('-insert_date')[:3]
@@ -722,3 +722,29 @@ def standalone_page(request, slug):
     })
 
     return render_to_response('standalone_page.html', context)
+
+
+
+
+
+
+
+
+
+
+def export_registrations(request):
+    response = HttpResponse(mimetype='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=registrations.csv'
+    writer = csv.writer(response)
+
+    writer.writerow(['Registartion Date', 'First Name', 'Last Name', 'Email', 'Address', 'City', 'State', 'Postal Code', 'Country', 'Phone', 'Gender', 'Church Name', 'How are you serving these days', 'What are your musical skills', 'What are you most wanting to learn', 'Need housing', 'Special Housing Needs', 'Food Allergies', 'Ride from Airport', 'Flight Information', 'Are you a student', 'Cost',])
+
+    for registration in ConferenceRegistration.objects.filter(has_paid=True).order_by('-insert_date'):
+        row = [registration.insert_date, registration.first_name, registration.last_name, registration.email, registration.address, registration.city, registration.state, registration.postal_code, registration.country, registration.phone_number, registration.gender, registration.church_name, registration.how_serving, registration.skills, registration.wanting_to_learn, registration.housing, registration.special_housing_needs, registration.food_allergies, registration.ride_from_airport, registration.flight_information, registration.student, registration.cost,]
+        writer.writerow(row)
+        for registrant in ConferenceRegistrant.objects.filter(registration=registration):
+            row = ['', registrant.first_name, registrant.last_name, registrant.email, '', '', '', '', '', '', registrant.gender, '', '', '' '', '', '', '', '', '', '', registrant.student,]
+            writer.writerow(row)
+
+
+    return response
