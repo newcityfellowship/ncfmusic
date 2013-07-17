@@ -739,7 +739,7 @@ def export_registrations(request):
 
     writer.writerow(['Registartion Date', 'First Name', 'Last Name', 'Email', 'Address', 'City', 'State', 'Postal Code', 'Country', 'Phone', 'Gender', 'Church Name', 'How are you serving these days', 'What are your musical skills', 'What are you most wanting to learn', 'Need housing', 'Special Housing Needs', 'Food Allergies', 'Ride from Airport', 'Flight Information', 'Are you a student', 'Cost', 'Has Paid'])
 
-    for registration in ConferenceRegistration.objects.filter(has_paid=True).order_by('-insert_date'):
+    for registration in ConferenceRegistration.objects.order_by('-insert_date'):
         row = [registration.insert_date, registration.first_name.encode('utf-8').strip(), registration.last_name.encode('utf-8').strip(), registration.email.encode('utf-8').strip(), registration.address.encode('utf-8').strip(), registration.city.encode('utf-8').strip(), registration.state.encode('utf-8').strip(), registration.postal_code, registration.country.encode('utf-8').strip(), registration.phone_number, registration.gender, registration.church_name.encode('utf-8').strip(), registration.how_serving.encode('utf-8').strip(), registration.skills.encode('utf-8').strip(), registration.wanting_to_learn.encode('utf-8').strip(), registration.housing, registration.special_housing_needs.encode('utf-8').strip(), registration.food_allergies.encode('utf-8').strip(), registration.ride_from_airport, registration.flight_information.encode('utf-8').strip(), registration.student, registration.cost, registration.has_paid]
         writer.writerow(row)
         for registrant in ConferenceRegistrant.objects.filter(registration=registration):
