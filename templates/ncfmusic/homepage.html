@@ -51,21 +51,23 @@
           </ul>
         </div>
         <div id='rightcol'>
+        {% comment %}
           <div id='ad'>
             <a href='/conference/'>
               <img src='{{ MEDIA_URL }}/images/2013_Conference_Callout.jpg' />
             </a>
           </div>
+        {% endcomment %}
 
           <div id='watch'>
             <div class='title'>
               <span>Video</span>
             </div>
             {% if watch.vimeo_id %}
-              <iframe src="http://player.vimeo.com/video/{{ watch.vimeo_id }}?title=0&byline=0&portrait=0" width="367" height="208" frameborder="0"></iframe>
+              <iframe src="http://player.vimeo.com/video/{{ watch.vimeo_id }}?title=0&byline=0&portrait=0" width="562" height="318" frameborder="0"></iframe>
             {% else %}
               {% if watch.youtube_id %}
-              <iframe id="player" type="text/html" width="367" height="208" src="http://www.youtube.com/embed/{{ watch.youtube_id }}?enablejsapi=1&origin=http://ncfmusic.com" frameborder="0"></iframe>
+              <iframe id="player" type="text/html" width="562" height="318" src="http://www.youtube.com/embed/{{ watch.youtube_id }}?enablejsapi=1&origin=http://ncfmusic.com" frameborder="0"></iframe>
               {% endif %}
               <h3>
                 <a href='#'>{{ watch.title }}</a>
