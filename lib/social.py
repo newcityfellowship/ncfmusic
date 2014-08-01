@@ -48,7 +48,7 @@ def update_twitter(status, url):
     #   Trim the status back to CHARACTER_LIMIT - short_url_length - 10 (for space between and hash tag)
     status_length = CHARACTER_LIMIT - short_url_length - 10
 
-    status = '%s http://%s%s' % (status, 'http://ncfmusic.com', url)
+    status = '%s http://%s%s' % (status, 'ncfmusic.com', url)
 
     try:
         status = api.PostUpdate(status)
