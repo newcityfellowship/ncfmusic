@@ -543,11 +543,8 @@ class BlogEntry(Learn):
             raise ValidationError('slug must be unique')
 
     def save(self, *args, **kwargs):
-        print self.id
         if not self.id:
-            print 'new post'
-
-        update_twitter('New blog post: "%s"' % self.title, self.get_absolute_url())
+            update_twitter('New blog post: "%s"' % self.title, self.get_absolute_url())
 
         super(BlogEntry, self).save(*args, **kwargs) 
 
