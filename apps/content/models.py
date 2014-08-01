@@ -14,6 +14,7 @@ import gdata.youtube
 import gdata.youtube.service
 from gdata.service import RequestError
 
+from ncfmusic.lib.social import update_twitter
 
 class Listen(models.Model):
     title = models.CharField(max_length=256)
@@ -271,6 +272,10 @@ class Tutorial(Learn):
         
         if count:
             raise ValidationError('slug must be unique')
+
+    class Meta:
+        verbose_name = 'Learn - Video'
+        verbose_name_plural = 'Learn - Videos'
     
 class Talk(Learn):
     duration = models.CharField(max_length=16)
@@ -292,6 +297,10 @@ class Talk(Learn):
         
         if count:
             raise ValidationError('slug must be unique')
+
+    class Meta:
+        verbose_name = 'Learn - MP3'
+        verbose_name_plural = 'Learn - MP3s'
     
 class Article(Learn):
     article_body = models.TextField()
@@ -312,6 +321,10 @@ class Article(Learn):
         
         if count:
             raise ValidationError('slug must be unique')
+
+    class Meta:
+        verbose_name = 'Learn - Article'
+        verbose_name_plural = 'Learn - Articles'
     
 class Genre(models.Model):
     name = models.CharField(max_length=64)
@@ -329,6 +342,16 @@ class ResourceManager(models.Manager):
 
         return sorted(qs.all(), key=lambda s: s.effective_date, reverse=True)
 
+class Tag(models.Model):
+    name = models.CharField(max_length=256)
+    slug = models.SlugField(max_length=255)
+    
+    class Meta:
+        ordering = ['name',]
+
+    def __unicode__(self):
+        return self.name
+
 
 class Song(models.Model):
     title = models.CharField(max_length=256)
@@ -340,7 +363,7 @@ class Song(models.Model):
     lyrics = models.FileField(upload_to='ext/lyrics', null=True, blank=True)
     producer = models.CharField(max_length=256, null=True, blank=True)
     vocals = models.ManyToManyField('Contributor', null=True, related_name='song_vocals')
-    instruments = models.ManyToManyField('Contributor', null=True, related_name='sont_instruments')
+    instruments = models.ManyToManyField('Contributor', null=True, related_name='song_instruments')
     release_date = models.DateField()
     album_title = models.CharField(max_length=256, null=True, blank=True)
     mp3 = models.FileField(upload_to='ext/songs', null=True, blank=True)
@@ -350,6 +373,7 @@ class Song(models.Model):
     related_talks = models.ManyToManyField('Talk', null=True, blank=True)
     insert_date = models.DateField(auto_now_add=True, editable=False)
     effective_date = models.DateField(editable=False, null=False, blank=False)
+    tags = models.ManyToManyField('Tag', null=True, blank=True)
 
     objects = models.Manager()
     effective_objects = ResourceManager()
@@ -480,10 +504,12 @@ class BlogCategory(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return '/blog/category/%s/' % self.slug
+        return '/updates/category/%s/' % self.slug
 
     class Meta:
         ordering = ['name',]
+        verbose_name = 'Update Category'
+        verbose_name_plural = 'Update Categories'
 
 class BlogEntry(Learn):
     related_songs = models.ManyToManyField('Song', null=True, blank=True)
@@ -493,12 +519,14 @@ class BlogEntry(Learn):
     class Meta:
         verbose_name_plural = 'Blog Entries'
         ordering = ['-date',]
+        verbose_name = 'Update'
+        verbose_name_plural = 'Updates'
 
     def __unicode__(self):
         return self.title
 
     def get_absolute_url(self):
-        return '/blog/%s/' % self.slug
+        return '/updates/%s/' % self.slug
 
     def possibly_related(self):
         return BlogEntry.objects.filter(related_songs__in=self.related_songs.all()).exclude(pk=self.pk).distinct()
@@ -513,6 +541,18 @@ class BlogEntry(Learn):
         
         if count:
             raise ValidationError('slug must be unique')
+
+    def save(self, *args, **kwargs):
+        print self.id
+        if not self.id:
+            print 'new post'
+
+        update_twitter('New blog post: "%s"' % self.title, self.get_absolute_url())
+
+        super(BlogEntry, self).save(*args, **kwargs) 
+
+
+
 
 GENDER_CHOICES = (
     ('M', 'Male'),

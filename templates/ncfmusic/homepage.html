@@ -15,7 +15,7 @@
             <li>
               <button class='audioplay paused' id='playsong{{ song.id }}' rel='song{{ song.id }}'></button>
               <h3>{{ song.title }}</h3>
-              <a href='{{ song.church.get_absolute_url }}'>{{ song.church }}</a>
+              {{ song.church }}
               <div class='audioplayer nocontrols'>
                 <div class='mp3holder' id='song{{ song.id }}' rel='{{ song.mp3.url }}'></div>
               </div>
@@ -34,7 +34,7 @@
       <div class='home' id='content'>
         <div id='leftcallout'>
           <div class='title'>
-            <a class='viewall' href='/blog'>
+            <a class='viewall' href='/updates/'>
               <img src='{{ MEDIA_URL }}/images/title-all-articles.png' />
             </a>
             <span>Blog</span>
@@ -61,6 +61,9 @@
 
           <div id='watch'>
             <div class='title'>
+              <a class='viewall' href='/watch/'>
+                <img src='{{ MEDIA_URL }}/images/title-all-videos.png' />
+              </a>
               <span>Video</span>
             </div>
             {% if watch.vimeo_id %}
@@ -98,7 +101,7 @@
           </div>
           {% endcomment %}
           <div id='findasong'>
-            <form action='/songs/' method='get'>
+            <form action='/search/' method='get'>
               <div class='typechooser'>
                 <input name='type' type='radio' value='sheet_music' />
                 <span>Sheet Music</span>

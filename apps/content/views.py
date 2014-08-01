@@ -223,6 +223,41 @@ def talks(request):
     })
     
     return render_to_response('learns.html', context)
+
+def learn(request):
+    article_list = Learn.objects.filter(blogentry__isnull=True).order_by('-date')
+    print article_list
+    
+    paginator = Paginator(article_list, 4)
+    
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+        
+    try:
+        learns = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        learns = paginator.page(paginator.num_pages)
+
+    for learn in learns.object_list:
+        try:
+            print 'Tutorial: %s' % learn.tutorial
+            print 'Talk: %s' % learn.talk
+            print 'Article: %s' % learn.article
+        except:
+            print 'Failed'
+        
+    source_list, tutorial_list, talk_list, thearticle_list = learn_sidebar()
+    context = RequestContext(request, {
+        'page': page,
+        'learns': learns,
+        'expanded': 'articles',
+        'article_list': article_list[:10], #   For the sidebar
+        'tutorial_list': tutorial_list, 
+        'talk_list': talk_list
+    })
+    return render_to_response('learns.html', context)
     
 def articles(request):
     article_list = Article.objects.order_by('-date')
@@ -264,7 +299,7 @@ def songs(request, start_letter=None):
     return HttpResponsePermanentRedirect('/resources/')
 
 @cache_page(60 * 15)
-def resources(request, start_letter=None, resource_type=None, genre=None):
+def resources(request, start_letter=None, resource_type=None, genre=None, tag=None):
     page = get_object_or_404(Page, slug__exact='resources')
 
     q = request.GET.get('q', '').strip()
@@ -288,8 +323,11 @@ def resources(request, start_letter=None, resource_type=None, genre=None):
             elif resource_type == 'read':
                 song_list = song_list.filter(related_articles__isnull=False).distinct()
 
-        elif genre:
+        if genre:
             song_list = song_list.filter(genre__slug=genre)
+
+        if tag:
+            song_list = song_list.filter(tags__slug=tag)
     
     #   I'm sure there's a better way to do this, but it's late and my brain's tired, so this will work
     from django.utils.datastructures import SortedDict
@@ -324,6 +362,7 @@ def resources(request, start_letter=None, resource_type=None, genre=None):
         'sections': sections,
         'start_letter': start_letter,
         'genres': Genre.objects.order_by('name'),
+        'tags': Tag.objects.order_by('name'),
     })
     
     return render_to_response('songs.html', context)
@@ -503,6 +542,9 @@ def search(request):
         
         event_query = get_query(query_string, ['title', 'teaser', 'article_body',])
         events = Event.objects.filter(event_query).filter(end_date__gte=datetime.datetime.now()).order_by('title')
+
+        blog_query = get_query(query_string, ['title', 'author__name', 'church__name', 'text',])
+        blog_entries = BlogEntry.objects.filter(blog_query).order_by('-insert_date')
         
         context = RequestContext(request, {
             #'page': page,
@@ -515,6 +557,7 @@ def search(request):
             'churches': churches,
             'contributors': contributors,
             'events': events,
+            'blogs': blog_entries,
         })
 
         return render_to_response('search.html', context)

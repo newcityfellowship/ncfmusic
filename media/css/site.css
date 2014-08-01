@@ -778,6 +778,11 @@ h2.sectionname {
   margin-left: 3px;
 }
 
+.extendeddetails .header {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
 .actionmenu .label, 
 .downloads .label {
   color: #414141;
@@ -791,6 +796,11 @@ h2.sectionname {
 
 .actionmenu a:hover{
   color: #2E8D7E;
+}
+
+.extendeddetails .information {
+  float: right;
+  width: 304px;
 }
 
 .downloads {
