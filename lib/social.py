@@ -1,9 +1,11 @@
 from django.utils.text import truncate_words
 from django.utils.html import strip_tags
 from django.conf import settings
-from ncfmusic.lib.twitter import Api, TwitterError, CHARACTER_LIMIT, Status
+from twitter import Api, TwitterError, Status
 
 import socket
+
+CHARACTER_LIMIT = 140
 
 class BetterApi(Api):
     def BetterPostUpdate(self, status, data={}):
@@ -49,7 +51,7 @@ def update_twitter(status, url):
     status = '%s http://%s%s' % (status, socket.gethostname(), url)
 
     try:
-        status = api.Update(status, data={'wrap_links': True})
+        status = api.PostUpdate(status)
     except TwitterError, e:
         sys.stderr.write('TWITTER ERROR: %s: %s\n' % (e, status))
         pass
