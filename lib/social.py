@@ -35,7 +35,7 @@ class BetterApi(Api):
         return data
 
 def update_twitter(status, url):
-    api = BetterApi(consumer_key=settings.TWITTER_CONSUMER_KEY,
+    api = Api(consumer_key=settings.TWITTER_CONSUMER_KEY,
                     consumer_secret=settings.TWITTER_CONSUMER_SECRET,
                     access_token_key=settings.TWITTER_ACCESS_TOKEN_KEY,
                     access_token_secret=settings.TWITTER_ACCESS_TOKEN_SECRET
@@ -49,7 +49,7 @@ def update_twitter(status, url):
     status = '%s http://%s%s' % (status, socket.gethostname(), url)
 
     try:
-        status = api.BetterPostUpdate(status, data={'wrap_links': True})
+        status = api.Update(status, data={'wrap_links': True})
     except TwitterError, e:
         sys.stderr.write('TWITTER ERROR: %s: %s\n' % (e, status))
         pass
