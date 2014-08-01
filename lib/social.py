@@ -3,7 +3,7 @@ from django.utils.html import strip_tags
 from django.conf import settings
 from twitter import Api, TwitterError, Status
 
-import socket
+import socket, sys
 
 CHARACTER_LIMIT = 140
 
