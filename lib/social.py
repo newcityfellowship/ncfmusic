@@ -40,7 +40,7 @@ def update_twitter(status, url):
                     access_token_key=settings.TWITTER_ACCESS_TOKEN_KEY,
                     access_token_secret=settings.TWITTER_ACCESS_TOKEN_SECRET
                     )
-    config = api.GetConfig()
+    config = api.GetHelpConfiguration()
     short_url_length = config['short_url_length']
 
     #   Trim the status back to CHARACTER_LIMIT - short_url_length - 10 (for space between and hash tag)
