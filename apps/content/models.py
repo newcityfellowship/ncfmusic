@@ -546,7 +546,7 @@ class BlogEntry(Learn):
         if not self.id:
             update_twitter('New site update: "%s"' % self.title, self.get_absolute_url())
         else:
-            update_twitter('"%s" Updated: %s' % self.title, self.get_absolute_url())
+            update_twitter('"%s" Updated' % self.title, self.get_absolute_url())
 
         super(BlogEntry, self).save(*args, **kwargs) 
 
