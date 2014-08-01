@@ -22,90 +22,155 @@
   <h3><a href="{{ song.get_absolute_url }}">{{ song.title }}</a></h3>
   <div class='break'></div>
   <div class='details'>
-    <span>
-      {{ song.songwriter }}
-    </span>
-    <span> |</span>
-    <span>
-      {{ song.church }}
-    </span>
-    <span> |</span>
     <span class='expander' rel='song{{ song.id }}-detail'>View Song Info &#x2B07;</span>
   </div>
   <div class='break'></div>
   <div class='extendeddetails' id='song{{ song.id }}-detail'>
-    <div class='downloads'>
-      <span class='label'>Download:</span><br />
-      {% if song.sheet_music %}<a href='{{ song.sheet_music.url }}'>Sheet Music</a><br />{% endif %}
-      {% if song.slides %}<a href='{{ song.slides.url }}'>Slides</a><br />{% endif %}
-      {% if song.lyrics %}<a href='{{ song.lyrics.url }}'>Lyrics</a><br />{% endif %}
-      {% if song.mp3 %}<a href='{{ song.mp3.url }}'>MP3</a><br />{% endif %}
+    <div class='information'>
+      <table>
+        <tr class='header'>
+          <td colspan='2'>INFORMATION</td>
+        </tr>
+
+        {% if song.church %}
+        <tr>
+          <td class='category'>Church:</td>
+          <td class='listing'>{{ song.church }}</td>
+        </tr>
+        {% endif %}
+
+        {% if song.songwriter %}
+        <tr>
+          <td class='category'>Songwriter:</td>
+          <td class='listing'>{{ song.songwriter }}</td>
+        </tr>
+        {% endif %}
+
+        {% if song.producer %}
+        <tr>
+          <td class='category'>Producer:</td>
+          <td class='listing'>
+            {{ song.producer }}
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if song.vocals.all|length %}
+        <tr>
+          <td class='category'>Vocals:</td>
+          <td class='listing'>
+            {% for contributor in song.vocals.all %}
+            {{ contribuer }}
+              {% if not forloop.last %}
+              <span>,</span>
+              {% endif %}
+            {% endfor %}
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if song.album_title %}
+        <tr>
+          <td class='category'>Album Title:</td>
+          <td class='listing'>
+            {{ song.album_title}}
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if song.release_date %}
+        <tr>
+          <td class='category'>Release Date:</td>
+          <td class='listing'>
+            {{ song.release_date|date:"F j, Y"}}
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if song.genre %}
+        <tr>
+          <td class='category'>Genre:</td>
+          <td class='listing'>
+            {{ song.genre }}
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if song.tags.all|length %}
+        <tr>
+          <td class='category'>Category:</td>
+          <td class='listing'>
+            {% for tag in song.tags.all %}
+            {{ tag }}
+              {% if not forloop.last %}
+              <span>,</span>
+              {% endif %}
+            {% endfor %}
+          </td>
+        </tr>
+        {% endif %}
+
+      </table>
     </div>
     <table>
-      <tr>
-        <td class='category'>Songwriter:</td>
-        <td class='listing'>
-          {{ song.songwriter }}
-        </td>
+      <tr class='header'>
+        <td colspan='2'>LINKS</td>
       </tr>
+
+      {% if song.sheet_music %}
       <tr>
-        <td class='category'>Producer:</td>
-        <td class='listing'>
-          {{ song.producer }}
-        </td>
+        <td class='category'>Sheet Music:</td>
+        <td class='listing'><a href='{{ song.sheet_music.url }}'>Download</a></td>
       </tr>
+      {% endif %}
+
+      {% if song.slides %}
       <tr>
-        <td class='category'>Vocals:</td>
-        <td class='listing'>
-          {% for contributor in song.vocals.all %}
-          {{ contribuer }}
-            {% if not forloop.last %}
-            <span>,</span>
-            {% endif %}
-          {% endfor %}
-        </td>
+        <td class='category'>Slides</td>
+        <td class='listing'><a href='{{ song.slides.url }}'>Download</a></td>
       </tr>
+      {% endif %}
+
+      {% if song.lyrics %}
       <tr>
-        <td class='category'>Release Date:</td>
-        <td class='listing'>
-          {{ song.release_date|date:"F j, Y"}}
-        </td>
+        <td class='category'>Lyrics</td>
+        <td class='listing'><a href='{{ song.lyrics.url }}'>Download</a></td>
       </tr>
+      {% endif %}
+
+      {% if song.mp3 %}
       <tr>
-        <td class='category'>Album Title:</td>
-        <td class='listing'>
-          {{ song.album_title}}
-        </td>
+        <td class='category'>MP3</td>
+        <td class='listing'><a href='{{ song.mp3.url }}'>Download</a></td>
       </tr>
-      <tr>
-        <td class='category'>Links:</td>
-      </tr>
-      
+      {% endif %}
+
       {% for video in song.related_videos.all %}
-      <tr class='links'>
-        <td>WATCH: </td>
-        <td><a href="{{ video.get_absolute_url }}">{{ video.title }}</a></td>
+      <tr>
+        <td class='category'>WATCH: </td>
+        <td class='listing'><a href="{{ video.get_absolute_url }}">{{ video.title }}</a></td>
       </tr>
       {% endfor %}
 
       {% for article in song.related_articles.all %}
-      <tr class='links'>
-        <td>READ:</td>
-        <td><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></td>
+      <tr>
+        <td class='category'>READ:</td>
+        <td class='listing'><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></td>
       </tr>
       {% endfor %}
 
       {% for talk in song.related_talks.all %}
-      <tr class='links'>
-        <td>LISTEN:</td>
-        <td><a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a></td>
+      <tr>
+        <td class='category'>LISTEN:</td>
+        <td class='listing'><a href="{{ talk.get_absolute_url }}">{{ talk.title }}</a></td>
       </tr>
       {% endfor %}
 
-      <tr class='links'>
-        <td>LINK:</td>
-        <td><a href="{{ song.get_absolute_url }}">http://ncfmusic.com{{ song.get_absolute_url }}</a></td>
+      <tr>
+        <td class='category'>LINK:</td>
+        <td class='listing'><a href="{{ song.get_absolute_url }}">http://ncfmusic.com{{ song.get_absolute_url }}</a></td>
       </tr>
+
     </table>
   </div>
   <div class='break'></div>

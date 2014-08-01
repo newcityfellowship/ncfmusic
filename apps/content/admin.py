@@ -27,6 +27,7 @@ class WatchAdmin(admin.ModelAdmin):
     list_filter = ('church', 'date', )
     search_fields = ('title', )
     prepopulated_fields = {'slug': ('title',)}
+    readonly_fields = ('insert_date',)
     
     class Media:
         js = [
@@ -77,6 +78,14 @@ class ArticleAdmin(admin.ModelAdmin):
         ]
     
 admin.site.register(Article, ArticleAdmin)
+
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug', )
+    list_filter = ('name', 'slug', )
+    search_fields = ('name', )
+    prepopulated_fields = {'slug': ('name',)}
+    
+admin.site.register(Tag, TagAdmin)
 
 class SongAdmin(admin.ModelAdmin):
     list_display = ('title', 'album_title', 'songwriter', 'church', 'release_date', )

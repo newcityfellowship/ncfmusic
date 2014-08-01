@@ -76,6 +76,15 @@
       {% endfor %}
 	  </ul>
 	{% endif %}
+
+  {% if blogs %}
+  <h2 class='pagename'>Updates</h2>
+    <ul class='aggregation'>
+      {% for entry in blogs %}   
+        {% include "blog/blogentry_item.html" %}
+      {% endfor %}
+    </ul>
+  {% endif %}
 	
 	{% if watches %}
 	<h2 class='pagename'>Watch</h2>

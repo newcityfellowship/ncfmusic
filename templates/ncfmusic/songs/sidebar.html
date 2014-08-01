@@ -10,6 +10,7 @@
 
   <div class="left-nav-spacer">&nbsp;</div>
 
+{% comment %}  
   <div class='title'>
     <span>By Resource Type</span>
   </div>
@@ -20,6 +21,7 @@
   </div>
 
   <div class="left-nav-spacer">&nbsp;</div>
+{% endcomment %}
 
   <div class='title'>
     <span>By Genre</span>
@@ -27,6 +29,15 @@
   <div class='filter'>
     {% for genre in genres %}
     <a href="/resources/genre/{{ genre.slug }}/">{{ genre.name }}</a><br />
+    {% endfor %}
+  </div>
+
+  <div class='title'>
+    <span>By Category</span>
+  </div>
+  <div class='filter'>
+    {% for tag in tags %}
+    <a href="/resources/tag/{{ tag.slug }}/">{{ tag.name }}</a><br />
     {% endfor %}
   </div>
 </div>

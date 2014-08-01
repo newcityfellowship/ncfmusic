@@ -2,6 +2,8 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 from django.views.generic.list_detail import object_list, object_detail
 
+from django.views.generic.simple import redirect_to
+
 from ncfmusic.apps.content.models import *
 
 handler500 = 'ncfmusic.apps.content.views.server_error'
@@ -38,19 +40,30 @@ urlpatterns += patterns('ncfmusic.apps.content.views',
     (r'^podcast/$',                                 'podcast'),
     (r'^watch/$',                                   'watch'),
     (r'^watch/(?P<slug>[\w-]+)/$',                  'watch'),
-    (r'^learn/$',                                   'articles'),
+    (r'^learn/$',                                   'learn'),
     (r'^tutorials/$',                               'tutorials'),
     (r'^tutorials/(?P<slug>[\w-]+)/$',              'tutorial'),
     (r'^talks/$',                                   'talks'),
     (r'^talks/(?P<slug>[\w-]+)/$',                  'talk'),
     (r'^articles/$',                                'articles'),
     (r'^articles/(?P<slug>[\w-]+)/$',               'article'),
-    (r'^blog/$',                                    object_list, dict(blog_dict, paginate_by=7)),
-    (r'^blog/page/(?P<page>[0-9]+)/$',              object_list, blog_dict),
-    (r'^blog/category/(?P<slug>[\w-]+)/$',          'blog_category_list'),
-    (r'^blog/(?P<slug>[\w-]+)/$',                   object_detail, dict(blog_dict, slug_field='slug')),
+    
+    (r'^blog/$', redirect_to, {'url': '/updates/'}),
+    (r'^blog/page/(?P<page>[0-9]+)/$', redirect_to, {'url': '/updates/page/%(page)s/'}),
+    (r'^blog/category/(?P<slug>[\w-]+)/$', redirect_to, {'url': '/updates/category/%(slug)s/'}),
+    (r'^blog/(?P<slug>[\w-]+)/$', redirect_to, {'url': '/updates/%(slug)s/'}),
+
+    (r'^updates/$',                                 object_list, dict(blog_dict, paginate_by=7)),
+    (r'^updates/page/(?P<page>[0-9]+)/$',           object_list, blog_dict),
+    (r'^updates/category/(?P<slug>[\w-]+)/$',       'blog_category_list'),
+    (r'^updates/(?P<slug>[\w-]+)/$',                   object_detail, dict(blog_dict, slug_field='slug')),
     #(r'^songs/$',                                   'songs'),
     #(r'^songs/(?P<start_letter>\w{1})/$',           'songs'),
+
+    #('^foo/(?P<id>\d+)/$', redirect_to, {'url': '/bar/%(id)s/'}),
+
+
+
     (r'^events/$',                                  'events'),
     (r'^events/(?P<month>\d{2})/(?P<year>\d{4})/$', 'events'),
     (r'^events/(?P<slug>[\w-]+)/$',                 'event'),
@@ -65,6 +78,8 @@ urlpatterns += patterns('ncfmusic.apps.content.views',
     (r'^resources/type/(?P<resource_type>[\w-]+)/genre/(?P<genre>[\w-]+)/$', 'resources'),
     (r'^resources/genre/(?P<genre>[\w-]+)/$',       'resources'),
     (r'^resources/genre/(?P<genre>[\w-]+)/type/(?P<resource_type>[\w-]+)/$', 'resources'),
+    (r'^resources/tag/(?P<tag>[\w-]+)/$',           'resources'),
+    (r'^resources/tag/(?P<tag>[\w-]+)/genre/(?P<genre>[\w-]+)/$', 'resources'),
     (r'^resource/(?P<slug>[\w-]+)/$',               'resource'),
     #(r'^conference/$',                              'conference'),
     #(r'^conference/registration/$',                 'conference_registration'),
