@@ -801,6 +801,7 @@ h2.sectionname {
 .extendeddetails .information {
   float: right;
   width: 304px;
+  padding: 0 15px 0 5px;
 }
 
 .downloads {
