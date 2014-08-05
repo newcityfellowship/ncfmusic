@@ -7,7 +7,7 @@
   {% include "learn/sidebar.html" %}
   <div id='maincontent'>
     <h2 class='pagename'>
-      Learn
+      {% if tag %}Category: {{ tag }}{% else %}Learn{% endif %}
     </h2>
     <ul class='aggregation'>
   {% for learn in learns.object_list %}   

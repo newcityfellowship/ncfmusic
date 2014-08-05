@@ -222,6 +222,7 @@ class Learn(models.Model):
     church = models.ForeignKey('Church')
     teaser = models.TextField()
     insert_date = models.DateField(auto_now_add=True, editable=False)
+    tags = models.ManyToManyField('Tag', null=True, blank=True)
 
     def clean(self):
         try:

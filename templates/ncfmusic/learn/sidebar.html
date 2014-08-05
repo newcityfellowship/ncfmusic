@@ -22,7 +22,7 @@
       <div class='topcat'>
         <div class='navexpander'>+</div>
         <div class='catname'>
-          <a href='/tutorials/'>Tutorials</a>
+          <a href='/lessons/'>Lessons</a>
         </div>
       </div>
       <ul class='subnavlist'>
@@ -49,4 +49,14 @@
       </ul>
     </li>
   </ul>
+
+  <div class='title'>
+    <span>By Category</span>
+  </div>
+  <div class='filter'>
+    {% for tag in tags %}
+    <a href="/learn/{{ tag.slug }}/">{{ tag.name }}</a><br />
+    {% endfor %}
+  </div>
 </div>
+

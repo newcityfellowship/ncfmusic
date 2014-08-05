@@ -6,7 +6,17 @@
 <div class='interior songs' id='content'>
   {% include "songs/sidebar.html" %}
   <div id='maincontent'>
- 	<h2 class='pagename'>Songs</h2>
+ 	<h2 class='pagename'>
+    {% if tag %}
+      Category: {{ tag }}
+    {% else %}
+      {% if genre %}
+      Genre: {{ genre }}
+      {% else %}
+      Songs
+      {% endif %}
+    {% endif %}
+    </h2>
   {% for letter,songs in sections.iteritems %} 
     {% if songs %}
 		<a name='{{letter}}'></a>

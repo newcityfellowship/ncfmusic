@@ -224,9 +224,15 @@ def talks(request):
     
     return render_to_response('learns.html', context)
 
-def learn(request):
+def learn(request, tag=None):
     article_list = Learn.objects.filter(blogentry__isnull=True).order_by('-date')
-    print article_list
+
+    if tag:
+        article_list = article_list.filter(tags__slug=tag)
+        try:
+            tag = Tag.objects.get(slug__exact=tag)
+        except Tag.DoesNotExist:
+            tag = None
     
     paginator = Paginator(article_list, 4)
     
@@ -239,14 +245,6 @@ def learn(request):
         learns = paginator.page(page)
     except (EmptyPage, InvalidPage):
         learns = paginator.page(paginator.num_pages)
-
-    for learn in learns.object_list:
-        try:
-            print 'Tutorial: %s' % learn.tutorial
-            print 'Talk: %s' % learn.talk
-            print 'Article: %s' % learn.article
-        except:
-            print 'Failed'
         
     source_list, tutorial_list, talk_list, thearticle_list = learn_sidebar()
     context = RequestContext(request, {
@@ -255,7 +253,9 @@ def learn(request):
         'expanded': 'articles',
         'article_list': article_list[:10], #   For the sidebar
         'tutorial_list': tutorial_list, 
-        'talk_list': talk_list
+        'talk_list': talk_list,
+        'tags': Tag.objects.filter(learn__isnull=False).distinct().order_by('name'),
+        'tag': tag,
     })
     return render_to_response('learns.html', context)
     
@@ -325,9 +325,17 @@ def resources(request, start_letter=None, resource_type=None, genre=None, tag=No
 
         if genre:
             song_list = song_list.filter(genre__slug=genre)
+            try:
+                genre = Genre.objects.get(slug__exact=genre)
+            except Genre.DoesNotExist:
+                genre = None
 
         if tag:
             song_list = song_list.filter(tags__slug=tag)
+            try:
+                tag = Tag.objects.get(slug__exact=tag)
+            except Tag.DoesNotExist:
+                tag = None
     
     #   I'm sure there's a better way to do this, but it's late and my brain's tired, so this will work
     from django.utils.datastructures import SortedDict
@@ -362,7 +370,9 @@ def resources(request, start_letter=None, resource_type=None, genre=None, tag=No
         'sections': sections,
         'start_letter': start_letter,
         'genres': Genre.objects.order_by('name'),
-        'tags': Tag.objects.order_by('name'),
+        'tags': Tag.objects.filter(song__isnull=False).distinct().order_by('name'),
+        'genre': genre,
+        'tag': tag,
     })
     
     return render_to_response('songs.html', context)

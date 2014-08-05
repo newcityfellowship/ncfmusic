@@ -15,10 +15,10 @@ $(document).ready(function (){
   $('.expander').click(function(){
     var toexpand = $("#" + $(this).attr('rel'));
     if(toexpand.css('display') == 'none'){
-      $(this).html('Hide Song Info &#x2B06;');
+      $(this).html('Hide Song Info and Resources &#x2B06;');
     }
     else{
-      $(this).html('View Song Info &#x2B07;');
+      $(this).html('View Song Info and Resources &#x2B07;');
     }
     toexpand.slideToggle('slow');
   });

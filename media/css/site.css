@@ -553,7 +553,8 @@ h2.sectionname {
   font-weight: bold;
   padding-right: 7px;
   font-family: 'PT Sans Narrow';
-  font-size: 13px; }
+  font-size: 13px; 
+  width: 70px; }
 
 #pagination {
   font-family: 'PT Sans Narrow';
