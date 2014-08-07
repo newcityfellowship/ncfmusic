@@ -1,7 +1,9 @@
 <div id='left-nav'>
+{% comment %}  
   <div class='title'>
     <span>Learn</span>
   </div>
+
   <ul class='topnavlist'>
 		<li class='navsection {% ifnotequal expanded 'articles' %}collapsed{% endifnotequal %}'>
       <div class='topcat'>
@@ -49,6 +51,7 @@
       </ul>
     </li>
   </ul>
+{% endcomment %}
 
   <div class='title'>
     <span>By Category</span>

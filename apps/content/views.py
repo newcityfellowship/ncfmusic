@@ -138,7 +138,7 @@ def sources(request, slug=None):
     
     return render_to_response('learns.html', context)
     
-def tutorials(request, slug=None):
+def tutorials(request, slug=None, tag=None):
     page = get_object_or_404(Page, slug__exact='learn')
     
     if slug:
@@ -167,6 +167,8 @@ def tutorials(request, slug=None):
         'talk_list': talk_list,
         'expanded': 'tutorials',
         'article_list': article_list,
+        'tags': Tag.objects.filter(learn__isnull=False).distinct().order_by('name'),
+        'tag': tag,
     })
     
     return render_to_response('learns.html', context)
@@ -197,7 +199,7 @@ def talk(request, slug):
     })
     return render_to_response('talk.html', context)
     
-def talks(request):
+def talks(request, tag=None):
     talk_list = Talk.objects.order_by('-insert_date')
     paginator = Paginator(talk_list, 4)
 
@@ -210,6 +212,13 @@ def talks(request):
         talks = paginator.page(page)
     except (EmptyPage, InvalidPage):
         talks = paginator.page(paginator.num_pages)
+
+    if tag:
+        article_list = article_list.filter(tags__slug=tag)
+        try:
+            tag = Tag.objects.get(slug__exact=tag)
+        except Tag.DoesNotExist:
+            tag = None
         
     source_list, tutorial_list, talk_list, article_list = learn_sidebar()
         
@@ -220,6 +229,8 @@ def talks(request):
         'tutorial_list': tutorial_list, 
         'talk_list': talk_list,
         'article_list': article_list,
+        'tags': Tag.objects.filter(learn__isnull=False).distinct().order_by('name'),
+        'tag': tag,
     })
     
     return render_to_response('learns.html', context)
@@ -234,7 +245,7 @@ def learn(request, tag=None):
         except Tag.DoesNotExist:
             tag = None
     
-    paginator = Paginator(article_list, 4)
+    paginator = Paginator(article_list, 5)
     
     try:
         page = int(request.GET.get('page', '1'))
@@ -259,7 +270,7 @@ def learn(request, tag=None):
     })
     return render_to_response('learns.html', context)
     
-def articles(request):
+def articles(request, tag=None):
     article_list = Article.objects.order_by('-date')
     
     paginator = Paginator(article_list, 4)
@@ -273,6 +284,13 @@ def articles(request):
         articles = paginator.page(page)
     except (EmptyPage, InvalidPage):
         articles = paginator.page(paginator.num_pages)
+
+    if tag:
+        article_list = article_list.filter(tags__slug=tag)
+        try:
+            tag = Tag.objects.get(slug__exact=tag)
+        except Tag.DoesNotExist:
+            tag = None
         
     source_list, tutorial_list, talk_list, thearticle_list = learn_sidebar()
     context = RequestContext(request, {
@@ -281,7 +299,9 @@ def articles(request):
         'expanded': 'articles',
         'article_list': article_list[:10], #   For the sidebar
         'tutorial_list': tutorial_list, 
-        'talk_list': talk_list
+        'talk_list': talk_list,
+        'tags': Tag.objects.filter(learn__isnull=False).distinct().order_by('name'),
+        'tag': tag,
     })
     return render_to_response('learns.html', context)
     
