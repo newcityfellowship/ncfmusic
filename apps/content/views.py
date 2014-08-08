@@ -821,3 +821,10 @@ def export_registrations(request):
 
 
     return response
+
+
+def facebook_auth_post(request):
+    print request.POST
+    print request.GET
+
+    return HttpResponse('Test')

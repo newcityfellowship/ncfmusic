@@ -86,7 +86,9 @@ urlpatterns += patterns('ncfmusic.apps.content.views',
     #(r'^conference/registration/$',                 'conference_registration'),
     #(r'^conference/registration/thanks/$',          'conference_registration_thanks'),
     (r'^paypal-return/$',                           'paypal_return'),
+    (r'^facebook/$',                                'facebook_auth_post'),
     (r'^(?P<slug>[\w-]+)/$',                        'standalone_page'),
+
     (r'^$',                                         'home'),
 )
 
