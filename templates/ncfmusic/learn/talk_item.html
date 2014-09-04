@@ -1,6 +1,6 @@
 <li>
   <button class='audioplay paused' id='playsong{{ talk.id }}' rel='song{{ talk.id }}'></button>
-  <h3 class='floater'>{{ talk.title }}</h3>
+  <h3 class='floater'><a href='{{ talk.get_absolute_url }}'>{{ talk.title }}</a></h3>
   <div class='audioplayer'>
     <div class='mp3holder' id='song{{ talk.id }}' rel='{{ talk.mp3.url }}'></div>
     <div class='time'></div>

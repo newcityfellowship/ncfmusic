@@ -250,7 +250,7 @@ class Tutorial(Learn):
         return self.title
         
     def get_absolute_url(self):
-        return '/tutorials/%s' % self.slug
+        return '/lessons/%s' % self.slug
         
     def save(self, *args, **kwargs):
         if not self.vimeo_id:
