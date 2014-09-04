@@ -1,5 +1,5 @@
 <li>
-  <a href='/tutorials/{{ tutorial.slug }}'>
+  <a href='{{ tutorial.get_absolute_url }}'>
     <img class='thumb' src='{{ tutorial.vimeo_thumb }}' />
   </a>
   <h3 class='nofloat'><a href='/tutorials/{{ tutorial.slug }}'>{{ tutorial.title }}</a></h3>
