@@ -56,7 +56,7 @@
           <div id='homelink'></div>
           <ul>
             <li>
-              <a {% ifequal page.slug "conference" %}class="selected" {% endifequal %}href='/conference/'>2015 Conference</a>
+              <a {% if page.slug == "conference" or page.slug == "conference-registration" or page.slug == "conference-participants" or page.slug == "conference-schedule" or page.slug == "conference-resources" %}class="selected" {% endif %}href='/conference/'>2015 Conference</a>
             </li>
             <li>
               <a {% ifequal page.slug "about" %}class="selected" {% endifequal %}href='/about/'>About</a>
