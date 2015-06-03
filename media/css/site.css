@@ -106,6 +106,9 @@ strong {
 .songshead {
   background-image: url(/media/images/song-hero.jpg);}
 
+.conferencehead {
+  background-image: url(/media/images/conference-2015-hero.png);}
+
 #nav {
   background-image: url(/media/images/nav-bg.png);
   background-repeat: no-repeat;
