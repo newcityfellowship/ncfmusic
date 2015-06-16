@@ -8,83 +8,38 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Genre'
-        db.create_table('content_genre', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=64)),
-        ))
-        db.send_create_signal('content', ['Genre'])
-
-
-        db.add_column('content_song', 'genre', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['content.Genre'], null=True))
-
-        # Renaming column for 'Song.genre' to match new field type.
-        # db.rename_column('content_song', 'genre', 'genre_id')
-        # # Changing field 'Song.genre'
-        # db.alter_column('content_song', 'genre_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['content.Genre'], null=True))
-        # Adding index on 'Song', fields ['genre']
-        #db.create_index('content_song', ['genre_id'])
+        # Adding field 'Page.class_override'
+        db.add_column('content_page', 'class_override',
+                      self.gf('django.db.models.fields.TextField')(null=True, blank=True),
+                      keep_default=False)
 
 
     def backwards(self, orm):
-        # Removing index on 'Song', fields ['genre']
-        db.delete_index('content_song', ['genre_id'])
+        # Deleting field 'Page.class_override'
+        db.delete_column('content_page', 'class_override')
 
-        # Deleting model 'Genre'
-        db.delete_table('content_genre')
-
-        db.delete_column('content_song', 'genre_id')
-
-        # Renaming column for 'Song.genre' to match new field type.
-        #db.rename_column('content_song', 'genre_id', 'genre')
-        # Changing field 'Song.genre'
-        #db.alter_column('content_song', 'genre', self.gf('django.db.models.fields.CharField')(max_length=256, null=True))
 
     models = {
-        'auth.group': {
-            'Meta': {'object_name': 'Group'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '80'}),
-            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
-        },
-        'auth.permission': {
-            'Meta': {'ordering': "('content_type__app_label', 'content_type__model', 'codename')", 'unique_together': "(('content_type', 'codename'),)", 'object_name': 'Permission'},
-            'codename': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        },
-        'auth.user': {
-            'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
-            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
-            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
-        },
         'content.article': {
-            'Meta': {'object_name': 'Article', '_ormbases': ['content.Learn']},
+            'Meta': {'ordering': "['-date']", 'object_name': 'Article', '_ormbases': ['content.Learn']},
             'article_body': ('django.db.models.fields.TextField', [], {}),
             'learn_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['content.Learn']", 'unique': 'True', 'primary_key': 'True'})
         },
-        'content.blogentry': {
-            'Meta': {'object_name': 'BlogEntry'},
-            # 'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
-            # 'entry_date': ('django.db.models.fields.DateTimeField', [], {}),
+        'content.blogcategory': {
+            'Meta': {'ordering': "['name']", 'object_name': 'BlogCategory'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'related_songs': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['content.Song']", 'symmetrical': 'False'}),
-            # 'text': ('django.db.models.fields.TextField', [], {})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255'})
+        },
+        'content.blogentry': {
+            'Meta': {'ordering': "['-date']", 'object_name': 'BlogEntry', '_ormbases': ['content.Learn']},
+            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['content.BlogCategory']", 'symmetrical': 'False'}),
+            'learn_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['content.Learn']", 'unique': 'True', 'primary_key': 'True'}),
+            'related_songs': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['content.Song']", 'null': 'True', 'blank': 'True'}),
+            'text': ('django.db.models.fields.TextField', [], {})
         },
         'content.church': {
-            'Meta': {'object_name': 'Church'},
+            'Meta': {'ordering': "['name']", 'object_name': 'Church'},
             'address': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'city': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'coords': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
@@ -94,8 +49,47 @@ class Migration(SchemaMigration):
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'}),
             'state': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'})
         },
+        'content.conferenceregistrant': {
+            'Meta': {'ordering': "['last_name', 'first_name']", 'object_name': 'ConferenceRegistrant'},
+            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
+            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'gender': ('django.db.models.fields.CharField', [], {'default': "'M'", 'max_length': '1'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'registration': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['content.ConferenceRegistration']"}),
+            'student': ('django.db.models.fields.CharField', [], {'default': "'No'", 'max_length': '3'})
+        },
+        'content.conferenceregistration': {
+            'Meta': {'ordering': "['-insert_date']", 'object_name': 'ConferenceRegistration'},
+            'address': ('django.db.models.fields.CharField', [], {'max_length': '1024'}),
+            'church_name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'city': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'cost': ('django.db.models.fields.FloatField', [], {}),
+            'country': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
+            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
+            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'flight_information': ('django.db.models.fields.CharField', [], {'max_length': '1024', 'null': 'True', 'blank': 'True'}),
+            'food_allergies': ('django.db.models.fields.CharField', [], {'default': "'No'", 'max_length': '3'}),
+            'gender': ('django.db.models.fields.CharField', [], {'default': "'M'", 'max_length': '1'}),
+            'has_paid': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'housing': ('django.db.models.fields.CharField', [], {'default': "'No'", 'max_length': '5'}),
+            'how_serving': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'insert_date': ('django.db.models.fields.DateField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'payer_id': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
+            'phone_number': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
+            'postal_code': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
+            'pp_token': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
+            'ride_from_airport': ('django.db.models.fields.CharField', [], {'default': "'No'", 'max_length': '3'}),
+            'skills': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'special_housing_needs': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'state': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'student': ('django.db.models.fields.CharField', [], {'default': "'No'", 'max_length': '3'}),
+            'wanting_to_learn': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
+        },
         'content.contact': {
-            'Meta': {'object_name': 'Contact'},
+            'Meta': {'ordering': "['last_name', 'first_name']", 'object_name': 'Contact'},
             'email_address': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -103,7 +97,7 @@ class Migration(SchemaMigration):
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '256'})
         },
         'content.contributor': {
-            'Meta': {'object_name': 'Contributor'},
+            'Meta': {'ordering': "['name']", 'object_name': 'Contributor'},
             'buy_music_url': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'church': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['content.Church']", 'null': 'True', 'blank': 'True'}),
             'city': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
@@ -117,7 +111,7 @@ class Migration(SchemaMigration):
             'website': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'})
         },
         'content.event': {
-            'Meta': {'object_name': 'Event'},
+            'Meta': {'ordering': "['-start_date']", 'object_name': 'Event'},
             'article_body': ('django.db.models.fields.TextField', [], {}),
             'church': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['content.Church']"}),
             'city': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
@@ -131,23 +125,25 @@ class Migration(SchemaMigration):
             'title': ('django.db.models.fields.CharField', [], {'max_length': '256'})
         },
         'content.genre': {
-            'Meta': {'object_name': 'Genre'},
+            'Meta': {'ordering': "['name']", 'object_name': 'Genre'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '64'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '255'})
         },
         'content.learn': {
-            'Meta': {'object_name': 'Learn'},
+            'Meta': {'ordering': "['-date']", 'object_name': 'Learn'},
             'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['content.Contributor']"}),
             'church': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['content.Church']"}),
             'date': ('django.db.models.fields.DateField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'insert_date': ('django.db.models.fields.DateField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'}),
+            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['content.Tag']", 'null': 'True', 'blank': 'True'}),
             'teaser': ('django.db.models.fields.TextField', [], {}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '256'})
         },
         'content.listen': {
-            'Meta': {'object_name': 'Listen'},
+            'Meta': {'ordering': "['title']", 'object_name': 'Listen'},
             'album_title': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'church': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['content.Church']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -163,41 +159,54 @@ class Migration(SchemaMigration):
             'vocals': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'listen_vocals'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['content.Contributor']"})
         },
         'content.page': {
-            'Meta': {'object_name': 'Page'},
+            'Meta': {'ordering': "['slug']", 'object_name': 'Page'},
+            'class_override': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'content': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'heroshot': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['heroshots.Image']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'})
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'}),
+            'standalone': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'})
         },
         'content.song': {
-            'Meta': {'object_name': 'Song'},
+            'Meta': {'ordering': "['title']", 'object_name': 'Song'},
             'album_title': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'church': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['content.Church']"}),
+            'effective_date': ('django.db.models.fields.DateField', [], {}),
             'genre': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['content.Genre']", 'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'instruments': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'sont_instruments'", 'null': 'True', 'to': "orm['content.Contributor']"}),
+            'insert_date': ('django.db.models.fields.DateField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'instruments': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'song_instruments'", 'null': 'True', 'to': "orm['content.Contributor']"}),
             'lyrics': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'mp3': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'producer': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
-            'related_articles': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['content.Article']", 'symmetrical': 'False'}),
-            'related_talks': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['content.Talk']", 'symmetrical': 'False'}),
-            'related_videos': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['content.Watch']", 'symmetrical': 'False'}),
+            'related_articles': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['content.Article']", 'null': 'True', 'blank': 'True'}),
+            'related_talks': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['content.Talk']", 'null': 'True', 'blank': 'True'}),
+            'related_videos': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['content.Watch']", 'null': 'True', 'blank': 'True'}),
             'release_date': ('django.db.models.fields.DateField', [], {}),
             'sheet_music': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'slides': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'}),
             'songwriter': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['content.Contributor']"}),
+            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['content.Tag']", 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'vocals': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'song_vocals'", 'null': 'True', 'to': "orm['content.Contributor']"})
         },
+        'content.tag': {
+            'Meta': {'ordering': "['name']", 'object_name': 'Tag'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'})
+        },
         'content.talk': {
-            'Meta': {'object_name': 'Talk', '_ormbases': ['content.Learn']},
+            'Meta': {'ordering': "['-date']", 'object_name': 'Talk', '_ormbases': ['content.Learn']},
             'duration': ('django.db.models.fields.CharField', [], {'max_length': '16'}),
             'learn_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['content.Learn']", 'unique': 'True', 'primary_key': 'True'}),
             'mp3': ('django.db.models.fields.files.FileField', [], {'max_length': '100'})
         },
         'content.tutorial': {
-            'Meta': {'object_name': 'Tutorial', '_ormbases': ['content.Learn']},
+            'Meta': {'ordering': "['-date']", 'object_name': 'Tutorial', '_ormbases': ['content.Learn']},
             'duration': ('django.db.models.fields.CharField', [], {'max_length': '16', 'null': 'True', 'blank': 'True'}),
             'learn_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['content.Learn']", 'unique': 'True', 'primary_key': 'True'}),
             'vimeo_embed_code': ('django.db.models.fields.CharField', [], {'max_length': '1024', 'null': 'True', 'blank': 'True'}),
@@ -206,7 +215,7 @@ class Migration(SchemaMigration):
             'vimeo_url': ('django.db.models.fields.CharField', [], {'max_length': '256'})
         },
         'content.watch': {
-            'Meta': {'object_name': 'Watch'},
+            'Meta': {'ordering': "['-date']", 'object_name': 'Watch'},
             'church': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['content.Church']", 'null': 'True'}),
             'date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
@@ -222,13 +231,6 @@ class Migration(SchemaMigration):
             'youtube_embed_code': ('django.db.models.fields.CharField', [], {'max_length': '1024', 'null': 'True', 'blank': 'True'}),
             'youtube_id': ('django.db.models.fields.CharField', [], {'max_length': '16', 'null': 'True', 'blank': 'True'}),
             'youtube_url': ('django.db.models.fields.CharField', [], {'max_length': '256', 'unique': 'True', 'null': 'True', 'blank': 'True'})
-        },
-        'contenttypes.contenttype': {
-            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
-            'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         'heroshots.category': {
             'Meta': {'object_name': 'Category'},

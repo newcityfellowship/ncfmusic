@@ -9,19 +9,19 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Deleting field 'BlogEntry.text'
-        db.delete_column('content_blogentry', 'text')
+        # db.delete_column('content_blogentry', 'text')
 
-        # Deleting field 'BlogEntry.author'
-        db.delete_column('content_blogentry', 'author_id')
+        # # Deleting field 'BlogEntry.author'
+        # db.delete_column('content_blogentry', 'author_id')
 
-        # Deleting field 'BlogEntry.entry_date'
-        db.delete_column('content_blogentry', 'entry_date')
+        # # Deleting field 'BlogEntry.entry_date'
+        # db.delete_column('content_blogentry', 'entry_date')
 
         # Deleting field 'BlogEntry.title'
         db.delete_column('content_blogentry', 'title')
 
-        # Deleting field 'BlogEntry.id'
-        db.delete_column('content_blogentry', 'id')
+        # # Deleting field 'BlogEntry.id'
+        # db.delete_column('content_blogentry', 'id')
 
         # Adding field 'BlogEntry.learn_ptr'
         db.add_column('content_blogentry', 'learn_ptr',

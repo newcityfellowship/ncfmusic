@@ -72,7 +72,8 @@ strong {
   text-align: right;
   border-top: 2px solid #CBCBCB;
   margin-top: 10px;
-  padding-bottom: 10px; }
+  padding-bottom: 10px; 
+  clear: both; }
 
 #header {
   background-repeat: no-repeat;

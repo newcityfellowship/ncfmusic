@@ -53,11 +53,11 @@ class Migration(DataMigration):
         },
         'content.blogentry': {
             'Meta': {'object_name': 'BlogEntry'},
-            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
-            'entry_date': ('django.db.models.fields.DateTimeField', [], {}),
+            # 'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
+            # 'entry_date': ('django.db.models.fields.DateTimeField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'related_songs': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['content.Song']", 'symmetrical': 'False'}),
-            'text': ('django.db.models.fields.TextField', [], {})
+            # 'text': ('django.db.models.fields.TextField', [], {})
         },
         'content.church': {
             'Meta': {'object_name': 'Church'},

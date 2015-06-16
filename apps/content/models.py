@@ -490,6 +490,7 @@ class Page(models.Model):
     content = models.TextField(blank=True, null=True)
     heroshot = models.ForeignKey(Image, null=True, blank=True)
     standalone = models.BooleanField(default=False, help_text='Standalone pages will exist at http://ncfmusic.com/&lt;slug&gt;/')
+    # class_override = models.CharField(max_length=255, blank=True, null=True, help_text='Class override to change header for this page.')
     
     def __unicode__(self):
         return self.slug

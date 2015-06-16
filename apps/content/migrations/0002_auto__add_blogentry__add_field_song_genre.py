@@ -11,9 +11,9 @@ class Migration(SchemaMigration):
         # Adding model 'BlogEntry'
         db.create_table('content_blogentry', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('entry_date', self.gf('django.db.models.fields.DateTimeField')()),
-            ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('text', self.gf('django.db.models.fields.TextField')()),
+            # ('entry_date', self.gf('django.db.models.fields.DateTimeField')()),
+            # ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            # ('text', self.gf('django.db.models.fields.TextField')()),
         ))
         db.send_create_signal('content', ['BlogEntry'])
 
@@ -112,11 +112,11 @@ class Migration(SchemaMigration):
         },
         'content.blogentry': {
             'Meta': {'object_name': 'BlogEntry'},
-            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
-            'entry_date': ('django.db.models.fields.DateTimeField', [], {}),
+            # 'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
+            # 'entry_date': ('django.db.models.fields.DateTimeField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'related_songs': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['content.Song']", 'symmetrical': 'False'}),
-            'text': ('django.db.models.fields.TextField', [], {})
+            # 'text': ('django.db.models.fields.TextField', [], {})
         },
         'content.church': {
             'Meta': {'object_name': 'Church'},
